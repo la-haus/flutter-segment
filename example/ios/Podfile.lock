@@ -1,0 +1,29 @@
+PODS:
+  - Analytics (3.7.0)
+  - Flutter (1.0.0)
+  - flutter_segment (0.0.1):
+    - Analytics (= 3.7.0)
+    - Flutter
+
+DEPENDENCIES:
+  - Flutter (from `.symlinks/flutter/ios`)
+  - flutter_segment (from `.symlinks/plugins/flutter_segment/ios`)
+
+SPEC REPOS:
+  https://github.com/cocoapods/specs.git:
+    - Analytics
+
+EXTERNAL SOURCES:
+  Flutter:
+    :path: ".symlinks/flutter/ios"
+  flutter_segment:
+    :path: ".symlinks/plugins/flutter_segment/ios"
+
+SPEC CHECKSUMS:
+  Analytics: 77fd5fb102a4a5eedafa2c2b0245ceb7b7c15e45
+  Flutter: 58dd7d1b27887414a370fcccb9e645c08ffd7a6a
+  flutter_segment: 31dce829260fc896cd391d7cee4fc3609003f93c
+
+PODFILE CHECKSUM: 7fb83752f59ead6285236625b82473f90b1cb932
+
+COCOAPODS: 1.6.1
