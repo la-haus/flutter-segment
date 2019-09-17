@@ -29,5 +29,6 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+        <meta-data android:name="com.claimsforce.segment.WRITE_KEY" android:value="<YOUR_WRITE_KEY_GOES_HERE>" />
     </application>
 </manifest>

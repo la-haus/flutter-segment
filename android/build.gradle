@@ -31,4 +31,8 @@ android {
     lintOptions {
         disable 'InvalidPackage'
     }
+
+    dependencies {
+        implementation 'com.segment.analytics.android:analytics:4.+'
+    }
 }

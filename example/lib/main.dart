@@ -19,14 +19,19 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-          title: const Text('Plugin example app'),
+          title: const Text('Segment example app'),
         ),
         body: Center(
           child: FlatButton(
-            child: Text('TRACK ACTION'),
+            child: Text('TRACK ACTION WITH SEGMENT'),
             onPressed: () async {
-              final id = await FlutterSegment.getAnonymousId;
-              print('anonymousId: $id');
+              await FlutterSegment.track(
+                eventName: 'TestEvent',
+                properties: {
+                  'price': 12.22,
+                  'product': 'TestProduct',
+                },
+              );
             },
           ),
         ),
