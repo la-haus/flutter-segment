@@ -1,3 +1,6 @@
+## 0.0.3
+
+* Adds package fixes and missing license.
 ## 0.0.2
 
 * Extended ReadMe.
