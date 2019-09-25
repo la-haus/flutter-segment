@@ -1,3 +1,6 @@
+## 0.0.4
+
+* Adds NavigatorObserver to automatically track named screen transitions.
 ## 0.0.3
 
 * Adds package fixes and missing license.
