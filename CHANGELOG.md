@@ -1,3 +1,6 @@
+## 0.0.5
+
+* Improves dependencies.
 ## 0.0.4
 
 * Adds NavigatorObserver to automatically track named screen transitions.
