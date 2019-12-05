@@ -42,6 +42,8 @@
         [self enable:result];
     } else if ([@"debug" isEqualToString:call.method]) {
         [self debug:call result:result];
+    } else if ([@"putDeviceToken" isEqualToString:call.method]) {
+        [self putDeviceToken:call result:result];
     } else {
         result(FlutterMethodNotImplemented);
     }
@@ -164,6 +166,19 @@
     @try {
         BOOL enabled = call.arguments[@"debug"];
         [SEGAnalytics debug: enabled];
+        result([NSNumber numberWithBool:YES]);
+    }
+    @catch (NSException *exception) {
+        result([FlutterError errorWithCode:@"FlutterSegmentException" message:[exception reason] details: nil]);
+    }
+}
+
+
+- (void)putDeviceToken:(FlutterMethodCall*)call result:(FlutterResult)result {
+    @try {
+        NSString *token = call.arguments[@"token"];
+        NSData* data = [token dataUsingEncoding:NSUTF8StringEncoding];
+        [[SEGAnalytics sharedAnalytics] registeredForRemoteNotificationsWithDeviceToken: data];
         result([NSNumber numberWithBool:YES]);
     }
     @catch (NSException *exception) {

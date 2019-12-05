@@ -2,12 +2,12 @@
 
 Flutter plugin to support iOS and Android Sources at https://segment.com.
 
-#Example
+# Example
 
-1. Import flutter-segment 
-2. Setup your Android and iOS Sources as described at Segment.com and generate your write keys  
+1. Import flutter-segment
+2. Setup your Android and iOS Sources as described at Segment.com and generate your write keys
 3. Android: Add your write key to AndroidManifest Meta Data:
-```
+```xml
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.flutter_segment_example">
 
@@ -44,7 +44,7 @@ Flutter plugin to support iOS and Android Sources at https://segment.com.
 </manifest>
 ```
 4. iOS: Add your write key to Info.plist
-```
+```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
@@ -95,14 +95,35 @@ Flutter plugin to support iOS and Android Sources at https://segment.com.
 ```
 5. Start tracking events
 
-```
+```dart
 FlutterSegment.track(
                 eventName: 'TestEvent',
                 properties: {
                   'price': 12.22,
                   'product': 'TestProduct',
                 },
-              );           
+              );
+```
+
+# Sending device tokens for push notifications
+
+Segment integrates with 3rd parties that allow sending push notifications.
+In order to do that you will need to provide it with the device token - which can be obtained using one of the several Flutter libraries.
+
+As soon as you obtain the device token, you need to add it to Segment's context and then emit a tracking event named `Application Opened` or `Application Installed`. The tracking event is needed because it is the [only moment when Segment propagates it to 3rd parties](https://segment.com/docs/connections/destinations/catalog/customer-io/).
+
+Both calls (`putDeviceToken` and `track`) can be done sequentially at startup time, given that the token exists.
+Nonetheless, if you don't want to delay the token propagation and don't mind having an extra `Application Opened` event in the middle of your app's events, it can be done right away when the token is acquired.
+
+```dart
+await FlutterSegment.putDeviceToken(token);
+/// the token is only propagated when one of two events are called:
+/// - Application Installed
+/// - Application Opened
+///
+await FlutterSegment.track(
+	eventName: 'Application Opened'
+);
 ```
 
 ## Getting Started
@@ -112,6 +133,6 @@ This project is a starting point for a Flutter
 a specialized package that includes platform-specific implementation code for
 Android and/or iOS.
 
-For help getting started with Flutter, view our 
-[online documentation](https://flutter.dev/docs), which offers tutorials, 
+For help getting started with Flutter, view our
+[online documentation](https://flutter.dev/docs), which offers tutorials,
 samples, guidance on mobile development, and a full API reference.
