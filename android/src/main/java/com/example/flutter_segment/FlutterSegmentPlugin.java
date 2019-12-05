@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.segment.analytics.Analytics;
+import com.segment.analytics.AnalyticsContext;
 import com.segment.analytics.Properties;
 import com.segment.analytics.Traits;
 
@@ -65,6 +66,8 @@ public class FlutterSegmentPlugin implements MethodCallHandler {
       this.anonymousId(result);
     } else if (call.method.equals("reset")) {
       this.reset(result);
+    } else if (call.method.equals("putDeviceToken")) {
+      this.putDeviceToken(call, result);
     } else {
       result.notImplemented();
     }
@@ -184,6 +187,17 @@ public class FlutterSegmentPlugin implements MethodCallHandler {
   private void reset(Result result) {
     try {
       Analytics.with(this.context).reset();
+      result.success(true);
+    } catch (Exception e) {
+      result.error("FlutterSegmentException", e.getLocalizedMessage(), null);
+    }
+  }
+
+  private void putDeviceToken(MethodCall call, Result result) {
+    try {
+      String token = call.argument("token");
+      AnalyticsContext analyticsContext = Analytics.with(context).getAnalyticsContext();
+      analyticsContext.putDeviceToken(token);
       result.success(true);
     } catch (Exception e) {
       result.error("FlutterSegmentException", e.getLocalizedMessage(), null);

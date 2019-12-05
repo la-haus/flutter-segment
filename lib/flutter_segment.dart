@@ -102,6 +102,16 @@ class FlutterSegment {
       print(exception);
     }
   }
+
+  static Future<void> putDeviceToken(String token) async {
+    try {
+      await _channel.invokeMethod('putDeviceToken', {
+        "token": token,
+      });
+    } on PlatformException catch (exception) {
+      print(exception);
+    }
+  }
 }
 
 typedef String ScreenNameExtractor(RouteSettings settings);
