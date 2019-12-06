@@ -4,7 +4,8 @@ version: 0.0.6
 authors:
   - Kevin Luecke <kevin@claimsforce.com>
   - Vinicius Zani <vinicius@queroanimo.com>
-homepage: https://github.com/claimsforce-gmbh/flutter-segment
+homepage: https://www.claimsforce.com
+repository: https://github.com/claimsforce-gmbh/flutter-segment
 
 environment:
   sdk: ">=2.1.0 <3.0.0"
