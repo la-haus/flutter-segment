@@ -2,6 +2,15 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+class FlutterSegmentDefaultOptions {
+  Map<String, dynamic> options;
+
+  /// Singleton of [FlutterSegmentDefaultOptions].
+  static final FlutterSegmentDefaultOptions instance = FlutterSegmentDefaultOptions._();
+
+  FlutterSegmentDefaultOptions._();
+}
+
 class FlutterSegment {
   static const MethodChannel _channel =
       const MethodChannel('flutter_segment');
@@ -11,7 +20,7 @@ class FlutterSegment {
       await _channel.invokeMethod('identify', {
         "userId": userId,
         "traits": traits ?? {},
-        "options": options ?? {},
+        "options": options ?? FlutterSegmentDefaultOptions.instance.options,
       });
     } on PlatformException catch (exception) {
       print(exception);
@@ -23,7 +32,7 @@ class FlutterSegment {
       await _channel.invokeMethod('track', {
         "eventName": eventName,
         "properties": properties ?? {},
-        "options": options ?? {},
+        "options": options ?? FlutterSegmentDefaultOptions.instance.options,
       });
     } on PlatformException catch (exception) {
       print(exception);
@@ -35,7 +44,7 @@ class FlutterSegment {
       await _channel.invokeMethod('screen', {
         "screenName": screenName,
         "properties": properties ?? {},
-        "options": options ?? {},
+        "options": options ?? FlutterSegmentDefaultOptions.instance.options,
       });
     } on PlatformException catch (exception) {
       print(exception);
@@ -47,7 +56,7 @@ class FlutterSegment {
       await _channel.invokeMethod('group', {
         "groupId": groupId,
         "traits": traits ?? {},
-        "options": options ?? {},
+        "options": options ?? FlutterSegmentDefaultOptions.instance.options,
       });
     } on PlatformException catch (exception) {
       print(exception);
@@ -58,7 +67,7 @@ class FlutterSegment {
     try {
       await _channel.invokeMethod('alias', {
         "alias": alias,
-        "options": options ?? {},
+        "options": options ?? FlutterSegmentDefaultOptions.instance.options,
       });
     } on PlatformException catch (exception) {
       print(exception);
