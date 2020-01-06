@@ -240,7 +240,8 @@ public class FlutterSegmentPlugin implements MethodCallHandler {
   private Options buildOptions(HashMap<String, Object> optionsData) {
     Options options = new Options();
 
-    if (optionsData.containsKey("integrations") &&
+    if (optionsData != null &&
+      optionsData.containsKey("integrations") &&
       (optionsData.get("integrations") instanceof HashMap)) {
       for (Map.Entry<String, Object> integration : ((HashMap<String,Object>)optionsData.get("integrations")).entrySet()) {
         String key = integration.getKey();
