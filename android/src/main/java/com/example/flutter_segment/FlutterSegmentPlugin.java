@@ -78,7 +78,7 @@ public class FlutterSegmentPlugin implements MethodCallHandler {
     try {
       String userId = call.argument("userId");
       HashMap<String, Object> traitsData = call.argument("traits");
-      HashMap<String, HashMap<String, HashMap<String, Object>>> options = call.argument("options");
+      HashMap<String, Object> options = call.argument("options");
       this.callIdentify(userId, traitsData, options);
       result.success(true);
     } catch (Exception e) {
@@ -89,7 +89,7 @@ public class FlutterSegmentPlugin implements MethodCallHandler {
   private void callIdentify(
     String userId,
     HashMap<String, Object> traitsData,
-    HashMap<String, HashMap<String, HashMap<String, Object>>> optionsData
+    HashMap<String, Object> optionsData
   ) {
     Traits traits = new Traits();
     Options options = this.buildOptions(optionsData);
@@ -107,7 +107,7 @@ public class FlutterSegmentPlugin implements MethodCallHandler {
     try {
       String eventName = call.argument("eventName");
       HashMap<String, Object> propertiesData = call.argument("properties");
-      HashMap<String, HashMap<String, HashMap<String, Object>>> options = call.argument("options");
+      HashMap<String, Object> options = call.argument("options");
       this.callTrack(eventName, propertiesData, options);
       result.success(true);
     } catch (Exception e) {
@@ -118,7 +118,7 @@ public class FlutterSegmentPlugin implements MethodCallHandler {
   private void callTrack(
     String eventName,
     HashMap<String, Object> propertiesData,
-    HashMap<String, HashMap<String, HashMap<String, Object>>> optionsData
+    HashMap<String, Object> optionsData
   ) {
     Properties properties = new Properties();
     Options options = this.buildOptions(optionsData);
@@ -136,7 +136,7 @@ public class FlutterSegmentPlugin implements MethodCallHandler {
     try {
       String screenName = call.argument("screenName");
       HashMap<String, Object> propertiesData = call.argument("properties");
-      HashMap<String, HashMap<String, HashMap<String, Object>>> options = call.argument("options");
+      HashMap<String, Object> options = call.argument("options");
       this.callScreen(screenName, propertiesData, options);
       result.success(true);
     } catch (Exception e) {
@@ -147,7 +147,7 @@ public class FlutterSegmentPlugin implements MethodCallHandler {
   private void callScreen(
     String screenName,
     HashMap<String, Object> propertiesData,
-    HashMap<String, HashMap<String, HashMap<String, Object>>> optionsData
+    HashMap<String, Object> optionsData
   ) {
     Properties properties = new Properties();
     Options options = this.buildOptions(optionsData);
@@ -165,7 +165,7 @@ public class FlutterSegmentPlugin implements MethodCallHandler {
     try {
       String groupId = call.argument("groupId");
       HashMap<String, Object> traitsData = call.argument("traits");
-      HashMap<String, HashMap<String, HashMap<String, Object>>> options = call.argument("options");
+      HashMap<String, Object> options = call.argument("options");
       this.callGroup(groupId, traitsData, options);
       result.success(true);
     } catch (Exception e) {
@@ -176,7 +176,7 @@ public class FlutterSegmentPlugin implements MethodCallHandler {
   private void callGroup(
     String groupId,
     HashMap<String, Object> traitsData,
-    HashMap<String, HashMap<String, HashMap<String, Object>>> optionsData
+    HashMap<String, Object> optionsData
   ) {
     Traits traits = new Traits();
     Options options = this.buildOptions(optionsData);
@@ -193,7 +193,7 @@ public class FlutterSegmentPlugin implements MethodCallHandler {
   private void alias(MethodCall call, Result result) {
     try {
       String alias = call.argument("alias");
-      HashMap<String, HashMap<String, HashMap<String, Object>>> optionsData = call.argument("options");
+      HashMap<String, Object> optionsData = call.argument("options");
       Options options = this.buildOptions(optionsData);
       Analytics.with(this.context).alias(alias, options);
       result.success(true);
@@ -237,15 +237,21 @@ public class FlutterSegmentPlugin implements MethodCallHandler {
    * @see https://segment.com/docs/connections/sources/catalog/libraries/mobile/android/#selecting-destinations
    * @see https://github.com/segmentio/analytics-android/blob/master/analytics/src/main/java/com/segment/analytics/Options.java
    */
-  private Options buildOptions(HashMap<String, HashMap<String, HashMap<String, Object>>> optionsData) {
+  private Options buildOptions(HashMap<String, Object> optionsData) {
     Options options = new Options();
 
-    if (optionsData.containsKey("integrations")) {
-      for(Map.Entry<String, HashMap<String, Object>> integration : optionsData.get("integrations").entrySet()) {
+    if (optionsData.containsKey("integrations") &&
+      (optionsData.get("integrations") instanceof HashMap)) {
+      for (Map.Entry<String, Object> integration : ((HashMap<String,Object>)optionsData.get("integrations")).entrySet()) {
         String key = integration.getKey();
-        HashMap<String, Object> values = integration.getValue();
 
-        options.setIntegrationOptions(key, values);
+        if (integration.getValue() instanceof HashMap) {
+          HashMap<String, Object> values = ((HashMap<String, Object>)integration.getValue());
+          options.setIntegrationOptions(key, values);
+        } else if (integration.getValue() instanceof Boolean) {
+          Boolean value = ((Boolean)integration.getValue());
+          options.setIntegration(key, value);
+        }
       }
     }
 

@@ -1,3 +1,6 @@
+## 0.0.7
+
+* Adds support for integration options in Android. iOS was already supported in previous versions.
 ## 0.0.6
 
 * Adds support for device token.
