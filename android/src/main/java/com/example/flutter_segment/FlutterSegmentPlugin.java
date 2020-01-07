@@ -29,6 +29,7 @@ public class FlutterSegmentPlugin implements MethodCallHandler {
   public FlutterSegmentPlugin(Context context) {
     this.context = context;
   }
+
   /** Plugin registration. */
   public static void registerWith(Registrar registrar) {
     Context context = registrar.activity().getApplicationContext();
@@ -37,12 +38,15 @@ public class FlutterSegmentPlugin implements MethodCallHandler {
       ApplicationInfo ai = context.getPackageManager().getApplicationInfo(context.getPackageName(), PackageManager.GET_META_DATA);
       Bundle bundle = ai.metaData;
       String writeKey = bundle.getString("com.claimsforce.segment.WRITE_KEY");
-      Analytics analytics = new Analytics.Builder(registrar.activity(), writeKey)
-              .trackApplicationLifecycleEvents() // Enable this to record certain application events automatically!
-              .build();
-// Set the initialized instance as a globally accessible instance.
-      Analytics.setSingletonInstance(analytics);
-      Analytics.with(registrar.activity()).track("Application Started");
+      Boolean trackApplicationLifecycleEvents = bundle.getBoolean("com.claimsforce.segment.TRACK_APPLICATION_LIFECYCLE_EVENTS");
+      Analytics.Builder analyticsBuilder = new Analytics.Builder(registrar.activity(), writeKey);
+      if (trackApplicationLifecycleEvents) {
+        // Enable this to record certain application events automatically
+        analyticsBuilder.trackApplicationLifecycleEvents();
+      }
+
+      // Set the initialized instance as a globally accessible instance.
+      Analytics.setSingletonInstance(analyticsBuilder.build());
     } catch (Exception e) {
       Log.e("FlutterSegment", e.getMessage());
     }
@@ -237,6 +241,7 @@ public class FlutterSegmentPlugin implements MethodCallHandler {
    * @see https://segment.com/docs/connections/sources/catalog/libraries/mobile/android/#selecting-destinations
    * @see https://github.com/segmentio/analytics-android/blob/master/analytics/src/main/java/com/segment/analytics/Options.java
    */
+  @SuppressWarnings("unchecked")
   private Options buildOptions(HashMap<String, Object> optionsData) {
     Options options = new Options();
 

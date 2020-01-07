@@ -39,7 +39,12 @@ Flutter plugin to support iOS and Android Sources at https://segment.com.
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+        <!-- Set your Segment write key and change the automatic event tracking
+            on if you wish the library to take care of it for you.
+            Remember that the application lifecycle events won't have any
+            special context set for you by the time it is initialized. -->
         <meta-data android:name="com.claimsforce.segment.WRITE_KEY" android:value="<YOUR_WRITE_KEY_GOES_HERE>" />
+        <meta-data android:name="com.claimsforce.segment.TRACK_APPLICATION_LIFECYCLE_EVENTS" android:value="false" />
     </application>
 </manifest>
 ```
@@ -88,6 +93,8 @@ Flutter plugin to support iOS and Android Sources at https://segment.com.
 	</array>
 	<key>com.claimsforce.segment.WRITE_KEY</key>
 	<string>YOUR_WRITE_KEY_GOES_HERE</string>
+	<key>com.claimsforce.segment.TRACK_APPLICATION_LIFECYCLE_EVENTS</key>
+	<false/>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
 </dict>
