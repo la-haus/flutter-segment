@@ -7,9 +7,9 @@
         NSString *path = [[NSBundle mainBundle] pathForResource: @"Info" ofType: @"plist"];
         NSDictionary *dict = [NSDictionary dictionaryWithContentsOfFile: path];
         NSString *writeKey = [dict objectForKey: @"com.claimsforce.segment.WRITE_KEY"];
-        NSBool *trackApplicationLifecycleEvents = [dict objectForKey: @"com.claimsforce.segment.TRACK_APPLICATION_LIFECYCLE_EVENTS"];
+        BOOL trackApplicationLifecycleEvents = [[dict objectForKey: @"com.claimsforce.segment.TRACK_APPLICATION_LIFECYCLE_EVENTS"] boolValue];
         SEGAnalyticsConfiguration *configuration = [SEGAnalyticsConfiguration configurationWithWriteKey:writeKey];
-        if ([trackApplicationLifecycleEvents]) {
+        if (trackApplicationLifecycleEvents) {
             configuration.trackApplicationLifecycleEvents = YES;
         }
         [SEGAnalytics setupWithConfiguration:configuration];
