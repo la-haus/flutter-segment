@@ -30,24 +30,24 @@ public class FlutterSegmentPlugin implements MethodCallHandler {
   }
   /** Plugin registration. */
   public static void registerWith(Registrar registrar) {
-    Context context = registrar.activity().getApplicationContext();
-
-    try {
-      ApplicationInfo ai = context.getPackageManager().getApplicationInfo(context.getPackageName(), PackageManager.GET_META_DATA);
-      Bundle bundle = ai.metaData;
-      String writeKey = bundle.getString("com.claimsforce.segment.WRITE_KEY");
-      Analytics analytics = new Analytics.Builder(registrar.activity(), writeKey)
-              .trackApplicationLifecycleEvents() // Enable this to record certain application events automatically!
-              .build();
-// Set the initialized instance as a globally accessible instance.
-      Analytics.setSingletonInstance(analytics);
-      Analytics.with(registrar.activity()).track("Application Started");
-    } catch (Exception e) {
-      Log.e("FlutterSegment", e.getMessage());
+    if (registrar.activity() != null) {
+      try {
+        Context context = registrar.activity().getApplicationContext();
+        ApplicationInfo ai = context.getPackageManager().getApplicationInfo(context.getPackageName(), PackageManager.GET_META_DATA);
+        Bundle bundle = ai.metaData;
+        String writeKey = bundle.getString("com.claimsforce.segment.WRITE_KEY");
+        Analytics analytics = new Analytics.Builder(registrar.activity(), writeKey)
+                .trackApplicationLifecycleEvents() // Enable this to record certain application events automatically!
+                .build();
+        // Set the initialized instance as a globally accessible instance.
+        Analytics.setSingletonInstance(analytics);
+        Analytics.with(registrar.activity()).track("Application Started");
+        final MethodChannel channel = new MethodChannel(registrar.messenger(), "flutter_segment");
+      channel.setMethodCallHandler(new FlutterSegmentPlugin(context));
+      } catch (Exception e) {
+        Log.e("FlutterSegment", e.getMessage());
+      }
     }
-
-    final MethodChannel channel = new MethodChannel(registrar.messenger(), "flutter_segment");
-    channel.setMethodCallHandler(new FlutterSegmentPlugin(context));
   }
 
   @Override
