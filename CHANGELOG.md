@@ -1,3 +1,10 @@
+## 0.0.7
+
+* Initialize plugin along with FirebaseMessaging.
+
+## 0.0.6
+
+* Adds support for device token.
 ## 0.0.5
 
 * Improves dependencies.
