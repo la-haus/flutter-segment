@@ -32,27 +32,26 @@ public class FlutterSegmentPlugin implements MethodCallHandler {
 
   /** Plugin registration. */
   public static void registerWith(Registrar registrar) {
-    Context context = registrar.activity().getApplicationContext();
+    if (registrar.activity() != null) {
+      Context context = registrar.activity().getApplicationContext();
 
-    try {
-      ApplicationInfo ai = context.getPackageManager().getApplicationInfo(context.getPackageName(), PackageManager.GET_META_DATA);
-      Bundle bundle = ai.metaData;
-      String writeKey = bundle.getString("com.claimsforce.segment.WRITE_KEY");
-      Boolean trackApplicationLifecycleEvents = bundle.getBoolean("com.claimsforce.segment.TRACK_APPLICATION_LIFECYCLE_EVENTS");
-      Analytics.Builder analyticsBuilder = new Analytics.Builder(registrar.activity(), writeKey);
-      if (trackApplicationLifecycleEvents) {
-        // Enable this to record certain application events automatically
-        analyticsBuilder.trackApplicationLifecycleEvents();
+      try {
+        ApplicationInfo ai = context.getPackageManager().getApplicationInfo(context.getPackageName(), PackageManager.GET_META_DATA);
+        Bundle bundle = ai.metaData;
+        String writeKey = bundle.getString("com.claimsforce.segment.WRITE_KEY");
+        Boolean trackApplicationLifecycleEvents = bundle.getBoolean("com.claimsforce.segment.TRACK_APPLICATION_LIFECYCLE_EVENTS");
+        Analytics.Builder analyticsBuilder = new Analytics.Builder(registrar.activity(), writeKey);
+        if (trackApplicationLifecycleEvents) {
+          // Enable this to record certain application events automatically
+          analyticsBuilder.trackApplicationLifecycleEvents();
+        }
+
+        // Set the initialized instance as a globally accessible instance.
+        Analytics.setSingletonInstance(analyticsBuilder.build());
+      } catch (Exception e) {
+        Log.e("FlutterSegment", e.getMessage());
       }
-
-      // Set the initialized instance as a globally accessible instance.
-      Analytics.setSingletonInstance(analyticsBuilder.build());
-    } catch (Exception e) {
-      Log.e("FlutterSegment", e.getMessage());
     }
-
-    final MethodChannel channel = new MethodChannel(registrar.messenger(), "flutter_segment");
-    channel.setMethodCallHandler(new FlutterSegmentPlugin(context));
   }
 
   @Override
