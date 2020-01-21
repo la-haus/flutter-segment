@@ -7,8 +7,11 @@
         NSString *path = [[NSBundle mainBundle] pathForResource: @"Info" ofType: @"plist"];
         NSDictionary *dict = [NSDictionary dictionaryWithContentsOfFile: path];
         NSString *writeKey = [dict objectForKey: @"com.claimsforce.segment.WRITE_KEY"];
+        BOOL trackApplicationLifecycleEvents = [[dict objectForKey: @"com.claimsforce.segment.TRACK_APPLICATION_LIFECYCLE_EVENTS"] boolValue];
         SEGAnalyticsConfiguration *configuration = [SEGAnalyticsConfiguration configurationWithWriteKey:writeKey];
-        configuration.trackApplicationLifecycleEvents = YES;
+        if (trackApplicationLifecycleEvents) {
+            configuration.trackApplicationLifecycleEvents = YES;
+        }
         [SEGAnalytics setupWithConfiguration:configuration];
         FlutterMethodChannel* channel = [FlutterMethodChannel
                                          methodChannelWithName:@"flutter_segment"

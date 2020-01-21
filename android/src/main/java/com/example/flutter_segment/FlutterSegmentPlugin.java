@@ -11,6 +11,7 @@ import com.segment.analytics.Analytics;
 import com.segment.analytics.AnalyticsContext;
 import com.segment.analytics.Properties;
 import com.segment.analytics.Traits;
+import com.segment.analytics.Options;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -28,6 +29,7 @@ public class FlutterSegmentPlugin implements MethodCallHandler {
   public FlutterSegmentPlugin(Context context) {
     this.context = context;
   }
+
   /** Plugin registration. */
   public static void registerWith(Registrar registrar) {
     if (registrar.activity() != null) {
@@ -36,14 +38,17 @@ public class FlutterSegmentPlugin implements MethodCallHandler {
         ApplicationInfo ai = context.getPackageManager().getApplicationInfo(context.getPackageName(), PackageManager.GET_META_DATA);
         Bundle bundle = ai.metaData;
         String writeKey = bundle.getString("com.claimsforce.segment.WRITE_KEY");
-        Analytics analytics = new Analytics.Builder(registrar.activity(), writeKey)
-                .trackApplicationLifecycleEvents() // Enable this to record certain application events automatically!
-                .build();
+        Boolean trackApplicationLifecycleEvents = bundle.getBoolean("com.claimsforce.segment.TRACK_APPLICATION_LIFECYCLE_EVENTS");
+        Analytics.Builder analyticsBuilder = new Analytics.Builder(registrar.activity(), writeKey);
+        if (trackApplicationLifecycleEvents) {
+          // Enable this to record certain application events automatically
+          analyticsBuilder.trackApplicationLifecycleEvents();
+        }
+
         // Set the initialized instance as a globally accessible instance.
-        Analytics.setSingletonInstance(analytics);
-        Analytics.with(registrar.activity()).track("Application Started");
+        Analytics.setSingletonInstance(analyticsBuilder.build());
         final MethodChannel channel = new MethodChannel(registrar.messenger(), "flutter_segment");
-      channel.setMethodCallHandler(new FlutterSegmentPlugin(context));
+        channel.setMethodCallHandler(new FlutterSegmentPlugin(context));
       } catch (Exception e) {
         Log.e("FlutterSegment", e.getMessage());
       }
@@ -77,15 +82,21 @@ public class FlutterSegmentPlugin implements MethodCallHandler {
     try {
       String userId = call.argument("userId");
       HashMap<String, Object> traitsData = call.argument("traits");
-      this.callIdentify(userId, traitsData);
+      HashMap<String, Object> options = call.argument("options");
+      this.callIdentify(userId, traitsData, options);
       result.success(true);
     } catch (Exception e) {
       result.error("FlutterSegmentException", e.getLocalizedMessage(), null);
     }
   }
 
-  private void callIdentify(String userId, HashMap<String, Object> traitsData) {
+  private void callIdentify(
+    String userId,
+    HashMap<String, Object> traitsData,
+    HashMap<String, Object> optionsData
+  ) {
     Traits traits = new Traits();
+    Options options = this.buildOptions(optionsData);
 
     for(Map.Entry<String, Object> trait : traitsData.entrySet()) {
       String key = trait.getKey();
@@ -93,22 +104,28 @@ public class FlutterSegmentPlugin implements MethodCallHandler {
       traits.putValue(key, value);
     }
 
-    Analytics.with(this.context).identify(userId, traits, null);
+    Analytics.with(this.context).identify(userId, traits, options);
   }
 
   private void track(MethodCall call, Result result) {
     try {
       String eventName = call.argument("eventName");
       HashMap<String, Object> propertiesData = call.argument("properties");
-      this.callTrack(eventName, propertiesData);
+      HashMap<String, Object> options = call.argument("options");
+      this.callTrack(eventName, propertiesData, options);
       result.success(true);
     } catch (Exception e) {
       result.error("FlutterSegmentException", e.getLocalizedMessage(), null);
     }
   }
 
-  private void callTrack(String eventName, HashMap<String, Object> propertiesData) {
+  private void callTrack(
+    String eventName,
+    HashMap<String, Object> propertiesData,
+    HashMap<String, Object> optionsData
+  ) {
     Properties properties = new Properties();
+    Options options = this.buildOptions(optionsData);
 
     for(Map.Entry<String, Object> property : propertiesData.entrySet()) {
       String key = property.getKey();
@@ -116,22 +133,28 @@ public class FlutterSegmentPlugin implements MethodCallHandler {
       properties.putValue(key, value);
     }
 
-    Analytics.with(this.context).track(eventName, properties);
+    Analytics.with(this.context).track(eventName, properties, options);
   }
 
   private void screen(MethodCall call, Result result) {
     try {
       String screenName = call.argument("screenName");
       HashMap<String, Object> propertiesData = call.argument("properties");
-      this.callScreen(screenName, propertiesData);
+      HashMap<String, Object> options = call.argument("options");
+      this.callScreen(screenName, propertiesData, options);
       result.success(true);
     } catch (Exception e) {
       result.error("FlutterSegmentException", e.getLocalizedMessage(), null);
     }
   }
 
-  private void callScreen(String screenName, HashMap<String, Object> propertiesData) {
+  private void callScreen(
+    String screenName,
+    HashMap<String, Object> propertiesData,
+    HashMap<String, Object> optionsData
+  ) {
     Properties properties = new Properties();
+    Options options = this.buildOptions(optionsData);
 
     for(Map.Entry<String, Object> property : propertiesData.entrySet()) {
       String key = property.getKey();
@@ -139,22 +162,28 @@ public class FlutterSegmentPlugin implements MethodCallHandler {
       properties.putValue(key, value);
     }
 
-    Analytics.with(this.context).screen(screenName, properties);
+    Analytics.with(this.context).screen(null, screenName, properties, options);
   }
 
   private void group(MethodCall call, Result result) {
     try {
       String groupId = call.argument("groupId");
       HashMap<String, Object> traitsData = call.argument("traits");
-      this.callGroup(groupId, traitsData);
+      HashMap<String, Object> options = call.argument("options");
+      this.callGroup(groupId, traitsData, options);
       result.success(true);
     } catch (Exception e) {
       result.error("FlutterSegmentException", e.getLocalizedMessage(), null);
     }
   }
 
-  private void callGroup(String groupId, HashMap<String, Object> traitsData) {
+  private void callGroup(
+    String groupId,
+    HashMap<String, Object> traitsData,
+    HashMap<String, Object> optionsData
+  ) {
     Traits traits = new Traits();
+    Options options = this.buildOptions(optionsData);
 
     for(Map.Entry<String, Object> trait : traitsData.entrySet()) {
       String key = trait.getKey();
@@ -162,13 +191,15 @@ public class FlutterSegmentPlugin implements MethodCallHandler {
       traits.putValue(key, value);
     }
 
-    Analytics.with(this.context).group(groupId, traits);
+    Analytics.with(this.context).group(groupId, traits, options);
   }
 
   private void alias(MethodCall call, Result result) {
     try {
       String alias = call.argument("alias");
-      Analytics.with(this.context).alias(alias);
+      HashMap<String, Object> optionsData = call.argument("options");
+      Options options = this.buildOptions(optionsData);
+      Analytics.with(this.context).alias(alias, options);
       result.success(true);
     } catch (Exception e) {
       result.error("FlutterSegmentException", e.getLocalizedMessage(), null);
@@ -202,5 +233,34 @@ public class FlutterSegmentPlugin implements MethodCallHandler {
     } catch (Exception e) {
       result.error("FlutterSegmentException", e.getLocalizedMessage(), null);
     }
+  }
+
+  /**
+   * Enables / disables / sets custom integration properties so Segment can properly
+   * interact with 3rd parties, such as Amplitude.
+   * @see https://segment.com/docs/connections/sources/catalog/libraries/mobile/android/#selecting-destinations
+   * @see https://github.com/segmentio/analytics-android/blob/master/analytics/src/main/java/com/segment/analytics/Options.java
+   */
+  @SuppressWarnings("unchecked")
+  private Options buildOptions(HashMap<String, Object> optionsData) {
+    Options options = new Options();
+
+    if (optionsData != null &&
+      optionsData.containsKey("integrations") &&
+      (optionsData.get("integrations") instanceof HashMap)) {
+      for (Map.Entry<String, Object> integration : ((HashMap<String,Object>)optionsData.get("integrations")).entrySet()) {
+        String key = integration.getKey();
+
+        if (integration.getValue() instanceof HashMap) {
+          HashMap<String, Object> values = ((HashMap<String, Object>)integration.getValue());
+          options.setIntegrationOptions(key, values);
+        } else if (integration.getValue() instanceof Boolean) {
+          Boolean value = ((Boolean)integration.getValue());
+          options.setIntegration(key, value);
+        }
+      }
+    }
+
+    return options;
   }
 }
