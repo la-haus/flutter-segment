@@ -33,9 +33,8 @@ public class FlutterSegmentPlugin implements MethodCallHandler {
   /** Plugin registration. */
   public static void registerWith(Registrar registrar) {
     if (registrar.activity() != null) {
-      Context context = registrar.activity().getApplicationContext();
-
       try {
+        Context context = registrar.activity().getApplicationContext();
         ApplicationInfo ai = context.getPackageManager().getApplicationInfo(context.getPackageName(), PackageManager.GET_META_DATA);
         Bundle bundle = ai.metaData;
         String writeKey = bundle.getString("com.claimsforce.segment.WRITE_KEY");
@@ -48,6 +47,8 @@ public class FlutterSegmentPlugin implements MethodCallHandler {
 
         // Set the initialized instance as a globally accessible instance.
         Analytics.setSingletonInstance(analyticsBuilder.build());
+        final MethodChannel channel = new MethodChannel(registrar.messenger(), "flutter_segment");
+        channel.setMethodCallHandler(new FlutterSegmentPlugin(context));
       } catch (Exception e) {
         Log.e("FlutterSegment", e.getMessage());
       }
