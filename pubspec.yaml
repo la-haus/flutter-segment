@@ -30,4 +30,4 @@ flutter:
         pluginClass: FlutterSegmentPlugin
       web:
         pluginClass: SegmentPlatformWeb
-        fileName: lib/segment_platform_web.dart
+        fileName: segment_platform_web.dart
