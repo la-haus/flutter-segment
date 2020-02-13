@@ -39,7 +39,12 @@ Flutter plugin to support iOS and Android Sources at https://segment.com.
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+        <!-- Set your Segment write key and change the automatic event tracking
+            on if you wish the library to take care of it for you.
+            Remember that the application lifecycle events won't have any
+            special context set for you by the time it is initialized. -->
         <meta-data android:name="com.claimsforce.segment.WRITE_KEY" android:value="<YOUR_WRITE_KEY_GOES_HERE>" />
+        <meta-data android:name="com.claimsforce.segment.TRACK_APPLICATION_LIFECYCLE_EVENTS" android:value="false" />
     </application>
 </manifest>
 ```
@@ -88,6 +93,8 @@ Flutter plugin to support iOS and Android Sources at https://segment.com.
 	</array>
 	<key>com.claimsforce.segment.WRITE_KEY</key>
 	<string>YOUR_WRITE_KEY_GOES_HERE</string>
+	<key>com.claimsforce.segment.TRACK_APPLICATION_LIFECYCLE_EVENTS</key>
+	<false/>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
 </dict>
@@ -124,6 +131,48 @@ await FlutterSegment.putDeviceToken(token);
 await FlutterSegment.track(
 	eventName: 'Application Opened'
 );
+```
+
+# Setting integration options
+
+If you intend to use any specific integrations with third parties, such as custom Session IDs for Amplitude, you'll need to set it using options for each call (or globally) when the application was started.
+
+## Setting the options in every call
+
+The methods below support `options` as parameters:
+- `identify({@required userId, Map<String, dynamic> traits, Map<String, dynamic> options})`
+- `track({@required String eventName, Map<String, dynamic> properties, Map<String, dynamic> options})`
+- `screen({@required String screenName, Map<String, dynamic> properties, Map<String, dynamic> options})`
+- `group({@required String groupId, Map<String, dynamic> traits, Map<String, dynamic> options})`
+- `alias({@required String alias, Map<String, dynamic> options})`
+
+An example of a screen being tracked as part of a session, which will be communicated to Amplitude:
+
+```dart
+FlutterSegment.screen(
+	screenName: screenName,
+	properties: {},
+	options: {
+		'integrations': {
+			'Amplitude': {
+				'session_id': '1578083527'
+			}
+		}
+	}
+```
+
+## Setting the options globally
+
+You can also set the default options to be used in every method call, if the call omits the options parameter. Just set `FlutterSegmentDefaultOptions.instance.options`. For example:
+
+```dart
+FlutterSegmentDefaultOptions.instance.options = {
+	'integrations': {
+		'Amplitude': {
+			'session_id': '1578083527'
+		}
+	}
+}
 ```
 
 ## Getting Started
