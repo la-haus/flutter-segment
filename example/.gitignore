@@ -8,6 +8,8 @@
 .buildlog/
 .history
 .svn/
+.flutter-plugins-dependencies
+ios/Flutter/flutter_export_environment.sh
 
 # IntelliJ related
 *.iml
