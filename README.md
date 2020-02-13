@@ -104,12 +104,12 @@ Flutter plugin to support iOS and Android Sources at https://segment.com.
 
 ```dart
 FlutterSegment.track(
-                eventName: 'TestEvent',
-                properties: {
-                  'price': 12.22,
-                  'product': 'TestProduct',
-                },
-              );
+  eventName: 'TestEvent',
+  properties: {
+    'price': 12.22,
+    'product': 'TestProduct',
+  },
+)
 ```
 
 # Sending device tokens for push notifications
@@ -124,13 +124,10 @@ Nonetheless, if you don't want to delay the token propagation and don't mind hav
 
 ```dart
 await FlutterSegment.putDeviceToken(token);
-/// the token is only propagated when one of two events are called:
-/// - Application Installed
-/// - Application Opened
-///
-await FlutterSegment.track(
-	eventName: 'Application Opened'
-);
+// the token is only propagated when one of two events are called:
+// - Application Installed
+// - Application Opened
+await FlutterSegment.track(eventName: 'Application Opened');
 ```
 
 # Setting integration options
@@ -150,15 +147,14 @@ An example of a screen being tracked as part of a session, which will be communi
 
 ```dart
 FlutterSegment.screen(
-	screenName: screenName,
-	properties: {},
-	options: {
-		'integrations': {
-			'Amplitude': {
-				'session_id': '1578083527'
-			}
-		}
-	}
+  screenName: screenName,
+  properties: {},
+  options: {
+    'integrations': {
+      'Amplitude': {'session_id': '1578083527'}
+    }
+  },
+)
 ```
 
 ## Setting the options globally
@@ -167,11 +163,11 @@ You can also set the default options to be used in every method call, if the cal
 
 ```dart
 FlutterSegmentDefaultOptions.instance.options = {
-	'integrations': {
-		'Amplitude': {
-			'session_id': '1578083527'
-		}
-	}
+  'integrations': {
+    'Amplitude': {
+      'session_id': '1578083527'
+    }
+  }
 }
 ```
 
