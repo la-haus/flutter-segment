@@ -1,5 +1,6 @@
 ### Customs ###
 ios/Flutter/flutter_export_environment.sh
+.idea/**
 
 # Created by https://www.gitignore.io/api/git,dart,flutter,intellij,webstorm,visualstudio
 # Edit at https://www.gitignore.io/?templates=git,dart,flutter,intellij,webstorm,visualstudio
