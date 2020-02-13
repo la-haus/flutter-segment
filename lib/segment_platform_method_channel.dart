@@ -1,5 +1,6 @@
 import 'package:meta/meta.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_segment/segment_default_options.dart';
 import 'package:flutter_segment/segment_platform_interface.dart';
 
 class SegmentPlatformMethodChannel extends SegmentPlatform {
@@ -14,7 +15,7 @@ class SegmentPlatformMethodChannel extends SegmentPlatform {
       await _channel.invokeMethod('identify', {
         'userId': userId,
         'traits': traits ?? {},
-        'options': options ?? {},
+        'options': options ?? SegmentDefaultOptions.instance.options,
       });
     } on PlatformException catch (exception) {
       print(exception);
@@ -30,7 +31,7 @@ class SegmentPlatformMethodChannel extends SegmentPlatform {
       await _channel.invokeMethod('track', {
         'eventName': eventName,
         'properties': properties ?? {},
-        'options': options ?? {},
+        'options': options ?? SegmentDefaultOptions.instance.options,
       });
     } on PlatformException catch (exception) {
       print(exception);
@@ -46,7 +47,7 @@ class SegmentPlatformMethodChannel extends SegmentPlatform {
       await _channel.invokeMethod('screen', {
         'screenName': screenName,
         'properties': properties ?? {},
-        'options': options ?? {},
+        'options': options ?? SegmentDefaultOptions.instance.options,
       });
     } on PlatformException catch (exception) {
       print(exception);
@@ -62,7 +63,7 @@ class SegmentPlatformMethodChannel extends SegmentPlatform {
       await _channel.invokeMethod('group', {
         'groupId': groupId,
         'traits': traits ?? {},
-        'options': options ?? {},
+        'options': options ?? SegmentDefaultOptions.instance.options,
       });
     } on PlatformException catch (exception) {
       print(exception);
@@ -76,7 +77,7 @@ class SegmentPlatformMethodChannel extends SegmentPlatform {
     try {
       await _channel.invokeMethod('alias', {
         'alias': alias,
-        'options': options ?? {},
+        'options': options ?? SegmentDefaultOptions.instance.options,
       });
     } on PlatformException catch (exception) {
       print(exception);
