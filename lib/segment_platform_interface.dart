@@ -1,5 +1,5 @@
 import 'package:meta/meta.dart';
-import 'package:flutter_segment/method_channel_segment.dart';
+import 'package:flutter_segment/segment_method_channel.dart';
 
 abstract class SegmentPlatform {
   /// The default instance of [SegmentPlatform] to use
@@ -8,8 +8,8 @@ abstract class SegmentPlatform {
   /// platform-specific class that extends [SegmentPlatform] when they
   /// register themselves.
   ///
-  /// Defaults to [MethodChannelSegment]
-  static SegmentPlatform instance = MethodChannelSegment();
+  /// Defaults to [SegmentMethodChannel]
+  static SegmentPlatform instance = SegmentMethodChannel();
 
   Future<void> identify({
     @required userId,
