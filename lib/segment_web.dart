@@ -18,12 +18,9 @@ class SegmentWeb {
     final analytics = JsObject.fromBrowserObject(context['analytics']);
     switch (call.method) {
       case 'track':
-        analytics.callMethod(
-          'track',
-          [
-            call.arguments['eventName'],
-          ],
-        );
+        analytics.callMethod('track', [
+          call.arguments['eventName'],
+        ]);
         break;
       default:
         throw PlatformException(
