@@ -31,5 +31,5 @@ flutter:
       ios:
         pluginClass: FlutterSegmentPlugin
       web:
-        pluginClass: SegmentPlatformWeb
-        fileName: segment_platform_web.dart
+        pluginClass: SegmentWeb
+        fileName: segment_web.dart
