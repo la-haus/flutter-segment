@@ -30,6 +30,9 @@ class MyApp extends StatelessWidget {
           ),
         ),
       ),
+      navigatorObservers: [
+        SegmentObserver(),
+      ],
     );
   }
 }
