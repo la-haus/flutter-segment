@@ -20,35 +20,35 @@ class SegmentWeb {
       case 'identify':
         analytics.callMethod('identify', [
           call.arguments['userId'],
-          call.arguments['traits'],
-          call.arguments['options'],
+          JsObject.jsify(call.arguments['traits']),
+          JsObject.jsify(call.arguments['options']),
         ]);
         break;
       case 'track':
         analytics.callMethod('track', [
           call.arguments['eventName'],
-          call.arguments['properties'],
-          call.arguments['options'],
+          JsObject.jsify(call.arguments['properties']),
+          JsObject.jsify(call.arguments['options']),
         ]);
         break;
       case 'screen':
         analytics.callMethod('page', [
           call.arguments['screenName'],
-          call.arguments['properties'],
-          call.arguments['options'],
+          JsObject.jsify(call.arguments['properties']),
+          JsObject.jsify(call.arguments['options']),
         ]);
         break;
       case 'group':
         analytics.callMethod('group', [
           call.arguments['groupId'],
-          call.arguments['traits'],
-          call.arguments['options'],
+          JsObject.jsify(call.arguments['traits']),
+          JsObject.jsify(call.arguments['options']),
         ]);
         break;
       case 'alias':
         analytics.callMethod('alias', [
           call.arguments['alias'],
-          call.arguments['options'],
+          JsObject.jsify(call.arguments['options']),
         ]);
         break;
       case 'getAnonymousId':
