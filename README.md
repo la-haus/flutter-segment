@@ -1,119 +1,125 @@
-# flutter_segment
+# Segment plugin
+![Pub Version](https://img.shields.io/pub/v/flutter_segment)
 
-Flutter plugin to support iOS and Android Sources at https://segment.com.
+Flutter plugin to support iOS, Android and Web sources at https://segment.com.
 
-# Example
+## Usage
+To use this plugin, add `flutter_segment` as a [dependency in your pubspec.yaml file](https://flutter.io/platform-plugins/).
 
-1. Import flutter-segment
-2. Setup your Android and iOS Sources as described at Segment.com and generate your write keys
-3. Android: Add your write key to AndroidManifest Meta Data:
+### Supported methods
+| Method | Android | iOS | Web |
+|---|---|---|---|
+| `identify` | X | X | X |
+| `track` | X | X | X |
+| `screen` | X | X | X |
+| `group` | X | X | X |
+| `alias` | X | X | X |
+| `getAnonymousId` | X | X | X |
+| `reset` | X | X | X |
+| `disable` | X | X | |
+| `enable` | X | X | |
+| `debug` | X | X | X |
+| `putDeviceToken` | X | X | |
+
+### Example
+``` dart
+import 'package:flutter/material.dart';
+import 'package:flutter_segment/flutter_segment.dart';
+
+void main() => runApp(MyApp());
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    Segment.screen(
+      screenName: 'Example Screen',
+    );
+    return MaterialApp(
+      home: Scaffold(
+        appBar: AppBar(
+          title: Text('Segment example app'),
+        ),
+        body: Center(
+          child: FlatButton(
+            child: Text('TRACK ACTION WITH SEGMENT'),
+            onPressed: () {
+              Segment.track(
+                eventName: 'ButtonClicked',
+                properties: {
+                  'foo': 'bar',
+                  'number': 1337,
+                  'clicked': true,
+                },
+              );
+            },
+          ),
+        ),
+      ),
+      navigatorObservers: [
+        SegmentObserver(),
+      ],
+    );
+  }
+}
+```
+
+## Installation
+Setup your Android, iOS and/or web sources as described at Segment.com and generate your write keys.
+
+Set your Segment write key and change the automatic event tracking (only for Android and iOS) on if you wish the library to take care of it for you. 
+Remember that the application lifecycle events won't have any special context set for you by the time it is initialized.
+
+### Android
 ```xml
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.flutter_segment_example">
-
-    <!-- io.flutter.app.FlutterApplication is an android.app.Application that
-         calls FlutterMain.startInitialization(this); in its onCreate method.
-         In most cases you can leave this as-is, but you if you want to provide
-         additional functionality it is fine to subclass or reimplement
-         FlutterApplication and put your custom class here. -->
-    <application
-        android:name="io.flutter.app.FlutterApplication"
-        android:label="flutter_segment_example"
-        android:icon="@mipmap/ic_launcher">
-        <activity
-            android:name=".MainActivity"
-            android:launchMode="singleTop"
-            android:theme="@style/LaunchTheme"
-            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
-            android:hardwareAccelerated="true"
-            android:windowSoftInputMode="adjustResize">
-            <!-- This keeps the window background of the activity showing
-                 until Flutter renders its first frame. It can be removed if
-                 there is no splash screen (such as the default splash screen
-                 defined in @style/LaunchTheme). -->
-            <meta-data
-                android:name="io.flutter.app.android.SplashScreenUntilFirstFrame"
-                android:value="true" />
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <category android:name="android.intent.category.LAUNCHER"/>
-            </intent-filter>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.example.flutter_segment_example">
+    <application>
+        <activity>
+            [...]
         </activity>
-        <!-- Set your Segment write key and change the automatic event tracking
-            on if you wish the library to take care of it for you.
-            Remember that the application lifecycle events won't have any
-            special context set for you by the time it is initialized. -->
-        <meta-data android:name="com.claimsforce.segment.WRITE_KEY" android:value="<YOUR_WRITE_KEY_GOES_HERE>" />
+        <meta-data android:name="com.claimsforce.segment.WRITE_KEY" android:value="YOUR_WRITE_KEY_GOES_HERE" />
         <meta-data android:name="com.claimsforce.segment.TRACK_APPLICATION_LIFECYCLE_EVENTS" android:value="false" />
     </application>
 </manifest>
 ```
-4. iOS: Add your write key to Info.plist
+
+### iOS
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>CFBundleDevelopmentRegion</key>
-	<string>$(DEVELOPMENT_LANGUAGE)</string>
-	<key>CFBundleExecutable</key>
-	<string>$(EXECUTABLE_NAME)</string>
-	<key>CFBundleIdentifier</key>
-	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
-	<key>CFBundleInfoDictionaryVersion</key>
-	<string>6.0</string>
-	<key>CFBundleName</key>
-	<string>flutter_segment_example</string>
-	<key>CFBundlePackageType</key>
-	<string>APPL</string>
-	<key>CFBundleShortVersionString</key>
-	<string>$(FLUTTER_BUILD_NAME)</string>
-	<key>CFBundleSignature</key>
-	<string>????</string>
-	<key>CFBundleVersion</key>
-	<string>$(FLUTTER_BUILD_NUMBER)</string>
-	<key>LSRequiresIPhoneOS</key>
-	<true/>
-	<key>UILaunchStoryboardName</key>
-	<string>LaunchScreen</string>
-	<key>UIMainStoryboardFile</key>
-	<string>Main</string>
-	<key>UISupportedInterfaceOrientations</key>
-	<array>
-		<string>UIInterfaceOrientationPortrait</string>
-		<string>UIInterfaceOrientationLandscapeLeft</string>
-		<string>UIInterfaceOrientationLandscapeRight</string>
-	</array>
-	<key>UISupportedInterfaceOrientations~ipad</key>
-	<array>
-		<string>UIInterfaceOrientationPortrait</string>
-		<string>UIInterfaceOrientationPortraitUpsideDown</string>
-		<string>UIInterfaceOrientationLandscapeLeft</string>
-		<string>UIInterfaceOrientationLandscapeRight</string>
-	</array>
+	[...]
 	<key>com.claimsforce.segment.WRITE_KEY</key>
 	<string>YOUR_WRITE_KEY_GOES_HERE</string>
 	<key>com.claimsforce.segment.TRACK_APPLICATION_LIFECYCLE_EVENTS</key>
 	<false/>
-	<key>UIViewControllerBasedStatusBarAppearance</key>
-	<false/>
+	[...]
 </dict>
 </plist>
 ```
-5. Start tracking events
 
-```dart
-FlutterSegment.track(
-                eventName: 'TestEvent',
-                properties: {
-                  'price': 12.22,
-                  'product': 'TestProduct',
-                },
-              );
+### Web
+```html
+<!DOCTYPE html>
+<html>
+<head>
+  [...]
+</head>
+<body>
+<script>
+  !function(){ ...;
+    analytics.load("YOUR_WRITE_KEY_GOES_HERE");
+    analytics.page();
+  }}();
+</script>
+  <script src="main.dart.js" type="application/javascript"></script>
+</body>
+</html>
+
 ```
+For more informations please check: https://segment.com/docs/connections/sources/catalog/libraries/website/javascript/quickstart/
 
-# Sending device tokens for push notifications
-
+## Sending device tokens for push notifications
 Segment integrates with 3rd parties that allow sending push notifications.
 In order to do that you will need to provide it with the device token - which can be obtained using one of the several Flutter libraries.
 
@@ -123,22 +129,17 @@ Both calls (`putDeviceToken` and `track`) can be done sequentially at startup ti
 Nonetheless, if you don't want to delay the token propagation and don't mind having an extra `Application Opened` event in the middle of your app's events, it can be done right away when the token is acquired.
 
 ```dart
-await FlutterSegment.putDeviceToken(token);
-/// the token is only propagated when one of two events are called:
-/// - Application Installed
-/// - Application Opened
-///
-await FlutterSegment.track(
-	eventName: 'Application Opened'
-);
+await Segment.putDeviceToken(token);
+// the token is only propagated when one of two events are called:
+// - Application Installed
+// - Application Opened
+await Segment.track(eventName: 'Application Opened');
 ```
 
-# Setting integration options
-
+## Setting integration options
 If you intend to use any specific integrations with third parties, such as custom Session IDs for Amplitude, you'll need to set it using options for each call (or globally) when the application was started.
 
 ## Setting the options in every call
-
 The methods below support `options` as parameters:
 - `identify({@required userId, Map<String, dynamic> traits, Map<String, dynamic> options})`
 - `track({@required String eventName, Map<String, dynamic> properties, Map<String, dynamic> options})`
@@ -149,39 +150,32 @@ The methods below support `options` as parameters:
 An example of a screen being tracked as part of a session, which will be communicated to Amplitude:
 
 ```dart
-FlutterSegment.screen(
-	screenName: screenName,
-	properties: {},
-	options: {
-		'integrations': {
-			'Amplitude': {
-				'session_id': '1578083527'
-			}
-		}
-	}
+Segment.screen(
+  screenName: screenName,
+  properties: {},
+  options: {
+    'integrations': {
+      'Amplitude': {'session_id': '1578083527'}
+    }
+  },
+)
 ```
 
 ## Setting the options globally
-
 You can also set the default options to be used in every method call, if the call omits the options parameter. Just set `FlutterSegmentDefaultOptions.instance.options`. For example:
 
 ```dart
-FlutterSegmentDefaultOptions.instance.options = {
-	'integrations': {
-		'Amplitude': {
-			'session_id': '1578083527'
-		}
-	}
+SegmentDefaultOptions.instance.options = {
+  'integrations': {
+    'Amplitude': {
+      'session_id': '1578083527'
+    }
+  }
 }
 ```
 
-## Getting Started
+## Issues
+Please file any issues, bugs, or feature requests in the [GitHub repo](https://github.com/claimsforce-gmbh/flutter-segment/issues/new).
 
-This project is a starting point for a Flutter
-[plug-in package](https://flutter.dev/developing-packages/),
-a specialized package that includes platform-specific implementation code for
-Android and/or iOS.
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Contributing
+If you wish to contribute a change to this repo, please send a [pull request](https://github.com/claimsforce-gmbh/flutter-segment/pulls).

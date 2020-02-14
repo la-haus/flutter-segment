@@ -3,39 +3,36 @@ import 'package:flutter_segment/flutter_segment.dart';
 
 void main() => runApp(MyApp());
 
-class MyApp extends StatefulWidget {
-  @override
-  _MyAppState createState() => _MyAppState();
-}
-
-class _MyAppState extends State<MyApp> {
-  @override
-  void initState() {
-    super.initState();
-  }
-
+class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    Segment.screen(
+      screenName: 'Example Screen',
+    );
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-          title: const Text('Segment example app'),
+          title: Text('Segment example app'),
         ),
         body: Center(
           child: FlatButton(
             child: Text('TRACK ACTION WITH SEGMENT'),
-            onPressed: () async {
-              await FlutterSegment.track(
-                eventName: 'TestEvent',
+            onPressed: () {
+              Segment.track(
+                eventName: 'ButtonClicked',
                 properties: {
-                  'price': 12.22,
-                  'product': 'TestProduct',
+                  'foo': 'bar',
+                  'number': 1337,
+                  'clicked': true,
                 },
               );
             },
           ),
         ),
       ),
+      navigatorObservers: [
+        SegmentObserver(),
+      ],
     );
   }
 }
