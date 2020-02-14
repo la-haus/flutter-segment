@@ -1,5 +1,9 @@
 ## 1.0.0
-* **BREAKING CHANGE**: the name was changed from `FlutterSegment` to `Segment`
+### BREAKING CHANGE
+* the name was changed from `FlutterSegment` to `Segment`
+* set flutter version to `>=1.12.13+hotfix.4 <2.0.0`
+
+### Feature
 * added web support
 
 ## 0.0.8
