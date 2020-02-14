@@ -1,5 +1,5 @@
 import 'package:meta/meta.dart';
-import 'package:flutter_segment/segment_platform_interface.dart';
+import 'package:flutter_segment/src/segment_platform_interface.dart';
 
 class FlutterSegment {
   static SegmentPlatform get _segment => SegmentPlatform.instance;
