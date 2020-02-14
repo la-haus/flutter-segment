@@ -1,7 +1,7 @@
 import 'package:meta/meta.dart';
 import 'package:flutter_segment/src/segment_platform_interface.dart';
 
-class FlutterSegment {
+class Segment {
   static SegmentPlatform get _segment => SegmentPlatform.instance;
 
   static Future<void> identify({

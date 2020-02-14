@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_segment/flutter_segment.dart';
+import 'package:flutter_segment/segment.dart';
 
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    FlutterSegment.screen(
+    Segment.screen(
       screenName: 'Example Screen',
     );
     return MaterialApp(
@@ -18,7 +18,7 @@ class MyApp extends StatelessWidget {
           child: FlatButton(
             child: Text('TRACK ACTION WITH SEGMENT'),
             onPressed: () {
-              FlutterSegment.track(
+              Segment.track(
                 eventName: 'TestEvent',
                 properties: {
                   'price': 12.22,
