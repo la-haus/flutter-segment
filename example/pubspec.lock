@@ -70,7 +70,7 @@ packages:
     source: sdk
     version: "0.0.0"
   flutter_segment:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       path: ".."
       relative: true
