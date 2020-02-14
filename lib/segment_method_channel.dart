@@ -5,7 +5,7 @@ import 'package:flutter_segment/segment_platform_interface.dart';
 
 const MethodChannel _channel = MethodChannel('flutter_segment');
 
-class MethodChannelSegment extends SegmentPlatform {
+class SegmentMethodChannel extends SegmentPlatform {
   Future<void> identify({
     @required userId,
     Map<String, dynamic> traits,
