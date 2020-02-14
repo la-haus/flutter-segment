@@ -4,7 +4,7 @@
 
 ## 0.0.8
 * added support for integration options in Android (iOS was already supported in previous versions)
-* added a configuration parameter for enabling/disabling automatic application lifecycle tracking
+* added a configuration parameter for enabling/disabling automatic application lifecycle tracking (only for Android, iOS)
 * removed `Application Started` tracking event from Android plugin registration
 
 ## 0.0.7
