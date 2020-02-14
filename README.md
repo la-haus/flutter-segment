@@ -61,9 +61,9 @@ class MyApp extends StatelessWidget {
 ```
 
 ## Installation
-Setup your Android, iOS and/or sources as described at Segment.com and generate your write keys.
+Setup your Android, iOS and/or web sources as described at Segment.com and generate your write keys.
 
-Set your Segment write key and change the automatic event tracking (only Android and iOS) on if you wish the library to take care of it for you. 
+Set your Segment write key and change the automatic event tracking (only for Android and iOS) on if you wish the library to take care of it for you. 
 Remember that the application lifecycle events won't have any special context set for you by the time it is initialized.
 
 ### Android
