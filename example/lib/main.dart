@@ -19,10 +19,11 @@ class MyApp extends StatelessWidget {
             child: Text('TRACK ACTION WITH SEGMENT'),
             onPressed: () {
               Segment.track(
-                eventName: 'TestEvent',
+                eventName: 'ButtonClicked',
                 properties: {
-                  'price': 12.22,
-                  'product': 'TestProduct',
+                  'foo': 'bar',
+                  'number': 1337,
+                  'clicked': true,
                 },
               );
             },
