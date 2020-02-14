@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_segment/segment.dart';
+import 'package:flutter_segment/flutter_segment.dart';
 
 void main() => runApp(MyApp());
 
