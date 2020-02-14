@@ -6,7 +6,22 @@ Flutter plugin to support iOS, Android and Web sources at https://segment.com.
 ## Usage
 To use this plugin, add `flutter_segment` as a [dependency in your pubspec.yaml file](https://flutter.io/platform-plugins/).
 
-## Example
+### Supported methods
+| Method | Android | iOS | Web |
+|---|---|---|---|
+| `identify` | X | X | X |
+| `track` | X | X | X |
+| `screen` | X | X | X |
+| `group` | X | X | X |
+| `alias` | X | X | X |
+| `getAnonymousId` | X | X | X |
+| `reset` | X | X | X |
+| `disable` | X | X | |
+| `enable` | X | X | |
+| `debug` | X | X | X |
+| `putDeviceToken` | X | X | |
+
+### Example
 ``` dart
 import 'package:flutter/material.dart';
 import 'package:flutter_segment/segment.dart';
@@ -45,7 +60,7 @@ class MyApp extends StatelessWidget {
 }
 ```
 
-## Configuration
+## Installation
 Setup your Android, iOS and/or sources as described at Segment.com and generate your write keys.
 
 Set your Segment write key and change the automatic event tracking (only Android and iOS) on if you wish the library to take care of it for you. 
