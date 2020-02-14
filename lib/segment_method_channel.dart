@@ -15,7 +15,7 @@ class SegmentMethodChannel extends SegmentPlatform {
       await _channel.invokeMethod('identify', {
         'userId': userId,
         'traits': traits ?? {},
-        'options': options ?? SegmentDefaultOptions.instance.options,
+        'options': options ?? SegmentDefaultOptions.instance.options ?? {},
       });
     } on PlatformException catch (exception) {
       print(exception);
@@ -31,7 +31,7 @@ class SegmentMethodChannel extends SegmentPlatform {
       await _channel.invokeMethod('track', {
         'eventName': eventName,
         'properties': properties ?? {},
-        'options': options ?? SegmentDefaultOptions.instance.options,
+        'options': options ?? SegmentDefaultOptions.instance.options ?? {},
       });
     } on PlatformException catch (exception) {
       print(exception);
@@ -47,7 +47,7 @@ class SegmentMethodChannel extends SegmentPlatform {
       await _channel.invokeMethod('screen', {
         'screenName': screenName,
         'properties': properties ?? {},
-        'options': options ?? SegmentDefaultOptions.instance.options,
+        'options': options ?? SegmentDefaultOptions.instance.options ?? {},
       });
     } on PlatformException catch (exception) {
       print(exception);
@@ -63,7 +63,7 @@ class SegmentMethodChannel extends SegmentPlatform {
       await _channel.invokeMethod('group', {
         'groupId': groupId,
         'traits': traits ?? {},
-        'options': options ?? SegmentDefaultOptions.instance.options,
+        'options': options ?? SegmentDefaultOptions.instance.options ?? {},
       });
     } on PlatformException catch (exception) {
       print(exception);
@@ -77,7 +77,7 @@ class SegmentMethodChannel extends SegmentPlatform {
     try {
       await _channel.invokeMethod('alias', {
         'alias': alias,
-        'options': options ?? SegmentDefaultOptions.instance.options,
+        'options': options ?? SegmentDefaultOptions.instance.options ?? {},
       });
     } on PlatformException catch (exception) {
       print(exception);
