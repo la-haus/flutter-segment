@@ -14,12 +14,54 @@ class SegmentWeb {
     channel.setMethodCallHandler(instance.handleMethodCall);
   }
 
-  Future<void> handleMethodCall(MethodCall call) async {
+  Future<dynamic> handleMethodCall(MethodCall call) async {
     final analytics = JsObject.fromBrowserObject(context['analytics']);
     switch (call.method) {
+      case 'identify':
+        analytics.callMethod('identify', [
+          call.arguments['userId'],
+          call.arguments['traits'],
+          call.arguments['options'],
+        ]);
+        break;
       case 'track':
         analytics.callMethod('track', [
           call.arguments['eventName'],
+          call.arguments['properties'],
+          call.arguments['options'],
+        ]);
+        break;
+      case 'screen':
+        analytics.callMethod('page', [
+          call.arguments['screenName'],
+          call.arguments['properties'],
+          call.arguments['options'],
+        ]);
+        break;
+      case 'group':
+        analytics.callMethod('group', [
+          call.arguments['groupId'],
+          call.arguments['traits'],
+          call.arguments['options'],
+        ]);
+        break;
+      case 'alias':
+        analytics.callMethod('alias', [
+          call.arguments['alias'],
+          call.arguments['options'],
+        ]);
+        break;
+      case 'getAnonymousId':
+        final user = analytics.callMethod('user');
+        final anonymousId = user.callMethod('anonymousId');
+        return anonymousId;
+        break;
+      case 'reset':
+        analytics.callMethod('reset');
+        break;
+      case 'debug':
+        analytics.callMethod('debug', [
+          call.arguments['debug'],
         ]);
         break;
       default:
