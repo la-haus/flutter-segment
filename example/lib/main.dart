@@ -2,9 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_segment/flutter_segment.dart';
 
 void main() {
-  /// Ensures flutter has initialized, so we can set the context
-  WidgetsFlutterBinding.ensureInitialized();
-
   /// The `context.device.token` is a special property.
   /// When you define it, setting the context again with no token property (ex: `{}`)
   /// has no effect on cleaning up the device token.
@@ -17,7 +14,7 @@ void main() {
   /// tokens, which are binary structures.
   ///
   /// Aside from this special use case, any other context property that needs
-  /// to be defined (or re-defined) can be done so by calling this method.
+  /// to be defined (or re-defined) can be done.
   Segment.setContext({
     'device': {
       'token': 'testing'
@@ -78,21 +75,6 @@ class MyApp extends StatelessWidget {
                 child: Text('Clear Context'),
                 onPressed: () {
                   Segment.setContext({ });
-                },
-              ),
-            ),
-
-            Spacer(),
-
-            Center(
-              child: FlatButton(
-                child: Text('Set Token'),
-                onPressed: () {
-                  Segment.setContext({
-                    'device': {
-                      'token': 'another-token'
-                    }
-                  });
                 },
               ),
             ),

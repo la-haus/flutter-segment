@@ -4,6 +4,9 @@
 #import <Analytics/SEGMiddleware.h>
 
 @implementation FlutterSegmentPlugin
+// Contents to be appended to the context
+static NSDictionary *_appendToContextMiddleware;
+
 + (void)registerWithRegistrar:(NSObject<FlutterPluginRegistrar>*)registrar {
   @try {
     NSString *path = [[NSBundle mainBundle] pathForResource: @"Info" ofType: @"plist"];
@@ -12,13 +15,15 @@
     BOOL trackApplicationLifecycleEvents = [[dict objectForKey: @"com.claimsforce.segment.TRACK_APPLICATION_LIFECYCLE_EVENTS"] boolValue];
     SEGAnalyticsConfiguration *configuration = [SEGAnalyticsConfiguration configurationWithWriteKey:writeKey];
 
-    // cleanup old context overrides during init
-    NSUserDefaults *preferences = [NSUserDefaults standardUserDefaults];
-    [preferences removeObjectForKey:@"segmentContext"];
-
     // This middleware is responsible for manipulating only the context part of the request,
     // leaving all other fields as is.
     SEGMiddlewareBlock contextMiddleware = ^(SEGContext *_Nonnull context, SEGMiddlewareNext _Nonnull next) {
+      // Do not execute if there is nothing to append
+      if (_appendToContextMiddleware == nil) {
+        next(context);
+        return;
+      }
+
       // Avoid overriding the context if there is none to override
       // (see different payload types here: https://github.com/segmentio/analytics-ios/tree/master/Analytics/Classes/Integrations)
       if (![context.payload isKindOfClass:[SEGTrackPayload class]]
@@ -31,6 +36,10 @@
 
       next([context
         modify: ^(id<SEGMutableContext> _Nonnull ctx) {
+          if (_appendToContextMiddleware == nil) {
+            return;
+          }
+
           // do not touch it if no payload is present
           if (ctx.payload == nil) {
             NSLog(@"Cannot update segment context when the current context payload is empty.");
@@ -38,54 +47,49 @@
           }
 
           @try {
-            NSUserDefaults *preferences = [NSUserDefaults standardUserDefaults];
-            if ([preferences objectForKey:@"segmentContext"] != nil) {
-              NSDictionary *contextToAppend = [preferences dictionaryForKey:@"segmentContext"];
-              // We need to perform a deep merge to not lose any sub-dictionary
-              // that is already set. [contextToAppend] has precedence over [ctx.payload.context] values
-              NSDictionary *combinedContext = [FlutterSegmentPlugin
-                mergeDictionary: ctx.payload.context == nil
-                  ? [[NSDictionary alloc] init]
-                  : [ctx.payload.context copy]
-                with: contextToAppend];
+            // We need to perform a deep merge to not lose any sub-dictionary
+            // that is already set. [contextToAppend] has precedence over [ctx.payload.context] values
+            NSDictionary *combinedContext = [FlutterSegmentPlugin
+              mergeDictionary: ctx.payload.context == nil
+                ? [[NSDictionary alloc] init]
+                : [ctx.payload.context copy]
+              with: _appendToContextMiddleware];
 
-              // SEGPayload does not offer copyWith* methods, so we have to
-              // manually test and re-create it for each of its type.
-              if ([ctx.payload isKindOfClass:[SEGTrackPayload class]]) {
-                ctx.payload = [[SEGTrackPayload alloc]
-                  initWithEvent: ((SEGTrackPayload*)ctx.payload).event
-                  properties: ((SEGTrackPayload*)ctx.payload).properties
-                  context: combinedContext
-                  integrations: ((SEGTrackPayload*)ctx.payload).integrations
-                ];
-              } else if ([ctx.payload isKindOfClass:[SEGScreenPayload class]]) {
-                ctx.payload = [[SEGScreenPayload alloc]
-                  initWithName: ((SEGScreenPayload*)ctx.payload).name
-                  properties: ((SEGScreenPayload*)ctx.payload).properties
-                  context: combinedContext
-                  integrations: ((SEGScreenPayload*)ctx.payload).integrations
-                ];
-              } else if ([ctx.payload isKindOfClass:[SEGGroupPayload class]]) {
-                ctx.payload = [[SEGGroupPayload alloc]
-                  initWithGroupId: ((SEGGroupPayload*)ctx.payload).groupId
-                  traits: ((SEGGroupPayload*)ctx.payload).traits
-                  context: combinedContext
-                  integrations: ((SEGGroupPayload*)ctx.payload).integrations
-                ];
-              } else if ([ctx.payload isKindOfClass:[SEGIdentifyPayload class]]) {
-                ctx.payload = [[SEGIdentifyPayload alloc]
-                  initWithUserId: ((SEGIdentifyPayload*)ctx.payload).userId
-                  anonymousId: ((SEGIdentifyPayload*)ctx.payload).anonymousId
-                  traits: ((SEGIdentifyPayload*)ctx.payload).traits
-                  context: combinedContext
-                  integrations: ((SEGIdentifyPayload*)ctx.payload).integrations
-                ];
-              }
+            // SEGPayload does not offer copyWith* methods, so we have to
+            // manually test and re-create it for each of its type.
+            if ([ctx.payload isKindOfClass:[SEGTrackPayload class]]) {
+              ctx.payload = [[SEGTrackPayload alloc]
+                initWithEvent: ((SEGTrackPayload*)ctx.payload).event
+                properties: ((SEGTrackPayload*)ctx.payload).properties
+                context: combinedContext
+                integrations: ((SEGTrackPayload*)ctx.payload).integrations
+              ];
+            } else if ([ctx.payload isKindOfClass:[SEGScreenPayload class]]) {
+              ctx.payload = [[SEGScreenPayload alloc]
+                initWithName: ((SEGScreenPayload*)ctx.payload).name
+                properties: ((SEGScreenPayload*)ctx.payload).properties
+                context: combinedContext
+                integrations: ((SEGScreenPayload*)ctx.payload).integrations
+              ];
+            } else if ([ctx.payload isKindOfClass:[SEGGroupPayload class]]) {
+              ctx.payload = [[SEGGroupPayload alloc]
+                initWithGroupId: ((SEGGroupPayload*)ctx.payload).groupId
+                traits: ((SEGGroupPayload*)ctx.payload).traits
+                context: combinedContext
+                integrations: ((SEGGroupPayload*)ctx.payload).integrations
+              ];
+            } else if ([ctx.payload isKindOfClass:[SEGIdentifyPayload class]]) {
+              ctx.payload = [[SEGIdentifyPayload alloc]
+                initWithUserId: ((SEGIdentifyPayload*)ctx.payload).userId
+                anonymousId: ((SEGIdentifyPayload*)ctx.payload).anonymousId
+                traits: ((SEGIdentifyPayload*)ctx.payload).traits
+                context: combinedContext
+                integrations: ((SEGIdentifyPayload*)ctx.payload).integrations
+              ];
             }
           }
           @catch (NSException *exception) {
             NSLog(@"Could not update segment context: %@", [exception reason]);
-            next(context);
           }
         }]
       );
@@ -139,17 +143,8 @@
 - (void)setContext:(FlutterMethodCall*)call result:(FlutterResult)result {
   @try {
     NSDictionary *context = call.arguments[@"context"];
-    NSUserDefaults *preferences = [NSUserDefaults standardUserDefaults];
-    [preferences setObject:context forKey:@"segmentContext"];
-    const BOOL didSave = [preferences synchronize];
-    if (!didSave) {
-      result([FlutterError
-        errorWithCode:@"FlutterSegmentException"
-        message:@"Could not set segmentContext in NSUserDefaults"
-        details: nil]);
-    } else {
-      result([NSNumber numberWithBool:YES]);
-    }
+    _appendToContextMiddleware = context;
+    result([NSNumber numberWithBool:YES]);
   }
   @catch (NSException *exception) {
     result([FlutterError
