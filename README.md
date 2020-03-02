@@ -19,7 +19,7 @@ To use this plugin, add `flutter_segment` as a [dependency in your pubspec.yaml 
 | `disable` | X | X | |
 | `enable` | X | X | |
 | `debug` | X | X | X |
-| `putDeviceToken` | X | X | |
+| `setContext` | X | X | |
 
 ### Example
 ``` dart
@@ -66,7 +66,7 @@ class MyApp extends StatelessWidget {
 ## Installation
 Setup your Android, iOS and/or web sources as described at Segment.com and generate your write keys.
 
-Set your Segment write key and change the automatic event tracking (only for Android and iOS) on if you wish the library to take care of it for you. 
+Set your Segment write key and change the automatic event tracking (only for Android and iOS) on if you wish the library to take care of it for you.
 Remember that the application lifecycle events won't have any special context set for you by the time it is initialized.
 
 ### Android
@@ -119,27 +119,39 @@ Remember that the application lifecycle events won't have any special context se
 ```
 For more informations please check: https://segment.com/docs/connections/sources/catalog/libraries/website/javascript/quickstart/
 
-## Sending device tokens for push notifications
+## Sending device tokens strings for push notifications
 Segment integrates with 3rd parties that allow sending push notifications.
-In order to do that you will need to provide it with the device token - which can be obtained using one of the several Flutter libraries.
+In order to do that you will need to provide it with the device token string - which can be obtained using one of the several Flutter libraries.
 
-As soon as you obtain the device token, you need to add it to Segment's context and then emit a tracking event named `Application Opened` or `Application Installed`. The tracking event is needed because it is the [only moment when Segment propagates it to 3rd parties](https://segment.com/docs/connections/destinations/catalog/customer-io/).
+As soon as you obtain the device token string, you need to add it to Segment's context by calling `setContext` and then emit a tracking event named `Application Opened` or `Application Installed`. The tracking event is needed because it is the [only moment when Segment propagates it to 3rd parties](https://segment.com/docs/connections/destinations/catalog/customer-io/).
 
-Both calls (`putDeviceToken` and `track`) can be done sequentially at startup time, given that the token exists.
+Both calls (`setContext` and `track`) can be done sequentially at startup time, given that the token exists.
 Nonetheless, if you don't want to delay the token propagation and don't mind having an extra `Application Opened` event in the middle of your app's events, it can be done right away when the token is acquired.
 
 ```dart
-await Segment.putDeviceToken(token);
+await Segment.setContext({
+  'device': {
+    'token': yourTokenString
+  },
+});
+
 // the token is only propagated when one of two events are called:
 // - Application Installed
 // - Application Opened
 await Segment.track(eventName: 'Application Opened');
 ```
 
-## Setting integration options
-If you intend to use any specific integrations with third parties, such as custom Session IDs for Amplitude, you'll need to set it using options for each call (or globally) when the application was started.
+A few important points:
+- The token is propagated as-is to Segment through the context field, without any manipulation or intermediate calls to Segment's libraries. Strucutred data - such as APNs - need to be properly converted to its string representation beforehand
+- On iOS, once the `device.token` is set, calling `setContext({})` will *not* clean up its value. This occurs due to the existence of another method from segment's library that sets the device token for Apple Push Notification service (APNs )
+- `setContext` always overrides any previous values that were set in a previous call to `setContext`
+- `setContext` is not persisted after the application is closed
 
-## Setting the options in every call
+## Setting integration options
+If you intend to use any specific integrations with third parties, such as custom Session IDs for Amplitude, you'll need to set it using options for each call, or globally when the application was started.
+
+### Setting the options in every call
+
 The methods below support `options` as parameters:
 - `identify({@required userId, Map<String, dynamic> traits, Map<String, dynamic> options})`
 - `track({@required String eventName, Map<String, dynamic> properties, Map<String, dynamic> options})`
@@ -161,8 +173,9 @@ Segment.screen(
 )
 ```
 
-## Setting the options globally
-You can also set the default options to be used in every method call, if the call omits the options parameter. Just set `FlutterSegmentDefaultOptions.instance.options`. For example:
+### Setting the options globally
+You can also set the default options to be used in every method call, if the call omits the options parameter. Just set `SegmentDefaultOptions.instance.options`. For example:
+
 
 ```dart
 SegmentDefaultOptions.instance.options = {

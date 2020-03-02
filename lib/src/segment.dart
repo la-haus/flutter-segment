@@ -2,6 +2,7 @@ import 'package:meta/meta.dart';
 import 'package:flutter_segment/src/segment_platform_interface.dart';
 
 export 'package:flutter_segment/src/segment_observer.dart';
+export 'package:flutter_segment/src/segment_default_options.dart';
 
 class Segment {
   static SegmentPlatform get _segment => SegmentPlatform.instance;
@@ -84,7 +85,7 @@ class Segment {
     return _segment.debug(enabled);
   }
 
-  static Future<void> putDeviceToken(String token) {
-    return _segment.putDeviceToken(token);
+  static Future<void> setContext(Map<String, dynamic> context) {
+    return _segment.setContext(context);
   }
 }
