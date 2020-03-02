@@ -152,6 +152,7 @@ static NSDictionary *_appendToContextMiddleware;
       message:[exception reason]
       details: nil]);
   }
+
 }
 
 - (void)identify:(FlutterMethodCall*)call result:(FlutterResult)result {

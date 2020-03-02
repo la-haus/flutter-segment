@@ -134,6 +134,7 @@ await Segment.setContext({
     'token': yourTokenString
   },
 });
+
 // the token is only propagated when one of two events are called:
 // - Application Installed
 // - Application Opened
@@ -150,6 +151,7 @@ A few important points:
 If you intend to use any specific integrations with third parties, such as custom Session IDs for Amplitude, you'll need to set it using options for each call, or globally when the application was started.
 
 ### Setting the options in every call
+
 The methods below support `options` as parameters:
 - `identify({@required userId, Map<String, dynamic> traits, Map<String, dynamic> options})`
 - `track({@required String eventName, Map<String, dynamic> properties, Map<String, dynamic> options})`
@@ -173,6 +175,7 @@ Segment.screen(
 
 ### Setting the options globally
 You can also set the default options to be used in every method call, if the call omits the options parameter. Just set `SegmentDefaultOptions.instance.options`. For example:
+
 
 ```dart
 SegmentDefaultOptions.instance.options = {
