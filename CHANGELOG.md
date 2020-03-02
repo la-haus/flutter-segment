@@ -1,3 +1,8 @@
+## 2.0.0
+### BREAKING CHANGE
+* removed `putDeviceToken` call
+* added `setContext` as a better and more general approach to setting context variables
+
 ## 1.0.0
 ### BREAKING CHANGE
 * the name was changed from `FlutterSegment` to `Segment`
