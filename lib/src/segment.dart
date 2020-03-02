@@ -2,6 +2,7 @@ import 'package:meta/meta.dart';
 import 'package:flutter_segment/src/segment_platform_interface.dart';
 
 export 'package:flutter_segment/src/segment_observer.dart';
+export 'package:flutter_segment/src/segment_default_options.dart';
 
 class Segment {
   static SegmentPlatform get _segment => SegmentPlatform.instance;
