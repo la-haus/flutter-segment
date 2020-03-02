@@ -1,6 +1,5 @@
 #include "AppDelegate.h"
 #include "GeneratedPluginRegistrant.h"
-#import <Analytics/SEGAnalytics.h>
 
 @implementation AppDelegate
 
