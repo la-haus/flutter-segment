@@ -2,9 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:flutter_segment/flutter_segment.dart';
 
 void main() {
-  // ensures flutter has initialized, so we can set the context
+  /// Ensures flutter has initialized, so we can set the context
   WidgetsFlutterBinding.ensureInitialized();
 
+  /// The `context.device.token` is a special property.
+  /// When you define it, setting the context again with no token property (ex: `{}`)
+  /// has no effect on cleaning up the device token.
+  ///
+  /// This is used as an example to allow you to set string-based
+  /// device tokens, which is the use case when integrating with
+  /// Firebase Cloud Messaging (FCM).
+  ///
+  /// This plugin currently does not support Apple Push Notification service (APNs)
+  /// tokens, which are binary structures.
+  ///
+  /// Aside from this special use case, any other context property that needs
+  /// to be defined (or re-defined) can be done so by calling this method.
   Segment.setContext({
     'device': {
       'token': 'testing'
@@ -53,6 +66,32 @@ class MyApp extends StatelessWidget {
                 onPressed: () {
                   Segment.setContext({
                     'custom': 123
+                  });
+                },
+              ),
+            ),
+
+            Spacer(),
+
+            Center(
+              child: FlatButton(
+                child: Text('Clear Context'),
+                onPressed: () {
+                  Segment.setContext({ });
+                },
+              ),
+            ),
+
+            Spacer(),
+
+            Center(
+              child: FlatButton(
+                child: Text('Set Token'),
+                onPressed: () {
+                  Segment.setContext({
+                    'device': {
+                      'token': 'another-token'
+                    }
                   });
                 },
               ),

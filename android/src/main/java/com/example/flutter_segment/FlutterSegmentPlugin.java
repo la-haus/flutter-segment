@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -12,7 +13,10 @@ import com.segment.analytics.AnalyticsContext;
 import com.segment.analytics.Properties;
 import com.segment.analytics.Traits;
 import com.segment.analytics.Options;
+import com.segment.analytics.Middleware;
+import com.segment.analytics.integrations.BasePayload;
 
+import java.util.LinkedHashMap;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -25,6 +29,7 @@ import io.flutter.plugin.common.PluginRegistry.Registrar;
 /** FlutterSegmentPlugin */
 public class FlutterSegmentPlugin implements MethodCallHandler {
   Context context;
+  static HashMap<String, Object> appendToContextMiddleware;
 
   public FlutterSegmentPlugin(Context context) {
     this.context = context;
@@ -44,6 +49,38 @@ public class FlutterSegmentPlugin implements MethodCallHandler {
           // Enable this to record certain application events automatically
           analyticsBuilder.trackApplicationLifecycleEvents();
         }
+
+        // Here we build a middleware that just appends data to the current context
+        // using the [deepMerge] strategy.
+        analyticsBuilder.middleware(
+          new Middleware() {
+            @Override
+            public void intercept(Chain chain) {
+              try {
+                if (appendToContextMiddleware == null) {
+                  chain.proceed(chain.payload());
+                  return;
+                }
+
+                BasePayload payload = chain.payload();
+                Map<String, Object> originalContext = new LinkedHashMap<>(payload.context());
+                Map<String, Object> mergedContext = FlutterSegmentPlugin.deepMerge(
+                  originalContext,
+                  appendToContextMiddleware
+                );
+
+                BasePayload newPayload = payload.toBuilder()
+                  .context(mergedContext)
+                  .build();
+
+                chain.proceed(newPayload);
+              } catch (Exception e) {
+                Log.e("FlutterSegment", e.getMessage());
+                chain.proceed(chain.payload());
+              }
+            }
+          }
+        );
 
         // Set the initialized instance as a globally accessible instance.
         Analytics.setSingletonInstance(analyticsBuilder.build());
@@ -71,8 +108,8 @@ public class FlutterSegmentPlugin implements MethodCallHandler {
       this.anonymousId(result);
     } else if (call.method.equals("reset")) {
       this.reset(result);
-    } else if (call.method.equals("putDeviceToken")) {
-      this.putDeviceToken(call, result);
+    } else if (call.method.equals("setContext")) {
+      this.setContext(call, result);
     } else {
       result.notImplemented();
     }
@@ -224,11 +261,9 @@ public class FlutterSegmentPlugin implements MethodCallHandler {
     }
   }
 
-  private void putDeviceToken(MethodCall call, Result result) {
+  private void setContext(MethodCall call, Result result) {
     try {
-      String token = call.argument("token");
-      AnalyticsContext analyticsContext = Analytics.with(context).getAnalyticsContext();
-      analyticsContext.putDeviceToken(token);
+      this.appendToContextMiddleware = call.argument("context");
       result.success(true);
     } catch (Exception e) {
       result.error("FlutterSegmentException", e.getLocalizedMessage(), null);
@@ -262,5 +297,20 @@ public class FlutterSegmentPlugin implements MethodCallHandler {
     }
 
     return options;
+  }
+
+  // Merges [newMap] into [original], *not* preserving [original]
+  // keys (deep) in case of conflicts.
+  private static Map deepMerge(Map original, Map newMap) {
+    for (Object key : newMap.keySet()) {
+      if (newMap.get(key) instanceof Map && original.get(key) instanceof Map) {
+        Map originalChild = (Map) original.get(key);
+        Map newChild = (Map) newMap.get(key);
+        original.put(key, deepMerge(originalChild, newChild));
+      } else {
+        original.put(key, newMap.get(key));
+      }
+    }
+    return original;
   }
 }
