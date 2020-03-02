@@ -84,7 +84,7 @@ class Segment {
     return _segment.debug(enabled);
   }
 
-  static Future<void> putDeviceToken(String token) {
-    return _segment.putDeviceToken(token);
+  static Future<void> setContext(Map<String, dynamic> context) {
+    return _segment.setContext(context);
   }
 }

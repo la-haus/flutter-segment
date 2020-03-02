@@ -122,10 +122,10 @@ class SegmentMethodChannel extends SegmentPlatform {
     }
   }
 
-  Future<void> putDeviceToken(String token) async {
+  Future<void> setContext(Map<String, dynamic> context) async {
     try {
-      await _channel.invokeMethod('putDeviceToken', {
-        'token': token,
+      await _channel.invokeMethod('setContext', {
+        'context': context
       });
     } on PlatformException catch (exception) {
       print(exception);

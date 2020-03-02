@@ -70,7 +70,7 @@ abstract class SegmentPlatform {
     throw UnimplementedError('debug() has not been implemented.');
   }
 
-  Future<void> putDeviceToken(String token) {
-    throw UnimplementedError('putDeviceToken() has not been implemented.');
+  Future<void> setContext(Map<String, dynamic> context) {
+    throw UnimplementedError('setContext() has not been implemented.');
   }
 }
