@@ -20,76 +20,95 @@ import java.util.LinkedHashMap;
 import java.util.HashMap;
 import java.util.Map;
 
+import io.flutter.plugin.common.BinaryMessenger;
 import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler;
 import io.flutter.plugin.common.MethodChannel.Result;
-import io.flutter.plugin.common.PluginRegistry.Registrar;
+import io.flutter.plugin.common.PluginRegistry;
+import io.flutter.embedding.engine.plugins.FlutterPlugin;
 
 /** FlutterSegmentPlugin */
-public class FlutterSegmentPlugin implements MethodCallHandler {
-  Context context;
+public class FlutterSegmentPlugin implements MethodCallHandler, FlutterPlugin {
+  private Context applicationContext;
+  private MethodChannel methodChannel;
+
   static HashMap<String, Object> appendToContextMiddleware;
 
-  public FlutterSegmentPlugin(Context context) {
-    this.context = context;
+  /** Plugin registration. */
+  public static void registerWith(PluginRegistry.Registrar registrar) {
+    final FlutterSegmentPlugin instance = new FlutterSegmentPlugin();
+    instance.onAttachedToEngine(registrar.context(), registrar.messenger());
   }
 
-  /** Plugin registration. */
-  public static void registerWith(Registrar registrar) {
-    if (registrar.activity() != null) {
-      try {
-        Context context = registrar.activity().getApplicationContext();
-        ApplicationInfo ai = context.getPackageManager().getApplicationInfo(context.getPackageName(), PackageManager.GET_META_DATA);
-        Bundle bundle = ai.metaData;
-        String writeKey = bundle.getString("com.claimsforce.segment.WRITE_KEY");
-        Boolean trackApplicationLifecycleEvents = bundle.getBoolean("com.claimsforce.segment.TRACK_APPLICATION_LIFECYCLE_EVENTS");
-        Analytics.Builder analyticsBuilder = new Analytics.Builder(registrar.activity(), writeKey);
-        if (trackApplicationLifecycleEvents) {
-          // Enable this to record certain application events automatically
-          analyticsBuilder.trackApplicationLifecycleEvents();
-        }
+  @Override
+  public void onAttachedToEngine(FlutterPluginBinding binding) {
+    onAttachedToEngine(binding.getApplicationContext(), binding.getBinaryMessenger());
+  }
 
-        // Here we build a middleware that just appends data to the current context
-        // using the [deepMerge] strategy.
-        analyticsBuilder.middleware(
-          new Middleware() {
-            @Override
-            public void intercept(Chain chain) {
-              try {
-                if (appendToContextMiddleware == null) {
-                  chain.proceed(chain.payload());
-                  return;
-                }
+  private void onAttachedToEngine(Context applicationContext, BinaryMessenger messenger) {
+    try {
+      this.applicationContext = applicationContext;
 
-                BasePayload payload = chain.payload();
-                Map<String, Object> originalContext = new LinkedHashMap<>(payload.context());
-                Map<String, Object> mergedContext = FlutterSegmentPlugin.deepMerge(
-                  originalContext,
-                  appendToContextMiddleware
-                );
+      ApplicationInfo ai = applicationContext.getPackageManager()
+        .getApplicationInfo(applicationContext.getPackageName(), PackageManager.GET_META_DATA);
 
-                BasePayload newPayload = payload.toBuilder()
-                  .context(mergedContext)
-                  .build();
+      Bundle bundle = ai.metaData;
+      String writeKey = bundle.getString("com.claimsforce.segment.WRITE_KEY");
+      Boolean trackApplicationLifecycleEvents = bundle.getBoolean("com.claimsforce.segment.TRACK_APPLICATION_LIFECYCLE_EVENTS");
+      Analytics.Builder analyticsBuilder = new Analytics.Builder(applicationContext, writeKey);
+      if (trackApplicationLifecycleEvents) {
+        // Enable this to record certain application events automatically
+        analyticsBuilder.trackApplicationLifecycleEvents();
+      }
 
-                chain.proceed(newPayload);
-              } catch (Exception e) {
-                Log.e("FlutterSegment", e.getMessage());
+      // Here we build a middleware that just appends data to the current context
+      // using the [deepMerge] strategy.
+      analyticsBuilder.middleware(
+        new Middleware() {
+          @Override
+          public void intercept(Chain chain) {
+            try {
+              if (appendToContextMiddleware == null) {
                 chain.proceed(chain.payload());
+                return;
               }
+
+              BasePayload payload = chain.payload();
+              Map<String, Object> originalContext = new LinkedHashMap<>(payload.context());
+              Map<String, Object> mergedContext = FlutterSegmentPlugin.deepMerge(
+                originalContext,
+                appendToContextMiddleware
+              );
+
+              BasePayload newPayload = payload.toBuilder()
+                .context(mergedContext)
+                .build();
+
+              chain.proceed(newPayload);
+            } catch (Exception e) {
+              Log.e("FlutterSegment", e.getMessage());
+              chain.proceed(chain.payload());
             }
           }
-        );
+        }
+      );
 
-        // Set the initialized instance as a globally accessible instance.
-        Analytics.setSingletonInstance(analyticsBuilder.build());
-        final MethodChannel channel = new MethodChannel(registrar.messenger(), "flutter_segment");
-        channel.setMethodCallHandler(new FlutterSegmentPlugin(context));
-      } catch (Exception e) {
-        Log.e("FlutterSegment", e.getMessage());
-      }
+      // Set the initialized instance as a globally accessible instance.
+      Analytics.setSingletonInstance(analyticsBuilder.build());
+      // register the channel to receive calls
+      methodChannel = new MethodChannel(messenger, "flutter_segment");
+      methodChannel.setMethodCallHandler(this);
+    } catch (Exception e) {
+      Log.e("FlutterSegment", e.getMessage());
     }
+  }
+
+  @Override
+  public void onDetachedFromEngine(FlutterPluginBinding binding) {
+    applicationContext = null;
+    methodChannel.setMethodCallHandler(null);
+    methodChannel = null;
   }
 
   @Override
@@ -141,7 +160,7 @@ public class FlutterSegmentPlugin implements MethodCallHandler {
       traits.putValue(key, value);
     }
 
-    Analytics.with(this.context).identify(userId, traits, options);
+    Analytics.with(this.applicationContext).identify(userId, traits, options);
   }
 
   private void track(MethodCall call, Result result) {
@@ -170,7 +189,7 @@ public class FlutterSegmentPlugin implements MethodCallHandler {
       properties.putValue(key, value);
     }
 
-    Analytics.with(this.context).track(eventName, properties, options);
+    Analytics.with(this.applicationContext).track(eventName, properties, options);
   }
 
   private void screen(MethodCall call, Result result) {
@@ -199,7 +218,7 @@ public class FlutterSegmentPlugin implements MethodCallHandler {
       properties.putValue(key, value);
     }
 
-    Analytics.with(this.context).screen(null, screenName, properties, options);
+    Analytics.with(this.applicationContext).screen(null, screenName, properties, options);
   }
 
   private void group(MethodCall call, Result result) {
@@ -228,7 +247,7 @@ public class FlutterSegmentPlugin implements MethodCallHandler {
       traits.putValue(key, value);
     }
 
-    Analytics.with(this.context).group(groupId, traits, options);
+    Analytics.with(this.applicationContext).group(groupId, traits, options);
   }
 
   private void alias(MethodCall call, Result result) {
@@ -236,7 +255,7 @@ public class FlutterSegmentPlugin implements MethodCallHandler {
       String alias = call.argument("alias");
       HashMap<String, Object> optionsData = call.argument("options");
       Options options = this.buildOptions(optionsData);
-      Analytics.with(this.context).alias(alias, options);
+      Analytics.with(this.applicationContext).alias(alias, options);
       result.success(true);
     } catch (Exception e) {
       result.error("FlutterSegmentException", e.getLocalizedMessage(), null);
@@ -245,7 +264,7 @@ public class FlutterSegmentPlugin implements MethodCallHandler {
 
   private void anonymousId(Result result) {
     try {
-      String anonymousId = Analytics.with(this.context).getAnalyticsContext().traits().anonymousId();
+      String anonymousId = Analytics.with(this.applicationContext).getAnalyticsContext().traits().anonymousId();
       result.success(anonymousId);
     } catch (Exception e) {
       result.error("FlutterSegmentException", e.getLocalizedMessage(), null);
@@ -254,7 +273,7 @@ public class FlutterSegmentPlugin implements MethodCallHandler {
 
   private void reset(Result result) {
     try {
-      Analytics.with(this.context).reset();
+      Analytics.with(this.applicationContext).reset();
       result.success(true);
     } catch (Exception e) {
       result.error("FlutterSegmentException", e.getLocalizedMessage(), null);
