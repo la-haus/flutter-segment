@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_segment/flutter_segment.dart';
 
 void main() {
+  /// Wait until the platform channel is properly initialized so we can call
+  /// `setContext` during the app initialization.
+  WidgetsFlutterBinding.ensureInitialized();
+
   /// The `context.device.token` is a special property.
   /// When you define it, setting the context again with no token property (ex: `{}`)
   /// has no effect on cleaning up the device token.
