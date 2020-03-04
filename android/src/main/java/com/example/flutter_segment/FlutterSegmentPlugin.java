@@ -105,6 +105,9 @@ public class FlutterSegmentPlugin implements MethodCallHandler, FlutterPlugin {
   }
 
   @Override
+  public void onDetachedFromEngine(FlutterPluginBinding binding) { }
+
+  @Override
   public void onMethodCall(MethodCall call, Result result) {
     if(call.method.equals("identify")) {
       this.identify(call, result);
