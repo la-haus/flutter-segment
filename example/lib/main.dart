@@ -21,7 +21,7 @@ void main() {
   /// to be defined (or re-defined) can be done.
   Segment.setContext({
     'device': {
-      'token': 'testing'
+      'token': 'testing',
     }
   });
 
@@ -42,7 +42,6 @@ class MyApp extends StatelessWidget {
         body: Column(
           children: <Widget>[
             Spacer(),
-
             Center(
               child: FlatButton(
                 child: Text('TRACK ACTION WITH SEGMENT'),
@@ -58,31 +57,24 @@ class MyApp extends StatelessWidget {
                 },
               ),
             ),
-
             Spacer(),
-
             Center(
               child: FlatButton(
                 child: Text('Update Context'),
                 onPressed: () {
-                  Segment.setContext({
-                    'custom': 123
-                  });
+                  Segment.setContext({'custom': 123});
                 },
               ),
             ),
-
             Spacer(),
-
             Center(
               child: FlatButton(
                 child: Text('Clear Context'),
                 onPressed: () {
-                  Segment.setContext({ });
+                  Segment.setContext({});
                 },
               ),
             ),
-
             Spacer(),
           ],
         ),
