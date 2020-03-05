@@ -1,6 +1,6 @@
 name: flutter_segment
 description: Flutter implementation of Segment Analytics for iOS, Android and Web
-version: 1.0.0
+version: 2.0.1
 authors:
   - Kevin Luecke <kevin@claimsforce.com>
   - Maik Schmidt <maik@claimsforce.com>

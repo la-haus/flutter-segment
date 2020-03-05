@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -12,48 +13,99 @@ import com.segment.analytics.AnalyticsContext;
 import com.segment.analytics.Properties;
 import com.segment.analytics.Traits;
 import com.segment.analytics.Options;
+import com.segment.analytics.Middleware;
+import com.segment.analytics.integrations.BasePayload;
 
+import java.util.LinkedHashMap;
 import java.util.HashMap;
 import java.util.Map;
 
+import io.flutter.plugin.common.BinaryMessenger;
 import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler;
 import io.flutter.plugin.common.MethodChannel.Result;
-import io.flutter.plugin.common.PluginRegistry.Registrar;
+import io.flutter.plugin.common.PluginRegistry;
+import io.flutter.embedding.engine.plugins.FlutterPlugin;
 
 /** FlutterSegmentPlugin */
-public class FlutterSegmentPlugin implements MethodCallHandler {
-  Context context;
+public class FlutterSegmentPlugin implements MethodCallHandler, FlutterPlugin {
+  private Context applicationContext;
+  private MethodChannel methodChannel;
 
-  public FlutterSegmentPlugin(Context context) {
-    this.context = context;
-  }
+  static HashMap<String, Object> appendToContextMiddleware;
 
   /** Plugin registration. */
-  public static void registerWith(Registrar registrar) {
-    if (registrar.activity() != null) {
-      try {
-        Context context = registrar.activity().getApplicationContext();
-        ApplicationInfo ai = context.getPackageManager().getApplicationInfo(context.getPackageName(), PackageManager.GET_META_DATA);
-        Bundle bundle = ai.metaData;
-        String writeKey = bundle.getString("com.claimsforce.segment.WRITE_KEY");
-        Boolean trackApplicationLifecycleEvents = bundle.getBoolean("com.claimsforce.segment.TRACK_APPLICATION_LIFECYCLE_EVENTS");
-        Analytics.Builder analyticsBuilder = new Analytics.Builder(registrar.activity(), writeKey);
-        if (trackApplicationLifecycleEvents) {
-          // Enable this to record certain application events automatically
-          analyticsBuilder.trackApplicationLifecycleEvents();
-        }
+  public static void registerWith(PluginRegistry.Registrar registrar) {
+    final FlutterSegmentPlugin instance = new FlutterSegmentPlugin();
+    instance.onAttachedToEngine(registrar.context(), registrar.messenger());
+  }
 
-        // Set the initialized instance as a globally accessible instance.
-        Analytics.setSingletonInstance(analyticsBuilder.build());
-        final MethodChannel channel = new MethodChannel(registrar.messenger(), "flutter_segment");
-        channel.setMethodCallHandler(new FlutterSegmentPlugin(context));
-      } catch (Exception e) {
-        Log.e("FlutterSegment", e.getMessage());
+  @Override
+  public void onAttachedToEngine(FlutterPluginBinding binding) {
+    onAttachedToEngine(binding.getApplicationContext(), binding.getBinaryMessenger());
+  }
+
+  private void onAttachedToEngine(Context applicationContext, BinaryMessenger messenger) {
+    try {
+      this.applicationContext = applicationContext;
+
+      ApplicationInfo ai = applicationContext.getPackageManager()
+        .getApplicationInfo(applicationContext.getPackageName(), PackageManager.GET_META_DATA);
+
+      Bundle bundle = ai.metaData;
+      String writeKey = bundle.getString("com.claimsforce.segment.WRITE_KEY");
+      Boolean trackApplicationLifecycleEvents = bundle.getBoolean("com.claimsforce.segment.TRACK_APPLICATION_LIFECYCLE_EVENTS");
+      Analytics.Builder analyticsBuilder = new Analytics.Builder(applicationContext, writeKey);
+      if (trackApplicationLifecycleEvents) {
+        // Enable this to record certain application events automatically
+        analyticsBuilder.trackApplicationLifecycleEvents();
       }
+
+      // Here we build a middleware that just appends data to the current context
+      // using the [deepMerge] strategy.
+      analyticsBuilder.middleware(
+        new Middleware() {
+          @Override
+          public void intercept(Chain chain) {
+            try {
+              if (appendToContextMiddleware == null) {
+                chain.proceed(chain.payload());
+                return;
+              }
+
+              BasePayload payload = chain.payload();
+              Map<String, Object> originalContext = new LinkedHashMap<>(payload.context());
+              Map<String, Object> mergedContext = FlutterSegmentPlugin.deepMerge(
+                originalContext,
+                appendToContextMiddleware
+              );
+
+              BasePayload newPayload = payload.toBuilder()
+                .context(mergedContext)
+                .build();
+
+              chain.proceed(newPayload);
+            } catch (Exception e) {
+              Log.e("FlutterSegment", e.getMessage());
+              chain.proceed(chain.payload());
+            }
+          }
+        }
+      );
+
+      // Set the initialized instance as a globally accessible instance.
+      Analytics.setSingletonInstance(analyticsBuilder.build());
+      // register the channel to receive calls
+      methodChannel = new MethodChannel(messenger, "flutter_segment");
+      methodChannel.setMethodCallHandler(this);
+    } catch (Exception e) {
+      Log.e("FlutterSegment", e.getMessage());
     }
   }
+
+  @Override
+  public void onDetachedFromEngine(FlutterPluginBinding binding) { }
 
   @Override
   public void onMethodCall(MethodCall call, Result result) {
@@ -71,8 +123,8 @@ public class FlutterSegmentPlugin implements MethodCallHandler {
       this.anonymousId(result);
     } else if (call.method.equals("reset")) {
       this.reset(result);
-    } else if (call.method.equals("putDeviceToken")) {
-      this.putDeviceToken(call, result);
+    } else if (call.method.equals("setContext")) {
+      this.setContext(call, result);
     } else {
       result.notImplemented();
     }
@@ -104,7 +156,7 @@ public class FlutterSegmentPlugin implements MethodCallHandler {
       traits.putValue(key, value);
     }
 
-    Analytics.with(this.context).identify(userId, traits, options);
+    Analytics.with(this.applicationContext).identify(userId, traits, options);
   }
 
   private void track(MethodCall call, Result result) {
@@ -133,7 +185,7 @@ public class FlutterSegmentPlugin implements MethodCallHandler {
       properties.putValue(key, value);
     }
 
-    Analytics.with(this.context).track(eventName, properties, options);
+    Analytics.with(this.applicationContext).track(eventName, properties, options);
   }
 
   private void screen(MethodCall call, Result result) {
@@ -162,7 +214,7 @@ public class FlutterSegmentPlugin implements MethodCallHandler {
       properties.putValue(key, value);
     }
 
-    Analytics.with(this.context).screen(null, screenName, properties, options);
+    Analytics.with(this.applicationContext).screen(null, screenName, properties, options);
   }
 
   private void group(MethodCall call, Result result) {
@@ -191,7 +243,7 @@ public class FlutterSegmentPlugin implements MethodCallHandler {
       traits.putValue(key, value);
     }
 
-    Analytics.with(this.context).group(groupId, traits, options);
+    Analytics.with(this.applicationContext).group(groupId, traits, options);
   }
 
   private void alias(MethodCall call, Result result) {
@@ -199,7 +251,7 @@ public class FlutterSegmentPlugin implements MethodCallHandler {
       String alias = call.argument("alias");
       HashMap<String, Object> optionsData = call.argument("options");
       Options options = this.buildOptions(optionsData);
-      Analytics.with(this.context).alias(alias, options);
+      Analytics.with(this.applicationContext).alias(alias, options);
       result.success(true);
     } catch (Exception e) {
       result.error("FlutterSegmentException", e.getLocalizedMessage(), null);
@@ -208,7 +260,7 @@ public class FlutterSegmentPlugin implements MethodCallHandler {
 
   private void anonymousId(Result result) {
     try {
-      String anonymousId = Analytics.with(this.context).getAnalyticsContext().traits().anonymousId();
+      String anonymousId = Analytics.with(this.applicationContext).getAnalyticsContext().traits().anonymousId();
       result.success(anonymousId);
     } catch (Exception e) {
       result.error("FlutterSegmentException", e.getLocalizedMessage(), null);
@@ -217,18 +269,16 @@ public class FlutterSegmentPlugin implements MethodCallHandler {
 
   private void reset(Result result) {
     try {
-      Analytics.with(this.context).reset();
+      Analytics.with(this.applicationContext).reset();
       result.success(true);
     } catch (Exception e) {
       result.error("FlutterSegmentException", e.getLocalizedMessage(), null);
     }
   }
 
-  private void putDeviceToken(MethodCall call, Result result) {
+  private void setContext(MethodCall call, Result result) {
     try {
-      String token = call.argument("token");
-      AnalyticsContext analyticsContext = Analytics.with(context).getAnalyticsContext();
-      analyticsContext.putDeviceToken(token);
+      this.appendToContextMiddleware = call.argument("context");
       result.success(true);
     } catch (Exception e) {
       result.error("FlutterSegmentException", e.getLocalizedMessage(), null);
@@ -262,5 +312,20 @@ public class FlutterSegmentPlugin implements MethodCallHandler {
     }
 
     return options;
+  }
+
+  // Merges [newMap] into [original], *not* preserving [original]
+  // keys (deep) in case of conflicts.
+  private static Map deepMerge(Map original, Map newMap) {
+    for (Object key : newMap.keySet()) {
+      if (newMap.get(key) instanceof Map && original.get(key) instanceof Map) {
+        Map originalChild = (Map) original.get(key);
+        Map newChild = (Map) newMap.get(key);
+        original.put(key, deepMerge(originalChild, newChild));
+      } else {
+        original.put(key, newMap.get(key));
+      }
+    }
+    return original;
   }
 }
