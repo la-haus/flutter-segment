@@ -1,10 +1,10 @@
-## 2.0.1
-* added support to the new [Android plugins APIs](https://flutter.dev/docs/development/packages-and-plugins/plugin-api-migration)
-
 ## 2.0.0
 ### BREAKING CHANGE
 * removed `putDeviceToken` call
 * added `setContext` as a better and more general approach to setting context variables
+
+### Feature
+* added support to the new [Android plugins APIs](https://flutter.dev/docs/development/packages-and-plugins/plugin-api-migration)
 
 ## 1.0.0
 ### BREAKING CHANGE
