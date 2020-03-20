@@ -38,16 +38,17 @@ public class FlutterSegmentPlugin implements MethodCallHandler, FlutterPlugin {
   /** Plugin registration. */
   public static void registerWith(PluginRegistry.Registrar registrar) {
     final FlutterSegmentPlugin instance = new FlutterSegmentPlugin();
-    instance.onAttachedToEngine(registrar.context(), registrar.messenger());
+    instance.setupChannels(registrar.context(), registrar.messenger());
   }
 
   @Override
   public void onAttachedToEngine(FlutterPluginBinding binding) {
-    onAttachedToEngine(binding.getApplicationContext(), binding.getBinaryMessenger());
+    setupChannels(binding.getApplicationContext(), binding.getBinaryMessenger());
   }
 
-  private void onAttachedToEngine(Context applicationContext, BinaryMessenger messenger) {
+  private void setupChannels(Context applicationContext, BinaryMessenger messenger) {
     try {
+      methodChannel = new MethodChannel(messenger, "flutter_segment");
       this.applicationContext = applicationContext;
 
       ApplicationInfo ai = applicationContext.getPackageManager()
@@ -94,10 +95,16 @@ public class FlutterSegmentPlugin implements MethodCallHandler, FlutterPlugin {
         }
       );
 
-      // Set the initialized instance as a globally accessible instance.
-      Analytics.setSingletonInstance(analyticsBuilder.build());
+      // Set the initialized instance as globally accessible.
+      // It may throw an exception if we are trying to re-register a singleton Analytics instance.
+      // This state may happen after the app is popped (back button until the app closes)
+      // and opened again from the TaskManager.
+      try {
+        Analytics.setSingletonInstance(analyticsBuilder.build());
+      } catch (IllegalStateException e) {
+        Log.w("FlutterSegment", e.getMessage());
+      }
       // register the channel to receive calls
-      methodChannel = new MethodChannel(messenger, "flutter_segment");
       methodChannel.setMethodCallHandler(this);
     } catch (Exception e) {
       Log.e("FlutterSegment", e.getMessage());
