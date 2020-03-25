@@ -16,9 +16,9 @@ To use this plugin, add `flutter_segment` as a [dependency in your pubspec.yaml 
 | `alias` | X | X | X |
 | `getAnonymousId` | X | X | X |
 | `reset` | X | X | X |
-| `disable` | X | X | |
-| `enable` | X | X | |
-| `debug` | X | X | X |
+| `disable` | | X | |
+| `enable` | | X | |
+| `debug` | | X | X |
 | `setContext` | X | X | |
 
 ### Example
