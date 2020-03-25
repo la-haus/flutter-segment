@@ -1,3 +1,6 @@
+## 2.0.1
+* fixed method channel issue
+
 ## 2.0.0
 ### BREAKING CHANGE
 * removed `putDeviceToken` call
