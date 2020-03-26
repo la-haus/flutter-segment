@@ -18,8 +18,10 @@ To use this plugin, add `flutter_segment` as a [dependency in your pubspec.yaml 
 | `reset` | X | X | X |
 | `disable` | X | X | |
 | `enable` | X | X | |
-| `debug` | X | X | X |
+| `debug` | X* | X | X |
 | `setContext` | X | X | |
+
+\* Debugging must be set as a configuration parameter in `AndroidManifest.xml` (see below). The official segment library does not offer the debug method for Android.
 
 ### Example
 ``` dart
@@ -78,6 +80,7 @@ Remember that the application lifecycle events won't have any special context se
         </activity>
         <meta-data android:name="com.claimsforce.segment.WRITE_KEY" android:value="YOUR_WRITE_KEY_GOES_HERE" />
         <meta-data android:name="com.claimsforce.segment.TRACK_APPLICATION_LIFECYCLE_EVENTS" android:value="false" />
+        <meta-data android:name="com.claimsforce.segment.DEBUG" android:value="false" />
     </application>
 </manifest>
 ```

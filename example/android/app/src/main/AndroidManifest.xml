@@ -38,5 +38,13 @@
             special context set for you by the time it is initialized. -->
         <meta-data android:name="com.claimsforce.segment.WRITE_KEY" android:value="<YOUR_WRITE_KEY_GOES_HERE>" />
         <meta-data android:name="com.claimsforce.segment.TRACK_APPLICATION_LIFECYCLE_EVENTS" android:value="false" />
+        <!--
+            If you want to debug the plugin events. Default is false.
+            <meta-data android:name="com.claimsforce.segment.DEBUG" android:value="true" />
+
+            Expected shell output (flutter run) when this flag is enabled:
+                D/Analytics(32684): Ran TrackPayload{event="ButtonClicked"} on integration Segment.io in 480110 ns.
+                D/Analytics(32684): Ran TrackPayload{event="ButtonClicked"} on integration Segment.io in 104410 ns.
+        -->
     </application>
 </manifest>

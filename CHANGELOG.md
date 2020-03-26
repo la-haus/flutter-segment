@@ -1,3 +1,7 @@
+## 2.0.2
+* added `disable` and `enable` methods for Android
+* added `DEBUG` configuration option for Android (used on `AndroidManifest.xml`)
+
 ## 2.0.1
 * added support to the new [Android plugins APIs](https://flutter.dev/docs/development/packages-and-plugins/plugin-api-migration)
 
