@@ -125,7 +125,7 @@ class SegmentMethodChannel extends SegmentPlatform {
   Future<void> setContext(Map<String, dynamic> context) async {
     try {
       await _channel.invokeMethod('setContext', {
-        'context': context
+        'context': context,
       });
     } on PlatformException catch (exception) {
       print(exception);
