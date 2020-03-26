@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:meta/meta.dart';
 import 'package:flutter_segment/src/segment_platform_interface.dart';
 
@@ -82,6 +84,13 @@ class Segment {
   }
 
   static Future<void> debug(bool enabled) {
+    if (Platform.isAndroid) {
+      throw Exception(
+        'Debug flag cannot be dynamically set on Android.\n'
+        'Add to AndroidManifest and avoid calling this method when Platform.isAndroid.'
+      );
+    }
+
     return _segment.debug(enabled);
   }
 
