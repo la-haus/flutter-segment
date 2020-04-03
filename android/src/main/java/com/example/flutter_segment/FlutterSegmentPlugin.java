@@ -15,6 +15,7 @@ import com.segment.analytics.Traits;
 import com.segment.analytics.Options;
 import com.segment.analytics.Middleware;
 import com.segment.analytics.integrations.BasePayload;
+import static com.segment.analytics.Analytics.LogLevel;
 
 import java.util.LinkedHashMap;
 import java.util.HashMap;
@@ -57,10 +58,15 @@ public class FlutterSegmentPlugin implements MethodCallHandler, FlutterPlugin {
       Bundle bundle = ai.metaData;
       String writeKey = bundle.getString("com.claimsforce.segment.WRITE_KEY");
       Boolean trackApplicationLifecycleEvents = bundle.getBoolean("com.claimsforce.segment.TRACK_APPLICATION_LIFECYCLE_EVENTS");
+      Boolean debug = bundle.getBoolean("com.claimsforce.segment.DEBUG", false);
       Analytics.Builder analyticsBuilder = new Analytics.Builder(applicationContext, writeKey);
       if (trackApplicationLifecycleEvents) {
         // Enable this to record certain application events automatically
         analyticsBuilder.trackApplicationLifecycleEvents();
+      }
+
+      if (debug) {
+        analyticsBuilder.logLevel(LogLevel.DEBUG);
       }
 
       // Here we build a middleware that just appends data to the current context
@@ -132,6 +138,10 @@ public class FlutterSegmentPlugin implements MethodCallHandler, FlutterPlugin {
       this.reset(result);
     } else if (call.method.equals("setContext")) {
       this.setContext(call, result);
+    } else if (call.method.equals("disable")) {
+      this.disable(call, result);
+    } else if (call.method.equals("enable")) {
+      this.enable(call, result);
     } else {
       result.notImplemented();
     }
@@ -286,6 +296,28 @@ public class FlutterSegmentPlugin implements MethodCallHandler, FlutterPlugin {
   private void setContext(MethodCall call, Result result) {
     try {
       this.appendToContextMiddleware = call.argument("context");
+      result.success(true);
+    } catch (Exception e) {
+      result.error("FlutterSegmentException", e.getLocalizedMessage(), null);
+    }
+  }
+
+  // There is no enable method at this time for Analytics on Android.
+  // Instead, we use optOut as a proxy to achieve the same result.
+  private void enable(MethodCall call, Result result) {
+    try {
+      Analytics.with(this.applicationContext).optOut(false);
+      result.success(true);
+    } catch (Exception e) {
+      result.error("FlutterSegmentException", e.getLocalizedMessage(), null);
+    }
+  }
+
+  // There is no disable method at this time for Analytics on Android.
+  // Instead, we use optOut as a proxy to achieve the same result.
+  private void disable(MethodCall call, Result result) {
+    try {
+      Analytics.with(this.applicationContext).optOut(true);
       result.success(true);
     } catch (Exception e) {
       result.error("FlutterSegmentException", e.getLocalizedMessage(), null);

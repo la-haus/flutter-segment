@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_segment/flutter_segment.dart';
 
@@ -75,6 +77,43 @@ class MyApp extends StatelessWidget {
                 },
               ),
             ),
+            Spacer(),
+
+            Center(
+              child: FlatButton(
+                child: Text('Disable'),
+                onPressed: () async {
+                  await Segment.disable();
+                  Segment.track(eventName: 'This event will not be logged');
+                },
+              ),
+            ),
+
+            Spacer(),
+
+            Center(
+              child: FlatButton(
+                child: Text('Enable'),
+                onPressed: () async {
+                  await Segment.enable();
+                  Segment.track(eventName: 'Enabled tracking events!');
+                },
+              ),
+            ),
+
+            Spacer(),
+
+            Platform.isIOS
+            ? Center(
+                child: FlatButton(
+                  child: Text('Debug mode'),
+                  onPressed: () {
+                    Segment.debug(true);
+                  },
+                ),
+              )
+            : Container(),
+
             Spacer(),
           ],
         ),

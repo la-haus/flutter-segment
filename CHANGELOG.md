@@ -1,3 +1,7 @@
+## 2.0.2
+* added `disable` and `enable` methods for Android
+* added `DEBUG` configuration option for Android (used on `AndroidManifest.xml`)
+
 ## 2.0.1
 * fixed method channel issue
 
