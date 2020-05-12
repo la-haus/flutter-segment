@@ -15,6 +15,7 @@ import com.segment.analytics.Traits;
 import com.segment.analytics.Options;
 import com.segment.analytics.Middleware;
 import com.segment.analytics.integrations.BasePayload;
+import com.segment.analytics.android.integrations.branch.BranchIntegration;
 import static com.segment.analytics.Analytics.LogLevel;
 
 import java.util.LinkedHashMap;
@@ -56,6 +57,7 @@ public class FlutterSegmentPlugin implements MethodCallHandler, FlutterPlugin {
         .getApplicationInfo(applicationContext.getPackageName(), PackageManager.GET_META_DATA);
 
       Bundle bundle = ai.metaData;
+      builder.use(BranchIntegration.FACTORY);
       String writeKey = bundle.getString("com.claimsforce.segment.WRITE_KEY");
       Boolean trackApplicationLifecycleEvents = bundle.getBoolean("com.claimsforce.segment.TRACK_APPLICATION_LIFECYCLE_EVENTS");
       Boolean debug = bundle.getBoolean("com.claimsforce.segment.DEBUG", false);

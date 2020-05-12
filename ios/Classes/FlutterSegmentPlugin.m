@@ -2,6 +2,7 @@
 #import <Analytics/SEGAnalytics.h>
 #import <Analytics/SEGContext.h>
 #import <Analytics/SEGMiddleware.h>
+#import <Segment-Branch/BNCBranchIntegrationFactory.h>
 
 @implementation FlutterSegmentPlugin
 // Contents to be appended to the context
@@ -100,6 +101,7 @@ static NSDictionary *_appendToContextMiddleware;
     ];
 
     configuration.trackApplicationLifecycleEvents = trackApplicationLifecycleEvents;
+    [configuration use:[BNCBranchIntegrationFactory instance]];
     [SEGAnalytics setupWithConfiguration:configuration];
     FlutterMethodChannel* channel = [FlutterMethodChannel
       methodChannelWithName:@"flutter_segment"
