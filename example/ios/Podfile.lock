@@ -1,8 +1,8 @@
 PODS:
-  - Analytics (3.7.0)
+  - Analytics (3.8.2)
   - Flutter (1.0.0)
   - flutter_segment (0.0.1):
-    - Analytics (= 3.7.0)
+    - Analytics (= 3.8.2)
     - Flutter
 
 DEPENDENCIES:
@@ -20,9 +20,9 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/flutter_segment/ios"
 
 SPEC CHECKSUMS:
-  Analytics: 77fd5fb102a4a5eedafa2c2b0245ceb7b7c15e45
+  Analytics: 4c482aea5efcecaeb03adfc7fc22e350f5ca575c
   Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
-  flutter_segment: 31dce829260fc896cd391d7cee4fc3609003f93c
+  flutter_segment: f4cf664f0e9eda5af00f7b9d6b3b089ad589cfdf
 
 PODFILE CHECKSUM: 3dbe063e9c90a5d7c9e4e76e70a821b9e2c1d271
 
