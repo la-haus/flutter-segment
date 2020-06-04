@@ -78,7 +78,6 @@ class MyApp extends StatelessWidget {
               ),
             ),
             Spacer(),
-
             Center(
               child: FlatButton(
                 child: Text('Disable'),
@@ -88,9 +87,7 @@ class MyApp extends StatelessWidget {
                 },
               ),
             ),
-
             Spacer(),
-
             Center(
               child: FlatButton(
                 child: Text('Enable'),
@@ -100,20 +97,17 @@ class MyApp extends StatelessWidget {
                 },
               ),
             ),
-
             Spacer(),
-
             Platform.isIOS
-            ? Center(
-                child: FlatButton(
-                  child: Text('Debug mode'),
-                  onPressed: () {
-                    Segment.debug(true);
-                  },
-                ),
-              )
-            : Container(),
-
+                ? Center(
+                    child: FlatButton(
+                      child: Text('Debug mode'),
+                      onPressed: () {
+                        Segment.debug(true);
+                      },
+                    ),
+                  )
+                : Container(),
             Spacer(),
           ],
         ),
