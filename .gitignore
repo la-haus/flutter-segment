@@ -36,6 +36,7 @@ doc/api/
 .pub-cache/
 .pub/
 .idea/
+example/ios/Flutter/Flutter.podspec
 
 # Android related
 **/android/**/gradle-wrapper.jar
