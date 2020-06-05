@@ -14,6 +14,7 @@ static NSDictionary *_appendToContextMiddleware;
     NSDictionary *dict = [NSDictionary dictionaryWithContentsOfFile: path];
     NSString *writeKey = [dict objectForKey: @"com.claimsforce.segment.WRITE_KEY"];
     BOOL trackApplicationLifecycleEvents = [[dict objectForKey: @"com.claimsforce.segment.TRACK_APPLICATION_LIFECYCLE_EVENTS"] boolValue];
+    BOOL enableBranchMetrics = [[dict objectForKey: @"com.claimsforce.segment.ENABLE_BRANCH_METRICS"] boolValue];
     SEGAnalyticsConfiguration *configuration = [SEGAnalyticsConfiguration configurationWithWriteKey:writeKey];
 
     // This middleware is responsible for manipulating only the context part of the request,
@@ -101,7 +102,11 @@ static NSDictionary *_appendToContextMiddleware;
     ];
 
     configuration.trackApplicationLifecycleEvents = trackApplicationLifecycleEvents;
-    [configuration use:[BNCBranchIntegrationFactory instance]];
+    
+    if(enableBranchMetrics){
+      [configuration use:[BNCBranchIntegrationFactory instance]];
+    }
+   
     [SEGAnalytics setupWithConfiguration:configuration];
     FlutterMethodChannel* channel = [FlutterMethodChannel
       methodChannelWithName:@"flutter_segment"

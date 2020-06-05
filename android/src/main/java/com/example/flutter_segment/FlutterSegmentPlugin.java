@@ -60,7 +60,9 @@ public class FlutterSegmentPlugin implements MethodCallHandler, FlutterPlugin {
 
       String writeKey = bundle.getString("com.claimsforce.segment.WRITE_KEY");
       Boolean trackApplicationLifecycleEvents = bundle.getBoolean("com.claimsforce.segment.TRACK_APPLICATION_LIFECYCLE_EVENTS");
+      Boolean enableBranchMetrics = bundle.getBoolean("com.claimsforce.segment.ENABLE_BRANCH_METRICS", false);
       Boolean debug = bundle.getBoolean("com.claimsforce.segment.DEBUG", false);
+      
       Analytics.Builder analyticsBuilder = new Analytics.Builder(applicationContext, writeKey);
       if (trackApplicationLifecycleEvents) {
         // Enable this to record certain application events automatically
@@ -71,8 +73,10 @@ public class FlutterSegmentPlugin implements MethodCallHandler, FlutterPlugin {
         analyticsBuilder.logLevel(LogLevel.DEBUG);
       }
 
-      //Branch analytics integration
-      analyticsBuilder.use(BranchIntegration.FACTORY);
+      if(enableBranchMetrics){
+        //Branch metrics integration
+        analyticsBuilder.use(BranchIntegration.FACTORY);
+      }
 
       // Here we build a middleware that just appends data to the current context
       // using the [deepMerge] strategy.
