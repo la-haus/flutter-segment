@@ -35,6 +35,7 @@ doc/api/
 .flutter-plugins-dependencies
 .pub-cache/
 .pub/
+.idea/
 
 # Android related
 **/android/**/gradle-wrapper.jar
