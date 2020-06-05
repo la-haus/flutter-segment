@@ -71,6 +71,8 @@ Setup your Android, iOS and/or web sources as described at Segment.com and gener
 Set your Segment write key and change the automatic event tracking (only for Android and iOS) on if you wish the library to take care of it for you.
 Remember that the application lifecycle events won't have any special context set for you by the time it is initialized.
 
+To enable [`branch.io`](https://help.branch.io/developers-hub/docs/plugins-overview) integration you need to configure `ENABLE_BRANCH_IO_INTEGRATION` as mentioned in the next section.
+
 ### Android
 ```xml
 <manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.example.flutter_segment_example">
@@ -80,6 +82,7 @@ Remember that the application lifecycle events won't have any special context se
         </activity>
         <meta-data android:name="com.claimsforce.segment.WRITE_KEY" android:value="YOUR_WRITE_KEY_GOES_HERE" />
         <meta-data android:name="com.claimsforce.segment.TRACK_APPLICATION_LIFECYCLE_EVENTS" android:value="false" />
+        <meta-data android:name="com.claimsforce.segment.ENABLE_BRANCH_IO_INTEGRATION" android:value="false" />
         <meta-data android:name="com.claimsforce.segment.DEBUG" android:value="false" />
     </application>
 </manifest>
@@ -95,6 +98,8 @@ Remember that the application lifecycle events won't have any special context se
 	<key>com.claimsforce.segment.WRITE_KEY</key>
 	<string>YOUR_WRITE_KEY_GOES_HERE</string>
 	<key>com.claimsforce.segment.TRACK_APPLICATION_LIFECYCLE_EVENTS</key>
+	<false/>
+	<key>com.claimsforce.segment.ENABLE_BRANCH_IO_INTEGRATION</key>
 	<false/>
 	[...]
 </dict>

@@ -1,3 +1,6 @@
+## 2.1.0
+* added `ENABLE_BRANCH_IO_INTEGRATION` configuration option
+
 ## 2.0.2
 * added `disable` and `enable` methods for Android
 * added `DEBUG` configuration option for Android (used on `AndroidManifest.xml`)
