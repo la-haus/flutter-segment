@@ -1,11 +1,11 @@
 PODS:
-  - Analytics (3.7.0)
+  - Analytics (3.8.2)
   - Branch (0.33.1):
     - Branch/Core (= 0.33.1)
   - Branch/Core (0.33.1)
   - Flutter (1.0.0)
   - flutter_segment (0.0.1):
-    - Analytics (= 3.7.0)
+    - Analytics (= 3.8.2)
     - Flutter
     - Segment-Branch
   - Segment-Branch (0.1.22):
@@ -30,10 +30,10 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/flutter_segment/ios"
 
 SPEC CHECKSUMS:
-  Analytics: 77fd5fb102a4a5eedafa2c2b0245ceb7b7c15e45
-  Branch: 65d05ffb137ef504777cff6bd4fb6f770f17145a
+  Analytics: 4c482aea5efcecaeb03adfc7fc22e350f5ca575c
   Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
-  flutter_segment: 01056aa189c296d6634b2372cbe4809db8668fd1
+  flutter_segment: f4cf664f0e9eda5af00f7b9d6b3b089ad589cfdf
+  Branch: 65d05ffb137ef504777cff6bd4fb6f770f17145a
   Segment-Branch: f255ba1354f6aa1bc8654d450b3b933380f2558d
 
 PODFILE CHECKSUM: 3dbe063e9c90a5d7c9e4e76e70a821b9e2c1d271
