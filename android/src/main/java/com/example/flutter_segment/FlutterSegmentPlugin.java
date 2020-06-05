@@ -60,7 +60,7 @@ public class FlutterSegmentPlugin implements MethodCallHandler, FlutterPlugin {
 
       String writeKey = bundle.getString("com.claimsforce.segment.WRITE_KEY");
       Boolean trackApplicationLifecycleEvents = bundle.getBoolean("com.claimsforce.segment.TRACK_APPLICATION_LIFECYCLE_EVENTS");
-      Boolean enableBranchMetrics = bundle.getBoolean("com.claimsforce.segment.ENABLE_BRANCH_METRICS", false);
+      Boolean enableBranchMetrics = bundle.getBoolean("com.claimsforce.segment.ENABLE_BRANCH_IO_INTEGRATION", false);
       Boolean debug = bundle.getBoolean("com.claimsforce.segment.DEBUG", false);
       
       Analytics.Builder analyticsBuilder = new Analytics.Builder(applicationContext, writeKey);
