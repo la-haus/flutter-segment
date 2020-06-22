@@ -1,3 +1,6 @@
+## 2.1.1
+* fixed `context` overwriting (using `segment.setContext(...)`) for `iOS` devices
+
 ## 2.1.0
 * added `ENABLE_BRANCH_IO_INTEGRATION` configuration option
 
