@@ -1,11 +1,11 @@
 PODS:
-  - Analytics (3.8.2)
+  - Analytics (4.0.1)
   - Branch (0.33.1):
     - Branch/Core (= 0.33.1)
   - Branch/Core (0.33.1)
   - Flutter (1.0.0)
   - flutter_segment (0.0.1):
-    - Analytics (= 3.8.2)
+    - Analytics (= 4.0.1)
     - Flutter
     - Segment-Branch
   - Segment-Branch (0.1.22):
@@ -17,7 +17,7 @@ DEPENDENCIES:
   - flutter_segment (from `.symlinks/plugins/flutter_segment/ios`)
 
 SPEC REPOS:
-  trunk:
+  https://github.com/cocoapods/specs.git:
     - Analytics
     - Branch
     - Segment-Branch
@@ -29,12 +29,12 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/flutter_segment/ios"
 
 SPEC CHECKSUMS:
-  Analytics: 4c482aea5efcecaeb03adfc7fc22e350f5ca575c
+  Analytics: ebdc0c3ed93684d10c898f57886e0ce7fbecc240
   Branch: 65d05ffb137ef504777cff6bd4fb6f770f17145a
   Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
-  flutter_segment: 27b5f5e5d7dceb9540e768da7ea7cb45c5ee9653
+  flutter_segment: 0357d36d6b066d5d255cda46d2f217b55110af95
   Segment-Branch: f255ba1354f6aa1bc8654d450b3b933380f2558d
 
 PODFILE CHECKSUM: 3dbe063e9c90a5d7c9e4e76e70a821b9e2c1d271
 
-COCOAPODS: 1.9.3
+COCOAPODS: 1.7.4
