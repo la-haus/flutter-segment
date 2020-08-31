@@ -1,3 +1,7 @@
+## 2.2.0
+* added `ENABLE_AMPLITUDE_INTEGRATION` configuration option
+* fixed segment-branch incorrect import path on iOS
+
 ## 2.1.1
 * fixed `context` overwriting (using `segment.setContext(...)`) for `iOS` devices
 
