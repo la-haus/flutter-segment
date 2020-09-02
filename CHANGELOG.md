@@ -1,3 +1,6 @@
+## 2.2.2
+* fixed segment-amplitude incorrect import path on iOS
+
 ## 2.2.1
 * fixed segment-branch incorrect import path on iOS
 
