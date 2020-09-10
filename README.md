@@ -66,7 +66,7 @@ class MyApp extends StatelessWidget {
 ```
 
 
-## Migration from `v2.x` to `v3.x
+## Migration from `v2.x` to `v3.x`
 In `v3.x` we removed branch io integration as the package is in the the maintenance mode and uses outdated dependencies.
 If you don't use `ENABLE_BRANCH_IO_INTEGRATION` you are good to go.
 If you want to continue using `ENABLE_BRANCH_IO_INTEGRATION` then use `v2.x` of this package.
