@@ -65,13 +65,17 @@ class MyApp extends StatelessWidget {
 }
 ```
 
+
+## Migration to v3.x
+In v3.x we removed branch io integration as the package is in the the maintenance mode and uses outdated dependencies.
+If you don't use `ENABLE_BRANCH_IO_INTEGRATION` you are good to go.
+If you want to continue using `ENABLE_BRANCH_IO_INTEGRATION` then use v2.x of this package.
+
 ## Installation
 Setup your Android, iOS and/or web sources as described at Segment.com and generate your write keys.
 
 Set your Segment write key and change the automatic event tracking (only for Android and iOS) on if you wish the library to take care of it for you.
 Remember that the application lifecycle events won't have any special context set for you by the time it is initialized.
-
-To enable [`branch.io`](https://help.branch.io/developers-hub/docs/plugins-overview) integration you need to configure `ENABLE_BRANCH_IO_INTEGRATION` as mentioned in the next section.
 
 ### Android
 ```xml
@@ -82,7 +86,6 @@ To enable [`branch.io`](https://help.branch.io/developers-hub/docs/plugins-overv
         </activity>
         <meta-data android:name="com.claimsforce.segment.WRITE_KEY" android:value="YOUR_WRITE_KEY_GOES_HERE" />
         <meta-data android:name="com.claimsforce.segment.TRACK_APPLICATION_LIFECYCLE_EVENTS" android:value="false" />
-        <meta-data android:name="com.claimsforce.segment.ENABLE_BRANCH_IO_INTEGRATION" android:value="false" />
         <meta-data android:name="com.claimsforce.segment.ENABLE_AMPLITUDE_INTEGRATION" android:value="false" />
         <meta-data android:name="com.claimsforce.segment.DEBUG" android:value="false" />
     </application>
@@ -99,8 +102,6 @@ To enable [`branch.io`](https://help.branch.io/developers-hub/docs/plugins-overv
 	<key>com.claimsforce.segment.WRITE_KEY</key>
 	<string>YOUR_WRITE_KEY_GOES_HERE</string>
 	<key>com.claimsforce.segment.TRACK_APPLICATION_LIFECYCLE_EVENTS</key>
-	<false/>
-	<key>com.claimsforce.segment.ENABLE_BRANCH_IO_INTEGRATION</key>
 	<false/>
 	<key>com.claimsforce.segment.ENABLE_AMPLITUDE_INTEGRATION</key>
     <false/>
