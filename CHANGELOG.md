@@ -1,4 +1,5 @@
-## 3.0.1
+## 3.0.0
+### BREAKING CHANGE
 * removed branch io integration as the package is in the maintenance mode
 
 ## 2.2.2
