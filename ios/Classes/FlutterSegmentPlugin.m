@@ -2,7 +2,6 @@
 #import <Analytics/SEGAnalytics.h>
 #import <Analytics/SEGContext.h>
 #import <Analytics/SEGMiddleware.h>
-#import <Segment_Branch/BNCBranchIntegrationFactory.h>
 #import <Segment_Amplitude/SEGAmplitudeIntegrationFactory.h>
 
 @implementation FlutterSegmentPlugin
@@ -15,7 +14,6 @@ static NSDictionary *_appendToContextMiddleware;
     NSDictionary *dict = [NSDictionary dictionaryWithContentsOfFile: path];
     NSString *writeKey = [dict objectForKey: @"com.claimsforce.segment.WRITE_KEY"];
     BOOL trackApplicationLifecycleEvents = [[dict objectForKey: @"com.claimsforce.segment.TRACK_APPLICATION_LIFECYCLE_EVENTS"] boolValue];
-    BOOL isBranchIoIntegrationEnabled = [[dict objectForKey: @"com.claimsforce.segment.ENABLE_BRANCH_IO_INTEGRATION"] boolValue];
     BOOL isAmplitudeIntegrationEnabled = [[dict objectForKey: @"com.claimsforce.segment.ENABLE_AMPLITUDE_INTEGRATION"] boolValue];
     SEGAnalyticsConfiguration *configuration = [SEGAnalyticsConfiguration configurationWithWriteKey:writeKey];
 
@@ -104,10 +102,6 @@ static NSDictionary *_appendToContextMiddleware;
     ];
 
     configuration.trackApplicationLifecycleEvents = trackApplicationLifecycleEvents;
-
-    if (isBranchIoIntegrationEnabled) {
-      [configuration use:[BNCBranchIntegrationFactory instance]];
-    }
 
     if (isAmplitudeIntegrationEnabled) {
       [configuration use:[SEGAmplitudeIntegrationFactory instance]];

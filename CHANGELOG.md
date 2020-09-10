@@ -1,3 +1,6 @@
+## 3.0.1
+* removed branch io integration as the package is in the maintenance mode
+
 ## 2.2.2
 * fixed segment-amplitude incorrect import path on iOS
 

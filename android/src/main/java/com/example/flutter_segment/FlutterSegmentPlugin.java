@@ -15,7 +15,6 @@ import com.segment.analytics.Traits;
 import com.segment.analytics.Options;
 import com.segment.analytics.Middleware;
 import com.segment.analytics.integrations.BasePayload;
-import com.segment.analytics.android.integrations.branch.BranchIntegration;
 import com.segment.analytics.android.integrations.amplitude.AmplitudeIntegration;
 import static com.segment.analytics.Analytics.LogLevel;
 
@@ -61,7 +60,6 @@ public class FlutterSegmentPlugin implements MethodCallHandler, FlutterPlugin {
 
       String writeKey = bundle.getString("com.claimsforce.segment.WRITE_KEY");
       Boolean trackApplicationLifecycleEvents = bundle.getBoolean("com.claimsforce.segment.TRACK_APPLICATION_LIFECYCLE_EVENTS");
-      Boolean isBranchIoIntegrationEnabled = bundle.getBoolean("com.claimsforce.segment.ENABLE_BRANCH_IO_INTEGRATION", false);
       Boolean isAmplitudeIntegrationEnabled = bundle.getBoolean("com.claimsforce.segment.ENABLE_AMPLITUDE_INTEGRATION", false);
       Boolean debug = bundle.getBoolean("com.claimsforce.segment.DEBUG", false);
 
@@ -73,10 +71,6 @@ public class FlutterSegmentPlugin implements MethodCallHandler, FlutterPlugin {
 
       if (debug) {
         analyticsBuilder.logLevel(LogLevel.DEBUG);
-      }
-
-      if (isBranchIoIntegrationEnabled){
-        analyticsBuilder.use(BranchIntegration.FACTORY);
       }
 
       if (isAmplitudeIntegrationEnabled) {
