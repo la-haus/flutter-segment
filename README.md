@@ -3,6 +3,10 @@
 
 Flutter plugin to support iOS, Android and Web sources at https://segment.com.
 
+### Future development
+We want to prepare flutter-segment for the future!
+Please have a look at [this issue](https://github.com/claimsforce-gmbh/flutter-segment/issues/46) and let us know what you think.
+
 ## Usage
 To use this plugin, add `flutter_segment` as a [dependency in your pubspec.yaml file](https://flutter.io/platform-plugins/).
 
