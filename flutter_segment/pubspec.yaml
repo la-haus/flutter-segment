@@ -1,0 +1,31 @@
+name: flutter_segment
+description: Flutter plugin for the Segment platform on Android and iOS.
+version: 0.0.1
+author:
+homepage:
+
+environment:
+  sdk: ">=2.7.0 <3.0.0"
+  flutter: ">=1.20.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_segment_platform_interface:
+    # TODO: update to use pub.dev once package is published
+    path: ../flutter_segment_platform_interface
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+flutter:
+  plugin:
+    platforms:
+      android:
+        package: com.claimsforce.flutter_segment
+        pluginClass: FlutterSegmentPlugin
+      ios:
+        pluginClass: FlutterSegmentPlugin
+      web:
+        default_package: flutter_segment_web

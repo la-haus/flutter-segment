@@ -1,0 +1,29 @@
+name: flutter_segment_web
+description: Web platform implementation of flutter_segment
+version: 0.0.1
+author:
+homepage:
+
+environment:
+  sdk: ">=2.7.0 <3.0.0"
+  flutter: ">=1.20.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_web_plugins:
+    sdk: flutter
+  flutter_segment_platform_interface:
+    # TODO: update to use pub.dev once package is published
+    path: ../flutter_segment_platform_interface
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+flutter:
+  plugin:
+    platforms:
+      web:
+        pluginClass: FlutterSegmentWebWeb
+        fileName: flutter_segment_web_web.dart

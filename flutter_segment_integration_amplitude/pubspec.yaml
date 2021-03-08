@@ -1,0 +1,26 @@
+name: flutter_segment_amplitude_integration
+description: A new flutter plugin project.
+version: 0.0.1
+author:
+homepage:
+publish_to: none
+
+environment:
+  sdk: ">=2.7.0 <3.0.0"
+  flutter: ">=1.20.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_segment:
+    # TODO: update to use pub.dev once package is published
+    path: ../flutter_segment
+
+flutter:
+  plugin:
+    platforms:
+      android:
+        package: com.claimsforce.flutter_segment_amplitude_integration
+        pluginClass: FlutterSegmentAmplitudeIntegrationPlugin
+      ios:
+        pluginClass: FlutterSegmentAmplitudeIntegrationPlugin
