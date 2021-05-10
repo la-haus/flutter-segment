@@ -1,3 +1,6 @@
+## 3.1.0
+* migrate to null safety
+
 ## 3.0.0
 ### BREAKING CHANGE
 * removed branch io integration as the package is in the maintenance mode
