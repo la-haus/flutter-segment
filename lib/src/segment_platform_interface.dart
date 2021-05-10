@@ -1,4 +1,3 @@
-import 'package:meta/meta.dart';
 import 'package:flutter_segment/src/segment_method_channel.dart';
 
 abstract class SegmentPlatform {
@@ -12,45 +11,45 @@ abstract class SegmentPlatform {
   static SegmentPlatform instance = SegmentMethodChannel();
 
   Future<void> identify({
-    @required userId,
-    Map<String, dynamic> traits,
-    Map<String, dynamic> options,
+    required userId,
+    required Map<String, dynamic> traits,
+    required Map<String, dynamic> options,
   }) {
     throw UnimplementedError('identify() has not been implemented.');
   }
 
   Future<void> track({
-    @required String eventName,
-    Map<String, dynamic> properties,
-    Map<String, dynamic> options,
+    required String eventName,
+    required Map<String, dynamic> properties,
+    required Map<String, dynamic> options,
   }) {
     throw UnimplementedError('track() has not been implemented.');
   }
 
   Future<void> screen({
-    @required String screenName,
-    Map<String, dynamic> properties,
-    Map<String, dynamic> options,
+    required String screenName,
+    required Map<String, dynamic> properties,
+    required Map<String, dynamic> options,
   }) {
     throw UnimplementedError('screen() has not been implemented.');
   }
 
   Future<void> group({
-    @required String groupId,
-    Map<String, dynamic> traits,
-    Map<String, dynamic> options,
+    required String groupId,
+    required Map<String, dynamic> traits,
+    required Map<String, dynamic> options,
   }) {
     throw UnimplementedError('group() has not been implemented.');
   }
 
   Future<void> alias({
-    @required String alias,
-    Map<String, dynamic> options,
+    required String alias,
+    required Map<String, dynamic> options,
   }) {
     throw UnimplementedError('alias() has not been implemented.');
   }
 
-  Future<String> get getAnonymousId {
+  Future<String?> get getAnonymousId {
     throw UnimplementedError('getAnonymousId() has not been implemented.');
   }
 
