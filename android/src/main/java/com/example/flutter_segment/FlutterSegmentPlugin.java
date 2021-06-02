@@ -168,7 +168,7 @@ public class FlutterSegmentPlugin implements MethodCallHandler, FlutterPlugin {
   }
 
   private void callIdentify(
-    String? userId,
+    String userId,
     HashMap<String, Object> traitsData,
     HashMap<String, Object> optionsData
   ) {
