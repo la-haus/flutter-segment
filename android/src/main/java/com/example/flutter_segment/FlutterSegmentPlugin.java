@@ -8,6 +8,8 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 
+import androidx.annotation.VisibleForTesting;
+
 import com.segment.analytics.Analytics;
 import com.segment.analytics.AnalyticsContext;
 import com.segment.analytics.Properties;
@@ -34,6 +36,7 @@ import io.flutter.embedding.engine.plugins.FlutterPlugin;
 public class FlutterSegmentPlugin implements MethodCallHandler, FlutterPlugin {
   private Context applicationContext;
   private MethodChannel methodChannel;
+  private PropertiesMapper propertiesMapper = new PropertiesMapper();
 
   static HashMap<String, Object> appendToContextMiddleware;
 
@@ -201,7 +204,7 @@ public class FlutterSegmentPlugin implements MethodCallHandler, FlutterPlugin {
     HashMap<String, Object> propertiesData,
     HashMap<String, Object> optionsData
   ) {
-    Properties properties = buildProperties(propertiesData);
+    Properties properties = propertiesMapper.buildProperties(propertiesData);
     Options options = this.buildOptions(optionsData);
 
     Analytics.with(this.applicationContext).track(eventName, properties, options);
@@ -224,7 +227,7 @@ public class FlutterSegmentPlugin implements MethodCallHandler, FlutterPlugin {
     HashMap<String, Object> propertiesData,
     HashMap<String, Object> optionsData
   ) {
-    Properties properties = buildProperties(propertiesData);
+    Properties properties = propertiesMapper.buildProperties(propertiesData);
     Options options = this.buildOptions(optionsData);
 
     Analytics.with(this.applicationContext).screen(null, screenName, properties, options);
@@ -362,23 +365,5 @@ public class FlutterSegmentPlugin implements MethodCallHandler, FlutterPlugin {
       }
     }
     return original;
-  }
-
-  private Properties buildProperties(Map<String, Object> map) {
-    Properties properties = new Properties();
-
-    for(Map.Entry<String, Object> property : map.entrySet()) {
-      String key = property.getKey();
-      Object value = property.getValue();
-
-      if (value instanceof Map){
-        Properties nestedProperties = buildProperties((Map<String, Object>) value);
-        properties.putValue(key, nestedProperties);
-      } else {
-        properties.putValue(key, value);
-      }
-    }
-
-    return properties;
   }
 }
