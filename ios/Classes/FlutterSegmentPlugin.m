@@ -3,6 +3,7 @@
 #import <Analytics/SEGContext.h>
 #import <Analytics/SEGMiddleware.h>
 #import <Segment_Amplitude/SEGAmplitudeIntegrationFactory.h>
+#import <Segment-Firebase/SEGFirebaseIntegrationFactory.h>
 
 @implementation FlutterSegmentPlugin
 // Contents to be appended to the context
@@ -15,6 +16,7 @@ static NSDictionary *_appendToContextMiddleware;
     NSString *writeKey = [dict objectForKey: @"com.claimsforce.segment.WRITE_KEY"];
     BOOL trackApplicationLifecycleEvents = [[dict objectForKey: @"com.claimsforce.segment.TRACK_APPLICATION_LIFECYCLE_EVENTS"] boolValue];
     BOOL isAmplitudeIntegrationEnabled = [[dict objectForKey: @"com.claimsforce.segment.ENABLE_AMPLITUDE_INTEGRATION"] boolValue];
+    BOOL isFirebaseIntegrationEnabled = [[dict objectForKey: @"com.claimsforce.segment.ENABLE_FIREBASE_INTEGRATION"] boolValue];
     SEGAnalyticsConfiguration *configuration = [SEGAnalyticsConfiguration configurationWithWriteKey:writeKey];
 
     // This middleware is responsible for manipulating only the context part of the request,
@@ -105,6 +107,10 @@ static NSDictionary *_appendToContextMiddleware;
 
     if (isAmplitudeIntegrationEnabled) {
       [configuration use:[SEGAmplitudeIntegrationFactory instance]];
+    }
+
+    if (isFirebaseIntegrationEnabled) {
+      [configuration use:[SEGFirebaseIntegrationFactory instance]];
     }
 
     [SEGAnalytics setupWithConfiguration:configuration];
