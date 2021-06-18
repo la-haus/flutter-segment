@@ -12,7 +12,7 @@ abstract class SegmentPlatform {
   static SegmentPlatform instance = SegmentMethodChannel();
 
   Future<void> identify({
-    @required userId,
+    String userId,
     Map<String, dynamic> traits,
     Map<String, dynamic> options,
   }) {
