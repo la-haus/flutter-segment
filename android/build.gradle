@@ -37,3 +37,7 @@ android {
         implementation 'com.segment.analytics.android.integrations:amplitude:+'
     }
 }
+
+dependencies {
+    testImplementation 'junit:junit:4.12'
+}
