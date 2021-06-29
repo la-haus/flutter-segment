@@ -5,7 +5,7 @@ const MethodChannel _channel = MethodChannel('flutter_segment');
 
 class SegmentMethodChannel extends SegmentPlatform {
   Future<void> identify({
-    required userId,
+    String? userId,
     required Map<String, dynamic> traits,
     required Map<String, dynamic> options,
   }) async {
