@@ -1,3 +1,6 @@
+## 3.1.1
+* make `userId` nullable
+
 ## 3.1.0
 * migrate to null safety
 
