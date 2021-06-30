@@ -1,3 +1,6 @@
+## 3.1.2
+* Android: allow nested properties for event properties (with Null Safety)
+
 ## 3.1.1
 * make `userId` nullable
 
