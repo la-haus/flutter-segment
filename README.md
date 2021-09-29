@@ -102,14 +102,14 @@ Remember that the application lifecycle events won't have any special context se
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	[...]
-	<key>com.claimsforce.segment.WRITE_KEY</key>
-	<string>YOUR_WRITE_KEY_GOES_HERE</string>
-	<key>com.claimsforce.segment.TRACK_APPLICATION_LIFECYCLE_EVENTS</key>
-	<false/>
-	<key>com.claimsforce.segment.ENABLE_AMPLITUDE_INTEGRATION</key>
-    <false/>
-	[...]
+  [...]
+  <key>com.claimsforce.segment.WRITE_KEY</key>
+  <string>YOUR_WRITE_KEY_GOES_HERE</string>
+  <key>com.claimsforce.segment.TRACK_APPLICATION_LIFECYCLE_EVENTS</key>
+  <false/>
+  <key>com.claimsforce.segment.ENABLE_AMPLITUDE_INTEGRATION</key>
+  <false/>
+  [...]
 </dict>
 </plist>
 ```
