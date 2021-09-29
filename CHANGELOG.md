@@ -1,3 +1,6 @@
+## 3.1.3
+* iOS: fix incorrect `Segment-Amplitude` import
+
 ## 3.1.2
 * Android: allow nested properties for event properties (with Null Safety)
 
