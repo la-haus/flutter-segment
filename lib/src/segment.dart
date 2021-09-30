@@ -24,7 +24,7 @@ class Segment {
   }
 
   static Future<void> config({
-    @required SegmentConfig options,
+    required SegmentConfig options,
   }) {
     return _segment.config(
       options: options,

@@ -5,8 +5,8 @@ class SegmentConfig {
   final bool debug;
 
   SegmentConfig({
-    this.writeKey,
-    this.trackApplicationLifecycleEvents,
+    required this.writeKey,
+    this.trackApplicationLifecycleEvents = false,
     this.amplitudeIntegrationEnabled = false,
     this.debug = false,
   });

@@ -13,7 +13,7 @@ abstract class SegmentPlatform {
   static SegmentPlatform instance = SegmentMethodChannel();
 
   Future<void> config({
-    @required SegmentConfig options,
+    required SegmentConfig options,
   }) {
     throw UnimplementedError('config() has not been implemented.');
   }
