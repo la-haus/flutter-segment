@@ -1,3 +1,6 @@
+## 3.2.0
+* added installation via Dart Code
+
 ## 3.1.3
 * iOS: fix incorrect `Segment-Amplitude` import
 
