@@ -7,7 +7,7 @@ const MethodChannel _channel = MethodChannel('flutter_segment');
 
 class SegmentMethodChannel extends SegmentPlatform {
   Future<void> config({
-    @required SegmentConfig options,
+    required SegmentConfig options,
   }) async {
     try {
       await _channel.invokeMethod('config', {
