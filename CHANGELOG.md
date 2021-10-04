@@ -1,3 +1,6 @@
+## 3.2.1
+* fix null safety
+
 ## 3.2.0
 * added installation via Dart Code
 
