@@ -72,9 +72,12 @@ public class FlutterSegmentPlugin implements MethodCallHandler, FlutterPlugin {
     try {
       Analytics.Builder analyticsBuilder = new Analytics.Builder(applicationContext, options.getWriteKey());
       if (options.getTrackApplicationLifecycleEvents()) {
-        // Enable this to record certain application events automatically
+        Log.i("FlutterSegment", "Lifecycle events enabled");
+
         analyticsBuilder.trackApplicationLifecycleEvents();
         analyticsBuilder.experimentalUseNewLifecycleMethods(false);
+      }else {
+        Log.i("FlutterSegment", "Lifecycle events are not been tracked");
       }
 
       if (options.getDebug()) {
