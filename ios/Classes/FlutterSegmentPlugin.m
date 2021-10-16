@@ -74,6 +74,7 @@ static NSDictionary *_appendToContextMiddleware;
                 } else if ([ctx.payload isKindOfClass:[SEGScreenPayload class]]) {
                   ctx.payload = [[SEGScreenPayload alloc]
                     initWithName: ((SEGScreenPayload*)ctx.payload).name
+                    category: ((SEGScreenPayload*)ctx.payload).category
                     properties: ((SEGScreenPayload*)ctx.payload).properties
                     context: combinedContext
                     integrations: ((SEGScreenPayload*)ctx.payload).integrations
