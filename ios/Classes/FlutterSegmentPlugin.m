@@ -2,7 +2,7 @@
 #import <Segment/SEGAnalytics.h>
 #import <Segment/SEGContext.h>
 #import <Segment/SEGMiddleware.h>
-#import <Segment-Amplitude/SEGAmplitudeIntegrationFactory.h>
+#import <Segment_Amplitude/SEGAmplitudeIntegrationFactory.h>
 
 @implementation FlutterSegmentPlugin
 // Contents to be appended to the context
