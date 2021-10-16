@@ -18,6 +18,6 @@ A new flutter plugin project.
   s.dependency 'Analytics', '4.1.6'
   s.dependency 'Segment-Amplitude', '3.2.4'
   s.ios.deployment_target = '8.0'
-
+  s.static_framework = true
 end
 
