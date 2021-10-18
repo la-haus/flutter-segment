@@ -7,7 +7,7 @@ on:
     branches: [ master ]
 
 jobs:
-  build:
+  analyze_code_style:
     runs-on: ubuntu-latest
 
     steps:
