@@ -1,3 +1,7 @@
+## 3.3.0
+* Android: upgrade Segment SDK to `4.10.0`
+* iOS: upgrade Segment SDK to `4.1.6`
+
 ## 3.2.1
 * fix null safety
 
