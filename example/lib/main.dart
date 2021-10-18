@@ -10,8 +10,8 @@ void main() {
 
   Segment.config(
     options: SegmentConfig(
-        writeKey: 'YOUR_WRITE_KEY_GOES_HERE',
-        trackApplicationLifecycleEvents: false,
+      writeKey: 'YOUR_WRITE_KEY_GOES_HERE',
+      trackApplicationLifecycleEvents: false,
     ),
   );
 
@@ -107,13 +107,13 @@ class MyApp extends StatelessWidget {
             Spacer(),
             Platform.isIOS
                 ? Center(
-              child: FlatButton(
-                child: Text('Debug mode'),
-                onPressed: () {
-                  Segment.debug(true);
-                },
-              ),
-            )
+                    child: FlatButton(
+                      child: Text('Debug mode'),
+                      onPressed: () {
+                        Segment.debug(true);
+                      },
+                    ),
+                  )
                 : Container(),
             Spacer(),
           ],
