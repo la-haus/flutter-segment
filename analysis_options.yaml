@@ -1,0 +1,34 @@
+include: package:lint/analysis_options.yaml
+
+linter:
+  rules:
+    - camel_case_types
+    - file_names
+    - exhaustive_cases
+    - sort_constructors_first
+    - sort_unnamed_constructors_first
+
+analyzer:
+  strong-mode:
+    implicit-casts: false
+  errors:
+    todo: warning
+    file_names: error
+    camel_case_types: error
+    exhaustive_cases: error
+    unnecessary_non_null_assertion: error
+    invalid_use_of_visible_for_testing_member: error
+    unused_import: error
+    unused_local_variable: error
+    unused_field: error
+    missing_required_param: error
+    missing_return: error
+    prefer_final_locals: error
+    prefer_typing_uninitialized_variables: error
+    prefer_function_declarations_over_variables: false
+    prefer_const_declarations: false
+    avoid_function_literals_in_foreach_calls: false
+    avoid_redundant_argument_values: false
+    avoid_positional_boolean_parameters: false
+    sort_pub_dependencies: false
+    sort_child_properties_last: error
