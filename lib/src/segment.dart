@@ -97,7 +97,7 @@ class Segment {
     if (Platform.isAndroid) {
       throw Exception(
         'Debug flag cannot be dynamically set on Android.\n'
-        'Add to AndroidManifest and avoid calling this method when Platform.isAndroid.'
+        'Add to AndroidManifest and avoid calling this method when Platform.isAndroid.',
       );
     }
 
