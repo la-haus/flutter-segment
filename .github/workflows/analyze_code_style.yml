@@ -1,4 +1,4 @@
-name: Test
+name: Analyze Code Style
 
 on:
   push:
@@ -22,5 +22,5 @@ jobs:
       - name: Install dependencies
         run: flutter pub get
 
-      - name: Run tests
-        run: flutter test
+      - name: Analyze project source
+        run: flutter analyze
