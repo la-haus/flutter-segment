@@ -1,12 +1,11 @@
 import 'dart:io';
 
-import 'package:meta/meta.dart';
-import 'package:flutter_segment/src/segment_default_options.dart';
 import 'package:flutter_segment/src/segment_config.dart';
+import 'package:flutter_segment/src/segment_default_options.dart';
 import 'package:flutter_segment/src/segment_platform_interface.dart';
 
-export 'package:flutter_segment/src/segment_observer.dart';
 export 'package:flutter_segment/src/segment_default_options.dart';
+export 'package:flutter_segment/src/segment_observer.dart';
 
 class Segment {
   static SegmentPlatform get _segment => SegmentPlatform.instance;
@@ -97,7 +96,7 @@ class Segment {
     if (Platform.isAndroid) {
       throw Exception(
         'Debug flag cannot be dynamically set on Android.\n'
-        'Add to AndroidManifest and avoid calling this method when Platform.isAndroid.'
+        'Add to AndroidManifest and avoid calling this method when Platform.isAndroid.',
       );
     }
 

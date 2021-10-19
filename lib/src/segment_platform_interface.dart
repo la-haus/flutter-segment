@@ -1,4 +1,3 @@
-import 'package:meta/meta.dart';
 import 'package:flutter_segment/src/segment_config.dart';
 import 'package:flutter_segment/src/segment_method_channel.dart';
 

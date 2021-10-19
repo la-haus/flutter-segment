@@ -1,4 +1,4 @@
-name: Test
+name: Analyze Code Style
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
     branches: [ master ]
 
 jobs:
-  build:
+  analyze_code_style:
     runs-on: ubuntu-latest
 
     steps:
@@ -23,7 +23,4 @@ jobs:
         run: flutter pub get
 
       - name: Analyze project source
-        run: flutter analyze
-
-      - name: Run tests
-        run: flutter test
+        run: flutter analyze --no-pub --no-fatal-infos --no-fatal-warnings

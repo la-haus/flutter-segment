@@ -1,5 +1,6 @@
 # Segment plugin
 [![Pub Version](https://img.shields.io/pub/v/flutter_segment)](https://pub.dev/packages/flutter_segment)
+[![style: lint](https://img.shields.io/badge/style-lint-4BC0F5.svg)](https://pub.dev/packages/lint)
 
 Flutter plugin to support iOS, Android and Web sources at https://segment.com.
 
