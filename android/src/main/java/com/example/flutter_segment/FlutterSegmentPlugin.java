@@ -183,7 +183,7 @@ public class FlutterSegmentPlugin implements MethodCallHandler, FlutterPlugin {
       HashMap<String, Object> options = call.argument("options");
       
       if (userId == null) {
-        this.callIdentify(traitsData, options);
+        this.callIdentify(traitsData);
       } else {
         this.callIdentify(userId, traitsData, options);
       }
