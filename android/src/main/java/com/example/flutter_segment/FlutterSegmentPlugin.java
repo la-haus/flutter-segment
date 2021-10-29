@@ -72,8 +72,11 @@ public class FlutterSegmentPlugin implements MethodCallHandler, FlutterPlugin {
     try {
       Analytics.Builder analyticsBuilder = new Analytics.Builder(applicationContext, options.getWriteKey());
       if (options.getTrackApplicationLifecycleEvents()) {
-        // Enable this to record certain application events automatically
+        Log.i("FlutterSegment", "Lifecycle events enabled");
+
         analyticsBuilder.trackApplicationLifecycleEvents();
+      } else {
+        Log.i("FlutterSegment", "Lifecycle events are not been tracked");
       }
 
       if (options.getDebug()) {
@@ -178,7 +181,13 @@ public class FlutterSegmentPlugin implements MethodCallHandler, FlutterPlugin {
       String userId = call.argument("userId");
       HashMap<String, Object> traitsData = call.argument("traits");
       HashMap<String, Object> options = call.argument("options");
-      this.callIdentify(userId, traitsData, options);
+      
+      if (userId == null) {
+        this.callIdentify(traitsData, options);
+      } else {
+        this.callIdentify(userId, traitsData, options);
+      }
+
       result.success(true);
     } catch (Exception e) {
       result.error("FlutterSegmentException", e.getLocalizedMessage(), null);
