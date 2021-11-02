@@ -21,6 +21,6 @@ A new flutter plugin project.
 
   # Added because Segment-Amplitude dependency on iOS cause this error:
   # [!] The 'Pods-Runner' target has transitive dependencies that include statically linked binaries: (Segment-Amplitude)
-  s.static_framework = true
+  # s.static_framework = true
 end
 
