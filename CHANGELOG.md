@@ -1,3 +1,7 @@
+## 3.4.0
+* iOS: fix immediate crash on iOS
+* iOS: set min deployment target to `11.0` (previous it was `8.0`)
+
 ## 3.3.0
 * Android: upgrade Segment SDK to `4.10.0`
 * iOS: upgrade Segment SDK to `4.1.6`
