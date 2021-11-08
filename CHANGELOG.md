@@ -1,3 +1,6 @@
+## 3.4.1
+* iOS: re-add `s.static_framework = true` in `podspec`
+
 ## 3.4.0
 * iOS: fix immediate crash on iOS
 * iOS: set min deployment target to `11.0` (previous it was `8.0`)
