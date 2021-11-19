@@ -11,6 +11,9 @@ Please have a look at [this issue](https://github.com/claimsforce-gmbh/flutter-s
 ## Usage
 To use this plugin, add `flutter_segment` as a [dependency in your pubspec.yaml file](https://flutter.io/platform-plugins/).
 
+### Important note for iOS usage
+Since version `3.5.0` we are forcing all users to use `use_frameworks!` within the [`Podfile`](https://github.com/claimsforce-gmbh/flutter-segment/blob/master/example/ios/Podfile#L31) due to import issues of some 3rd party dependencies.
+
 ### Supported methods
 | Method | Android | iOS | Web |
 |---|---|---|---|
