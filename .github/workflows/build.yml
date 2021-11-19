@@ -1,10 +1,7 @@
 # src: https://gist.github.com/rodydavis/bde9a9a8c2fcdcf3474c0f50248f2e3a
 
 name: Flutter Build
-on:
-  pull_request:
-    branches:
-      - master
+on: [push, pull_request]
 
 # Cancel jobs and just run the last one
 concurrency:
