@@ -91,6 +91,13 @@ void main() {
   /// Wait until the platform channel is properly initialized so we can call
   /// `setContext` during the app initialization.
   WidgetsFlutterBinding.ensureInitialized();
+  
+  String writeKey;
+  if(Platform.isAndroid){
+    writeKey = "ANDROID_WRITE_KEY";
+  } else{ //iOS
+      writeKey = "IOS_WRITE_KEY";
+  }
 
   Segment.config(
     options: SegmentConfig(

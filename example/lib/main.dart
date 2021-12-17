@@ -46,14 +46,14 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-          title: Text('Segment example app'),
+          title: const Text('Segment example app'),
         ),
         body: Column(
           children: <Widget>[
-            Spacer(),
+            const Spacer(),
             Center(
-              child: FlatButton(
-                child: Text('TRACK ACTION WITH SEGMENT'),
+              child: ElevatedButton(
+                child: const Text('TRACK ACTION WITH SEGMENT'),
                 onPressed: () {
                   Segment.track(
                     eventName: 'ButtonClicked',
@@ -66,56 +66,57 @@ class MyApp extends StatelessWidget {
                 },
               ),
             ),
-            Spacer(),
+            const Spacer(),
             Center(
-              child: FlatButton(
-                child: Text('Update Context'),
+              child: ElevatedButton(
+                child: const Text('Update Context'),
                 onPressed: () {
                   Segment.setContext({'custom': 123});
                 },
               ),
             ),
-            Spacer(),
+            const Spacer(),
             Center(
-              child: FlatButton(
-                child: Text('Clear Context'),
+              child: ElevatedButton(
+                child: const Text('Clear Context'),
                 onPressed: () {
                   Segment.setContext({});
                 },
               ),
             ),
-            Spacer(),
+            const Spacer(),
             Center(
-              child: FlatButton(
-                child: Text('Disable'),
+              child: ElevatedButton(
+                child: const Text('Disable'),
                 onPressed: () async {
                   await Segment.disable();
                   Segment.track(eventName: 'This event will not be logged');
                 },
               ),
             ),
-            Spacer(),
+            const Spacer(),
             Center(
-              child: FlatButton(
-                child: Text('Enable'),
+              child: ElevatedButton(
+                child: const Text('Enable'),
                 onPressed: () async {
                   await Segment.enable();
                   Segment.track(eventName: 'Enabled tracking events!');
                 },
               ),
             ),
-            Spacer(),
-            Platform.isIOS
-                ? Center(
-                    child: FlatButton(
-                      child: Text('Debug mode'),
-                      onPressed: () {
-                        Segment.debug(true);
-                      },
-                    ),
-                  )
-                : Container(),
-            Spacer(),
+            const Spacer(),
+            if (Platform.isIOS)
+              Center(
+                child: ElevatedButton(
+                  child: const Text('Debug mode'),
+                  onPressed: () {
+                    Segment.debug(true);
+                  },
+                ),
+              )
+            else
+              Container(),
+            const Spacer(),
           ],
         ),
       ),

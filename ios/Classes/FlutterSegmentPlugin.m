@@ -320,6 +320,7 @@ static BOOL wasSetupFromFile = NO;
     if (isAmplitudeIntegrationEnabled) {
       [configuration use:[SEGAmplitudeIntegrationFactory instance]];
     }
+
     return configuration;
 }
 
@@ -333,6 +334,7 @@ static BOOL wasSetupFromFile = NO;
     if (isAmplitudeIntegrationEnabled) {
       [configuration use:[SEGAmplitudeIntegrationFactory instance]];
     }
+
     return configuration;
 }
 

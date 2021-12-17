@@ -9,9 +9,9 @@ linter:
     - sort_unnamed_constructors_first
 
 analyzer:
-  # strong-mode:
+  strong-mode:
     # TODO: enable
-    # implicit-casts: false
+    implicit-casts: false
   errors:
     todo: warning
     file_names: error

@@ -19,7 +19,7 @@ A new flutter plugin project.
   s.dependency 'Segment-Amplitude', '3.3.2'
   s.ios.deployment_target = '11.0'
 
-  # Added because Segment-Amplitude dependency on iOS cause this error:
+  # Added because Segment-Amplitude dependencies on iOS cause this error:
   # [!] The 'Pods-Runner' target has transitive dependencies that include statically linked binaries: (Segment-Amplitude)
   s.static_framework = true
 end
