@@ -56,15 +56,9 @@ public class FlutterSegmentPlugin implements MethodCallHandler, FlutterPlugin {
     methodChannel.setMethodCallHandler(this);
 
     try {
-      ApplicationInfo ai = applicationContext.getPackageManager()
-              .getApplicationInfo(applicationContext.getPackageName(), PackageManager.GET_META_DATA);
-
-      Bundle bundle = ai.metaData;
-
-      FlutterSegmentOptions options = FlutterSegmentOptions.create(bundle);
-      setupChannels(options);
+      throw Exception("AAAAAAA");
     } catch (Exception e) {
-      Log.e("FlutterSegment", e.getMessage(), e);
+      Log.e("FlutterSegment", e.getMessage());
     }
   }
 
@@ -112,7 +106,7 @@ public class FlutterSegmentPlugin implements MethodCallHandler, FlutterPlugin {
 
               chain.proceed(newPayload);
             } catch (Exception e) {
-              Log.e("FlutterSegment", e.getMessage(), e);
+              Log.e("FlutterSegment", e.getMessage());
               chain.proceed(chain.payload());
             }
           }
@@ -126,10 +120,10 @@ public class FlutterSegmentPlugin implements MethodCallHandler, FlutterPlugin {
       try {
         Analytics.setSingletonInstance(analyticsBuilder.build());
       } catch (IllegalStateException e) {
-        Log.w("FlutterSegment", e.getMessage(), e);
+        Log.w("FlutterSegment", e.getMessage());
       }
     } catch (Exception e) {
-      Log.e("FlutterSegment", e.getMessage(), e);
+      Log.e("FlutterSegment", e.getMessage());
     }
   }
 
@@ -172,19 +166,15 @@ public class FlutterSegmentPlugin implements MethodCallHandler, FlutterPlugin {
       this.setupChannels(options);
       result.success(true);
     } catch (Exception e) {
-      result.error("FlutterSegmentException", e.getLocalizedMessage(), e);
+      result.error("FlutterSegmentException", e.getLocalizedMessage(), null);
     }
   }
 
   private void identify(MethodCall call, Result result) {
     try {
-      String userId = call.argument("userId");
-      HashMap<String, Object> traitsData = call.argument("traits");
-      HashMap<String, Object> options = call.argument("options");
-      this.callIdentify(userId, traitsData, options);
-      result.success(true);
+      throw Exception("BBBBBBB");
     } catch (Exception e) {
-      result.error("FlutterSegmentException", e.getLocalizedMessage(), e);
+      result.error("FlutterSegmentException", e.getLocalizedMessage(), null);
     }
   }
 
@@ -213,7 +203,7 @@ public class FlutterSegmentPlugin implements MethodCallHandler, FlutterPlugin {
       this.callTrack(eventName, propertiesData, options);
       result.success(true);
     } catch (Exception e) {
-      result.error("FlutterSegmentException", e.getLocalizedMessage(), e);
+      result.error("FlutterSegmentException", e.getLocalizedMessage(), null);
     }
   }
 
@@ -236,7 +226,7 @@ public class FlutterSegmentPlugin implements MethodCallHandler, FlutterPlugin {
       this.callScreen(screenName, propertiesData, options);
       result.success(true);
     } catch (Exception e) {
-      result.error("FlutterSegmentException", e.getLocalizedMessage(), e);
+      result.error("FlutterSegmentException", e.getLocalizedMessage(), null);
     }
   }
 
@@ -259,7 +249,7 @@ public class FlutterSegmentPlugin implements MethodCallHandler, FlutterPlugin {
       this.callGroup(groupId, traitsData, options);
       result.success(true);
     } catch (Exception e) {
-      result.error("FlutterSegmentException", e.getLocalizedMessage(), e);
+      result.error("FlutterSegmentException", e.getLocalizedMessage(), null);
     }
   }
 
@@ -288,7 +278,7 @@ public class FlutterSegmentPlugin implements MethodCallHandler, FlutterPlugin {
       Analytics.with(this.applicationContext).alias(alias, options);
       result.success(true);
     } catch (Exception e) {
-      result.error("FlutterSegmentException", e.getLocalizedMessage(), e);
+      result.error("FlutterSegmentException", e.getLocalizedMessage(), null);
     }
   }
 
@@ -297,7 +287,7 @@ public class FlutterSegmentPlugin implements MethodCallHandler, FlutterPlugin {
       String anonymousId = Analytics.with(this.applicationContext).getAnalyticsContext().traits().anonymousId();
       result.success(anonymousId);
     } catch (Exception e) {
-      result.error("FlutterSegmentException", e.getLocalizedMessage(), e);
+      result.error("FlutterSegmentException", e.getLocalizedMessage(), null);
     }
   }
 
@@ -306,7 +296,7 @@ public class FlutterSegmentPlugin implements MethodCallHandler, FlutterPlugin {
       Analytics.with(this.applicationContext).reset();
       result.success(true);
     } catch (Exception e) {
-      result.error("FlutterSegmentException", e.getLocalizedMessage(), e);
+      result.error("FlutterSegmentException", e.getLocalizedMessage(), null);
     }
   }
 
@@ -315,7 +305,7 @@ public class FlutterSegmentPlugin implements MethodCallHandler, FlutterPlugin {
       this.appendToContextMiddleware = call.argument("context");
       result.success(true);
     } catch (Exception e) {
-      result.error("FlutterSegmentException", e.getLocalizedMessage(), e);
+      result.error("FlutterSegmentException", e.getLocalizedMessage(), null);
     }
   }
 
@@ -326,7 +316,7 @@ public class FlutterSegmentPlugin implements MethodCallHandler, FlutterPlugin {
       Analytics.with(this.applicationContext).optOut(false);
       result.success(true);
     } catch (Exception e) {
-      result.error("FlutterSegmentException", e.getLocalizedMessage(), e);
+      result.error("FlutterSegmentException", e.getLocalizedMessage(), null);
     }
   }
 
@@ -337,7 +327,7 @@ public class FlutterSegmentPlugin implements MethodCallHandler, FlutterPlugin {
       Analytics.with(this.applicationContext).optOut(true);
       result.success(true);
     } catch (Exception e) {
-      result.error("FlutterSegmentException", e.getLocalizedMessage(), e);
+      result.error("FlutterSegmentException", e.getLocalizedMessage(), null);
     }
   }
 
