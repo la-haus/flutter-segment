@@ -9,13 +9,20 @@ export 'package:flutter_segment/src/segment_observer.dart';
 
 class Segment {
   const Segment._();
+
   static SegmentPlatform get _segment => SegmentPlatform.instance;
+  static bool isDebugEnabled = false;
 
   static Future<void> identify({
     String? userId,
     Map<String, dynamic>? traits,
     Map<String, dynamic>? options,
   }) {
+    if (isDebugEnabled) {
+      print(
+          "SegmentFlutter - calling identify with userId($userId) traits($traits) options ($options)");
+    }
+
     return _segment.identify(
       userId: userId,
       traits: traits ?? {},
@@ -94,6 +101,8 @@ class Segment {
   }
 
   static Future<void> debug(bool enabled) {
+    isDebugEnabled = enabled;
+
     if (Platform.isAndroid) {
       throw Exception(
         'Debug flag cannot be dynamically set on Android.\n'
