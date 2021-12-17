@@ -118,6 +118,8 @@ static BOOL wasSetupFromFile = NO;
 }
 
 - (void)handleMethodCall:(FlutterMethodCall*)call result:(FlutterResult)result {
+  NSLog(@"Method %@, args: %@", call.method, call.arguments);
+
   if ([@"config" isEqualToString:call.method] && !wasSetupFromFile) {
     [self config:call result:result];
   } else if ([@"identify" isEqualToString:call.method]) {
@@ -192,7 +194,7 @@ static BOOL wasSetupFromFile = NO;
     result([FlutterError
       errorWithCode:@"FlutterSegmentException"
       message:[exception reason]
-      details: [NSThread  callStackSymbols].description]);
+      details: @"[NSThread  callStackSymbols].description"]);
   }
 }
 
