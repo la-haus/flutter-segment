@@ -118,7 +118,7 @@ static BOOL wasSetupFromFile = NO;
 }
 
 - (void)handleMethodCall:(FlutterMethodCall*)call result:(FlutterResult)result {
-  NSLog(@"Method %@, args: %@", call.method, call.arguments);
+  NSLog(@"SegmentFlutter - iOS - Method %@, args: %@", call.method, call.arguments);
 
   if ([@"config" isEqualToString:call.method] && !wasSetupFromFile) {
     [self config:call result:result];
@@ -182,12 +182,20 @@ static BOOL wasSetupFromFile = NO;
 
 - (void)identify:(FlutterMethodCall*)call result:(FlutterResult)result {
   @try {
+    NSLog(@"SegmentFlutter - iOS - 1");
     NSString *userId = call.arguments[@"userId"];
+    NSLog(@"SegmentFlutter - iOS - 2 %@", userId);
     NSDictionary *traits = call.arguments[@"traits"];
+    NSLog(@"SegmentFlutter - iOS - 3 %@", traits);
     NSDictionary *options = call.arguments[@"options"];
+    NSLog(@"SegmentFlutter - iOS - 4 %@", options);
+
     [[SEGAnalytics sharedAnalytics] identify: userId
                       traits: traits
                      options: options];
+
+    NSLog(@"SegmentFlutter - iOS - 5 %@", options);
+
     result([NSNumber numberWithBool:YES]);
   }
   @catch (NSException *exception) {
