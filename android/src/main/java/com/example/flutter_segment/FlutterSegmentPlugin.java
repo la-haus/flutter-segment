@@ -57,14 +57,7 @@ public class FlutterSegmentPlugin implements MethodCallHandler, FlutterPlugin {
 
     try {
       throw new Exception("AAAAAAA");
-
-      ApplicationInfo ai = applicationContext.getPackageManager()
-              .getApplicationInfo(applicationContext.getPackageName(), PackageManager.GET_META_DATA);
-
-      Bundle bundle = ai.metaData;
-
-      FlutterSegmentOptions options = FlutterSegmentOptions.create(bundle);
-      setupChannels(options);
+      
     } catch (Exception e) {
       Log.e("FlutterSegment", e.getMessage(), e);
     }
@@ -181,11 +174,8 @@ public class FlutterSegmentPlugin implements MethodCallHandler, FlutterPlugin {
   private void identify(MethodCall call, Result result) {
     try {
       throw new Exception("BBBBBBBBB");
-      String userId = call.argument("userId");
-      HashMap<String, Object> traitsData = call.argument("traits");
-      HashMap<String, Object> options = call.argument("options");
-      this.callIdentify(userId, traitsData, options);
-      result.success(true);
+
+
     } catch (Exception e) {
       result.error("FlutterSegmentException", e.getLocalizedMessage(), e);
     }
