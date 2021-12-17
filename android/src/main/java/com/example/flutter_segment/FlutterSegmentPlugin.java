@@ -56,7 +56,7 @@ public class FlutterSegmentPlugin implements MethodCallHandler, FlutterPlugin {
     methodChannel.setMethodCallHandler(this);
 
     try {
-      throw Exception("AAAAAAA");
+      throw new Exception("AAAAAAA");
     } catch (Exception e) {
       Log.e("FlutterSegment", e.getMessage());
     }
@@ -172,7 +172,7 @@ public class FlutterSegmentPlugin implements MethodCallHandler, FlutterPlugin {
 
   private void identify(MethodCall call, Result result) {
     try {
-      throw Exception("BBBBBBB");
+      throw new Exception("BBBBBBB");
     } catch (Exception e) {
       result.error("FlutterSegmentException", e.getLocalizedMessage(), null);
     }
