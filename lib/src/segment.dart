@@ -16,8 +16,13 @@ class Segment {
     Map<String, dynamic>? traits,
     Map<String, dynamic>? options,
   }) {
+    // Allow the userId to be null because there is an error
+    // in the iOS implementation:
+    // https://github.com/claimsforce-gmbh/flutter-segment/issues/58
+    final sanitizedUserId = userId ?? '';
+
     return _segment.identify(
-      userId: userId,
+      userId:  sanitizedUserId,
       traits: traits ?? {},
       options: options ?? SegmentDefaultOptions.instance.options ?? {},
     );
