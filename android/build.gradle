@@ -36,6 +36,9 @@ android {
     dependencies {
         implementation 'com.segment.analytics.android:analytics:4.10.0'
         implementation 'com.segment.analytics.android.integrations:amplitude:3.0.3'
+        implementation 'com.appsflyer:segment-android-integration:6.4.3'
+        implementation 'com.android.installreferrer:installreferrer:2.2'
+
     }
 }
 
