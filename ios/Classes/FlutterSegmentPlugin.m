@@ -138,6 +138,8 @@ static BOOL wasSetupFromFile = NO;
     [self disable:result];
   } else if ([@"enable" isEqualToString:call.method]) {
     [self enable:result];
+  } else if ([@"flush" isEqualToString:call.method]) {
+    [self flush:call result:result];
   } else if ([@"debug" isEqualToString:call.method]) {
     [self debug:call result:result];
   } else if ([@"setContext" isEqualToString:call.method]) {
@@ -305,6 +307,18 @@ static BOOL wasSetupFromFile = NO;
 - (void)enable:(FlutterResult)result {
   @try {
     [[SEGAnalytics sharedAnalytics] enable];
+    result([NSNumber numberWithBool:YES]);
+  }
+  @catch (NSException *exception) {
+    result([FlutterError errorWithCode:@"FlutterSegmentException"
+      message:[exception reason]
+      details: [NSThread  callStackSymbols].description]);
+  }
+}
+
+- (void)flush:(FlutterResult)result {
+  @try {
+    [[SEGAnalytics sharedAnalytics] flush];
     result([NSNumber numberWithBool:YES]);
   }
   @catch (NSException *exception) {
