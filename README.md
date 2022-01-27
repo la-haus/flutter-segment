@@ -15,19 +15,20 @@ To use this plugin, add `flutter_segment` as a [dependency in your pubspec.yaml 
 Since version `3.5.0` we are forcing all users to use `use_frameworks!` within the [`Podfile`](https://github.com/claimsforce-gmbh/flutter-segment/blob/master/example/ios/Podfile#L31) due to import issues of some 3rd party dependencies.
 
 ### Supported methods
-| Method | Android | iOS | Web |
-|---|---|---|---|
-| `identify` | X | X | X |
-| `track` | X | X | X |
-| `screen` | X | X | X |
-| `group` | X | X | X |
-| `alias` | X | X | X |
+| Method           | Android | iOS | Web |
+|------------------|---|---|---|
+| `identify`       | X | X | X |
+| `track`          | X | X | X |
+| `screen`         | X | X | X |
+| `group`          | X | X | X |
+| `alias`          | X | X | X |
 | `getAnonymousId` | X | X | X |
-| `reset` | X | X | X |
-| `disable` | X | X | |
-| `enable` | X | X | |
-| `debug` | X* | X | X |
-| `setContext` | X | X | |
+| `reset`          | X | X | X |
+| `disable`        | X | X | |
+| `enable`         | X | X | |
+| `flush`          | X | X | |
+| `debug`          | X* | X | X |
+| `setContext`     | X | X | |
 
 \* Debugging must be set as a configuration parameter in `AndroidManifest.xml` (see below). The official segment library does not offer the debug method for Android.
 
