@@ -16,6 +16,9 @@ import com.segment.analytics.Middleware;
 import com.segment.analytics.integrations.BasePayload;
 import com.segment.analytics.android.integrations.amplitude.AmplitudeIntegration;
 import com.segment.analytics.android.integrations.appsflyer.AppsflyerIntegration;
+import androidx.annotation.NonNull;
+import com.appsflyer.deeplink.DeepLinkResult;
+
 import static com.segment.analytics.Analytics.LogLevel;
 
 import java.util.LinkedHashMap;
@@ -90,6 +93,45 @@ public class FlutterSegmentPlugin implements MethodCallHandler, FlutterPlugin {
 
       if (options.isAppsFlyerIntegrationEnabled()) {
         analyticsBuilder.use(AppsflyerIntegration.FACTORY);
+
+        AppsflyerIntegration.conversionListener  = new AppsflyerIntegration.ExternalAppsFlyerConversionListener() {
+          @Override
+          public void onConversionDataSuccess(Map<String, Object> map) {
+            // Process Deferred Deep Linking here
+            for (String attrName : map.keySet()) {
+              Log.d("---", "attribute: " + attrName + " = " + map.get(attrName));
+            }
+          }
+
+          @Override
+          public void onConversionDataFail(String s) {
+            Log.d("---", "onConversionDataFail: " +s);
+
+          }
+
+          @Override
+          public void onAppOpenAttribution(Map<String, String> map) {
+            // Process Direct Deep Linking here
+            for (String attrName : map.keySet()) {
+              Log.d("---", "attribute: " + attrName + " = " + map.get(attrName));
+            }
+          }
+
+          @Override
+          public void onAttributionFailure(String s) {
+            Log.d("---", "onAttributionFailure: " + s);
+
+          }
+        };
+
+        AppsflyerIntegration.deepLinkListener = new AppsflyerIntegration.ExternalDeepLinkListener() {
+          @Override
+          public void onDeepLinking(@NonNull DeepLinkResult deepLinkResult) {
+            Log.d("---", "onDeepLinking: ");
+
+          }
+        };
+
       }
 
       if (options.getTrackAttributionInformation()) {
