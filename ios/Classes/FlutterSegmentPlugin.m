@@ -139,7 +139,7 @@ static BOOL wasSetupFromFile = NO;
   } else if ([@"enable" isEqualToString:call.method]) {
     [self enable:result];
   } else if ([@"flush" isEqualToString:call.method]) {
-    [self flush:call result:result];
+    [self flush:result];
   } else if ([@"debug" isEqualToString:call.method]) {
     [self debug:call result:result];
   } else if ([@"setContext" isEqualToString:call.method]) {
