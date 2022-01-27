@@ -136,6 +136,15 @@ class SegmentMethodChannel extends SegmentPlatform {
   }
 
   @override
+  Future<void> flush() async {
+    try {
+      await _channel.invokeMethod('flush');
+    } on PlatformException catch (exception) {
+      print(exception);
+    }
+  }
+
+  @override
   Future<void> debug(bool enabled) async {
     try {
       await _channel.invokeMethod('debug', {
