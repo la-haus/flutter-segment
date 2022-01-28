@@ -1,6 +1,6 @@
 # src: https://gist.github.com/rodydavis/bde9a9a8c2fcdcf3474c0f50248f2e3a
 
-name: Flutter Build
+name: Flutter Checks
 on:
   pull_request:
     branches:
@@ -19,6 +19,17 @@ defaults:
     working-directory: example/
 
 jobs:
+  unit_test:
+    name: Run Unit Tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - uses: subosito/flutter-action@v1
+        with:
+          flutter-version: '2.0.0'
+      - run: flutter pub get
+      - run: flutter test
+
   build_web:
     name: Build Web
     runs-on: ubuntu-latest
