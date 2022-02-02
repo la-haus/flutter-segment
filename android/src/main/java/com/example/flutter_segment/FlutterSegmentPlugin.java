@@ -14,7 +14,7 @@ import com.segment.analytics.Traits;
 import com.segment.analytics.Options;
 import com.segment.analytics.Middleware;
 import com.segment.analytics.integrations.BasePayload;
-import com.segment.analytics.android.integrations.amplitude.AmplitudeIntegration;
+//import com.segment.analytics.android.integrations.amplitude.AmplitudeIntegration;
 import com.segment.analytics.android.integrations.appsflyer.AppsflyerIntegration;
 import androidx.annotation.NonNull;
 import com.appsflyer.deeplink.DeepLinkResult;
@@ -75,64 +75,26 @@ public class FlutterSegmentPlugin implements MethodCallHandler, FlutterPlugin {
   private void setupChannels(FlutterSegmentOptions options) {
     try {
       Analytics.Builder analyticsBuilder = new Analytics.Builder(applicationContext, options.getWriteKey());
+      if (options.isAppsFlyerIntegrationEnabled()) {
+        analyticsBuilder.use(AppsflyerIntegration.FACTORY);
+      }
+
       if (options.getTrackApplicationLifecycleEvents()) {
         Log.i("FlutterSegment", "Lifecycle events enabled");
 
         analyticsBuilder.trackApplicationLifecycleEvents();
+        analyticsBuilder.recordScreenViews();
       } else {
         Log.i("FlutterSegment", "Lifecycle events are not been tracked");
       }
 
       if (options.getDebug()) {
-        analyticsBuilder.logLevel(LogLevel.DEBUG);
+        analyticsBuilder.logLevel(LogLevel.VERBOSE);
       }
 
-      if (options.isAmplitudeIntegrationEnabled()) {
-        analyticsBuilder.use(AmplitudeIntegration.FACTORY);
-      }
-
-      if (options.isAppsFlyerIntegrationEnabled()) {
-        analyticsBuilder.use(AppsflyerIntegration.FACTORY);
-
-        AppsflyerIntegration.conversionListener  = new AppsflyerIntegration.ExternalAppsFlyerConversionListener() {
-          @Override
-          public void onConversionDataSuccess(Map<String, Object> map) {
-            // Process Deferred Deep Linking here
-            for (String attrName : map.keySet()) {
-              Log.d("---", "attribute: " + attrName + " = " + map.get(attrName));
-            }
-          }
-
-          @Override
-          public void onConversionDataFail(String s) {
-            Log.d("---", "onConversionDataFail: " +s);
-
-          }
-
-          @Override
-          public void onAppOpenAttribution(Map<String, String> map) {
-            // Process Direct Deep Linking here
-            for (String attrName : map.keySet()) {
-              Log.d("---", "attribute: " + attrName + " = " + map.get(attrName));
-            }
-          }
-
-          @Override
-          public void onAttributionFailure(String s) {
-            Log.d("---", "onAttributionFailure: " + s);
-
-          }
-        };
-
-        AppsflyerIntegration.deepLinkListener = new AppsflyerIntegration.ExternalDeepLinkListener() {
-          @Override
-          public void onDeepLinking(@NonNull DeepLinkResult deepLinkResult) {
-            Log.d("---", "onDeepLinking: ");
-
-          }
-        };
-
-      }
+//      if (options.isAmplitudeIntegrationEnabled()) {
+//        analyticsBuilder.use(AmplitudeIntegration.FACTORY);
+//      }
 
       if (options.getTrackAttributionInformation()) {
         Log.i("FlutterSegment", "Track Attribution Information is enabled");
@@ -185,6 +147,14 @@ public class FlutterSegmentPlugin implements MethodCallHandler, FlutterPlugin {
     } catch (Exception e) {
       Log.e("FlutterSegment", e.getMessage());
     }
+
+    Analytics analytics = Analytics.with(this.applicationContext);
+
+    analytics.onIntegrationReady("Segment.io", new Analytics.Callback() {
+      @Override public void onReady(Object instance) {
+        Log.d("FlutterSegment", "Segment integration ready.");
+      }
+    });
   }
 
   @Override
