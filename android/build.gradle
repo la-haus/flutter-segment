@@ -35,7 +35,7 @@ android {
 
     dependencies {
         implementation 'com.segment.analytics.android:analytics:4.10.0'
-        implementation 'com.segment.analytics.android.integrations:amplitude:3.0.3'
+        implementation 'com.segment.analytics.android.integrations:amplitude:3.1.0'
     }
 }
 

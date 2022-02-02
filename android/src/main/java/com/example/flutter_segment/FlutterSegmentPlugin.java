@@ -6,15 +6,13 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
 
-import androidx.annotation.VisibleForTesting;
-
 import com.segment.analytics.Analytics;
 import com.segment.analytics.Properties;
 import com.segment.analytics.Traits;
 import com.segment.analytics.Options;
 import com.segment.analytics.Middleware;
+import com.segment.analytics.android.integrations.amplitude.AmplitudeSessionId;
 import com.segment.analytics.integrations.BasePayload;
-import com.segment.analytics.android.integrations.amplitude.AmplitudeIntegration;
 import static com.segment.analytics.Analytics.LogLevel;
 
 import java.util.LinkedHashMap;
@@ -84,7 +82,7 @@ public class FlutterSegmentPlugin implements MethodCallHandler, FlutterPlugin {
       }
 
       if (options.isAmplitudeIntegrationEnabled()) {
-        analyticsBuilder.use(AmplitudeIntegration.FACTORY);
+        analyticsBuilder.useSourceMiddleware(new AmplitudeSessionId());
       }
 
       // Here we build a middleware that just appends data to the current context
