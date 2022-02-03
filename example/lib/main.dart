@@ -9,8 +9,9 @@ Future<void> main() async{
   WidgetsFlutterBinding.ensureInitialized();
   Segment.config(
     options: SegmentConfig(
-      writeKey: 'YOUR_WRITE_KEY_GOES_HERE',
+      writeKey: 'GHzVTcd0SBVcYOBu5ujtp7zRcb6ljHJQ',
       trackApplicationLifecycleEvents: false,
+      debug: true
     ),
   );
   /// The `context.device.token` is a special property.

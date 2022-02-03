@@ -14,10 +14,8 @@ import com.segment.analytics.Traits;
 import com.segment.analytics.Options;
 import com.segment.analytics.Middleware;
 import com.segment.analytics.integrations.BasePayload;
-//import com.segment.analytics.android.integrations.amplitude.AmplitudeIntegration;
-import com.segment.analytics.android.integrations.appsflyer.AppsflyerIntegration;
+import com.segment.analytics.android.integrations.amplitude.AmplitudeIntegration;
 import androidx.annotation.NonNull;
-import com.appsflyer.deeplink.DeepLinkResult;
 
 import static com.segment.analytics.Analytics.LogLevel;
 
@@ -75,9 +73,6 @@ public class FlutterSegmentPlugin implements MethodCallHandler, FlutterPlugin {
   private void setupChannels(FlutterSegmentOptions options) {
     try {
       Analytics.Builder analyticsBuilder = new Analytics.Builder(applicationContext, options.getWriteKey());
-      if (options.isAppsFlyerIntegrationEnabled()) {
-        analyticsBuilder.use(AppsflyerIntegration.FACTORY);
-      }
 
       if (options.getTrackApplicationLifecycleEvents()) {
         Log.i("FlutterSegment", "Lifecycle events enabled");
@@ -92,15 +87,8 @@ public class FlutterSegmentPlugin implements MethodCallHandler, FlutterPlugin {
         analyticsBuilder.logLevel(LogLevel.VERBOSE);
       }
 
-//      if (options.isAmplitudeIntegrationEnabled()) {
-//        analyticsBuilder.use(AmplitudeIntegration.FACTORY);
-//      }
-
-      if (options.getTrackAttributionInformation()) {
-        Log.i("FlutterSegment", "Track Attribution Information is enabled");
-        analyticsBuilder.trackAttributionInformation();
-      } else {
-        Log.i("FlutterSegment", "Attribution Information are not been tracked");
+      if (options.isAmplitudeIntegrationEnabled()) {
+        analyticsBuilder.use(AmplitudeIntegration.FACTORY);
       }
 
       // Here we build a middleware that just appends data to the current context
@@ -147,14 +135,6 @@ public class FlutterSegmentPlugin implements MethodCallHandler, FlutterPlugin {
     } catch (Exception e) {
       Log.e("FlutterSegment", e.getMessage());
     }
-
-    Analytics analytics = Analytics.with(this.applicationContext);
-
-    analytics.onIntegrationReady("Segment.io", new Analytics.Callback() {
-      @Override public void onReady(Object instance) {
-        Log.d("FlutterSegment", "Segment integration ready.");
-      }
-    });
   }
 
   @Override
