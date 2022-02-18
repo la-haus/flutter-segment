@@ -17,6 +17,7 @@ class SegmentConfig {
     return {
       'writeKey': writeKey,
       'trackApplicationLifecycleEvents': trackApplicationLifecycleEvents,
+      'amplitudeIntegrationEnabled': amplitudeIntegrationEnabled,
       'mixpanelIntegrationEnabled': mixpanelIntegrationEnabled,
       'debug': debug,
     };
