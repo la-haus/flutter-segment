@@ -7,7 +7,7 @@ import android.os.Bundle;
 
 import com.segment.analytics.Analytics;
 import com.segment.analytics.Traits;
-import com.segment.analytics.android.integrations.appsflyer.AppsflyerIntegration;
+//import com.segment.analytics.android.integrations.appsflyer.AppsflyerIntegration;
 import com.appsflyer.AppsFlyerLib;
 
 
@@ -47,8 +47,8 @@ public class MyApplication extends FlutterApplication {
                 Log.i("FlutterSegment", "init from application class.");
             }
 
-            Analytics.Builder builder = new Analytics.Builder(this, writeKey)
-                    .use(AppsflyerIntegration.FACTORY);
+            Analytics.Builder builder = new Analytics.Builder(this, writeKey);
+//                    .use(AppsflyerIntegration.FACTORY);
 
             if (debug)
                 builder.logLevel(Analytics.LogLevel.VERBOSE);
