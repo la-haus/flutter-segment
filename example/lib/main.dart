@@ -7,13 +7,13 @@ Future<void> main() async{
   /// Wait until the platform channel is properly initialized so we can call
   /// `setContext` during the app initialization.
   WidgetsFlutterBinding.ensureInitialized();
-  Segment.config(
+  /*Segment.config(
     options: SegmentConfig(
-      writeKey: 'GHzVTcd0SBVcYOBu5ujtp7zRcb6ljHJQ',
+      writeKey: 'writeKey',
       trackApplicationLifecycleEvents: false,
       debug: true
     ),
-  );
+  );*/
   /// The `context.device.token` is a special property.
   /// When you define it, setting the context again with no token property (ex: `{}`)
   /// has no effect on cleaning up the device token.
