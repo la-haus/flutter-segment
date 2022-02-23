@@ -8,6 +8,7 @@ import android.os.Bundle;
 import com.segment.analytics.Analytics;
 import com.segment.analytics.Traits;
 import com.segment.analytics.android.integrations.appsflyer.AppsflyerIntegration;
+import com.appsflyer.AppsFlyerLib;
 
 
 import java.util.Map;
@@ -24,6 +25,7 @@ public class MyApplication extends FlutterApplication {
     public void onCreate() {
         super.onCreate();
         initSegmentAnalytics();
+        initAppsflyer();
     }
 
     private void initSegmentAnalytics() {
@@ -59,6 +61,31 @@ public class MyApplication extends FlutterApplication {
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
             Log.e("FlutterSegment exception ", e.getMessage());
+        }
+    }
+
+    private void initAppsflyer(){
+        try {
+            ApplicationInfo ai = getPackageManager()
+                    .getApplicationInfo(getPackageName(), PackageManager.GET_META_DATA);
+
+            Bundle bundle = ai.metaData;
+
+            String devKey = bundle.getString("com.claimsforce.appsflyer.DEV_KEY");
+
+            if (devKey == null || devKey.equals("")) {
+                Log.i("FlutterSegment", "DEV KEY key is required.");
+                return;
+            } else {
+                Log.i("FlutterSegment", "init appsflyer from application class.");
+            }
+
+            AppsFlyerLib.getInstance().init(devKey, null, this);
+            AppsFlyerLib.getInstance().start(this);
+            AppsFlyerLib.getInstance().setDebugLog(true);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+            Log.e("FlutterSegment initAppsflyer exception ", e.getMessage());
         }
     }
 }
