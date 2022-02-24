@@ -37,8 +37,6 @@ public class MyApplication extends FlutterApplication {
             String writeKey = bundle.getString("com.claimsforce.segment.WRITE_KEY");
             Boolean trackApplicationLifecycleEvents = bundle.getBoolean("com.claimsforce.segment.TRACK_APPLICATION_LIFECYCLE_EVENTS");
             Boolean debug = bundle.getBoolean("com.claimsforce.segment.DEBUG", false);
-            Boolean enableAppsflyer = bundle.getBoolean("com.claimsforce.segment.ENABLE_APPSFLYER_INTEGRATION", false);
-            Boolean trackAttribution = bundle.getBoolean("com.claimsforce.segment.TRACK_ATTRIBUTION_INFORMATION", false);
 
             if (writeKey == null || writeKey.equals("")) {
                 Log.i("FlutterSegment", "write key is required.");
@@ -47,13 +45,8 @@ public class MyApplication extends FlutterApplication {
                 Log.i("FlutterSegment", "init from application class.");
             }
 
-            Analytics.Builder builder = new Analytics.Builder(this, writeKey);
-
-            if (enableAppsflyer)
-                builder.use(AppsflyerIntegration.FACTORY);
-
-            if (trackApplicationLifecycleEvents)
-                builder.trackAttributionInformation();
+            Analytics.Builder builder = new Analytics.Builder(this, writeKey)
+                    .use(AppsflyerIntegration.FACTORY);
 
             if (debug)
                 builder.logLevel(Analytics.LogLevel.VERBOSE);
