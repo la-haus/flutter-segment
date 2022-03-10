@@ -17,7 +17,7 @@ import android.content.pm.ApplicationInfo;
 
 //https://segment.com/docs/spec/identify/
 //https://segment.com/docs/sources/mobile/android/
-public class MyApplication extends FlutterApplication {
+public class SegmentApplication extends FlutterApplication {
     static final String TAG = "SEG_AF";
 
     @Override
@@ -36,7 +36,7 @@ public class MyApplication extends FlutterApplication {
 
             String writeKey = bundle.getString("com.claimsforce.segment.WRITE_KEY");
             Boolean trackApplicationLifecycleEvents = bundle.getBoolean("com.claimsforce.segment.TRACK_APPLICATION_LIFECYCLE_EVENTS");
-            Boolean debug = bundle.getBoolean("com.claimsforce.segment.DEBUG", false);
+            Boolean isDebuggable = bundle.getBoolean("com.claimsforce.segment.DEBUG", false);
 
             if (writeKey == null || writeKey.equals("")) {
                 Log.i("FlutterSegment", "write key is required.");
@@ -48,7 +48,7 @@ public class MyApplication extends FlutterApplication {
             Analytics.Builder builder = new Analytics.Builder(this, writeKey)
                     .use(AppsflyerIntegration.FACTORY);
 
-            if (debug)
+            if (isDebuggable)
                 builder.logLevel(Analytics.LogLevel.VERBOSE);
 
             if (trackApplicationLifecycleEvents)
