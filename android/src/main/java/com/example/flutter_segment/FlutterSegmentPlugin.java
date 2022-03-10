@@ -14,7 +14,10 @@ import com.segment.analytics.Traits;
 import com.segment.analytics.Options;
 import com.segment.analytics.Middleware;
 import com.segment.analytics.integrations.BasePayload;
-import com.segment.analytics.android.integrations.amplitude.AmplitudeIntegration;
+//import com.segment.analytics.android.integrations.amplitude.AmplitudeIntegration;
+import com.segment.analytics.android.integrations.appsflyer.AppsflyerIntegration;
+import androidx.annotation.NonNull;
+
 import static com.segment.analytics.Analytics.LogLevel;
 
 import java.util.LinkedHashMap;
@@ -71,52 +74,64 @@ public class FlutterSegmentPlugin implements MethodCallHandler, FlutterPlugin {
   private void setupChannels(FlutterSegmentOptions options) {
     try {
       Analytics.Builder analyticsBuilder = new Analytics.Builder(applicationContext, options.getWriteKey());
+      if (options.isAppsFlyerIntegrationEnabled()) {
+        analyticsBuilder.use(AppsflyerIntegration.FACTORY);
+      }
+
       if (options.getTrackApplicationLifecycleEvents()) {
         Log.i("FlutterSegment", "Lifecycle events enabled");
 
         analyticsBuilder.trackApplicationLifecycleEvents();
+        analyticsBuilder.recordScreenViews();
       } else {
         Log.i("FlutterSegment", "Lifecycle events are not been tracked");
       }
 
       if (options.getDebug()) {
-        analyticsBuilder.logLevel(LogLevel.DEBUG);
+        analyticsBuilder.logLevel(LogLevel.VERBOSE);
       }
 
-      if (options.isAmplitudeIntegrationEnabled()) {
-        analyticsBuilder.use(AmplitudeIntegration.FACTORY);
+//      if (options.isAmplitudeIntegrationEnabled()) {
+//        analyticsBuilder.use(AmplitudeIntegration.FACTORY);
+//      }
+
+      if (options.getTrackAttributionInformation()) {
+        Log.i("FlutterSegment", "Track Attribution Information is enabled");
+        analyticsBuilder.trackAttributionInformation();
+      } else {
+        Log.i("FlutterSegment", "Attribution Information are not been tracked");
       }
 
       // Here we build a middleware that just appends data to the current context
       // using the [deepMerge] strategy.
       analyticsBuilder.middleware(
-        new Middleware() {
-          @Override
-          public void intercept(Chain chain) {
-            try {
-              if (appendToContextMiddleware == null) {
-                chain.proceed(chain.payload());
-                return;
+              new Middleware() {
+                @Override
+                public void intercept(Chain chain) {
+                  try {
+                    if (appendToContextMiddleware == null) {
+                      chain.proceed(chain.payload());
+                      return;
+                    }
+
+                    BasePayload payload = chain.payload();
+                    Map<String, Object> originalContext = new LinkedHashMap<>(payload.context());
+                    Map<String, Object> mergedContext = FlutterSegmentPlugin.deepMerge(
+                            originalContext,
+                            appendToContextMiddleware
+                    );
+
+                    BasePayload newPayload = payload.toBuilder()
+                            .context(mergedContext)
+                            .build();
+
+                    chain.proceed(newPayload);
+                  } catch (Exception e) {
+                    Log.e("FlutterSegment", e.getMessage());
+                    chain.proceed(chain.payload());
+                  }
+                }
               }
-
-              BasePayload payload = chain.payload();
-              Map<String, Object> originalContext = new LinkedHashMap<>(payload.context());
-              Map<String, Object> mergedContext = FlutterSegmentPlugin.deepMerge(
-                originalContext,
-                appendToContextMiddleware
-              );
-
-              BasePayload newPayload = payload.toBuilder()
-                .context(mergedContext)
-                .build();
-
-              chain.proceed(newPayload);
-            } catch (Exception e) {
-              Log.e("FlutterSegment", e.getMessage());
-              chain.proceed(chain.payload());
-            }
-          }
-        }
       );
 
       // Set the initialized instance as globally accessible.
@@ -131,6 +146,14 @@ public class FlutterSegmentPlugin implements MethodCallHandler, FlutterPlugin {
     } catch (Exception e) {
       Log.e("FlutterSegment", e.getMessage());
     }
+
+    Analytics analytics = Analytics.with(this.applicationContext);
+
+    analytics.onIntegrationReady("Segment.io", new Analytics.Callback() {
+      @Override public void onReady(Object instance) {
+        Log.d("FlutterSegment", "Segment integration ready.");
+      }
+    });
   }
 
   @Override
@@ -189,9 +212,9 @@ public class FlutterSegmentPlugin implements MethodCallHandler, FlutterPlugin {
   }
 
   private void callIdentify(
-    String userId,
-    HashMap<String, Object> traitsData,
-    HashMap<String, Object> optionsData
+          String userId,
+          HashMap<String, Object> traitsData,
+          HashMap<String, Object> optionsData
   ) {
     Traits traits = new Traits();
     Options options = this.buildOptions(optionsData);
@@ -218,9 +241,9 @@ public class FlutterSegmentPlugin implements MethodCallHandler, FlutterPlugin {
   }
 
   private void callTrack(
-    String eventName,
-    HashMap<String, Object> propertiesData,
-    HashMap<String, Object> optionsData
+          String eventName,
+          HashMap<String, Object> propertiesData,
+          HashMap<String, Object> optionsData
   ) {
     Properties properties = propertiesMapper.buildProperties(propertiesData);
     Options options = this.buildOptions(optionsData);
@@ -241,9 +264,9 @@ public class FlutterSegmentPlugin implements MethodCallHandler, FlutterPlugin {
   }
 
   private void callScreen(
-    String screenName,
-    HashMap<String, Object> propertiesData,
-    HashMap<String, Object> optionsData
+          String screenName,
+          HashMap<String, Object> propertiesData,
+          HashMap<String, Object> optionsData
   ) {
     Properties properties = propertiesMapper.buildProperties(propertiesData);
     Options options = this.buildOptions(optionsData);
@@ -264,9 +287,9 @@ public class FlutterSegmentPlugin implements MethodCallHandler, FlutterPlugin {
   }
 
   private void callGroup(
-    String groupId,
-    HashMap<String, Object> traitsData,
-    HashMap<String, Object> optionsData
+          String groupId,
+          HashMap<String, Object> traitsData,
+          HashMap<String, Object> optionsData
   ) {
     Traits traits = new Traits();
     Options options = this.buildOptions(optionsData);
@@ -352,8 +375,8 @@ public class FlutterSegmentPlugin implements MethodCallHandler, FlutterPlugin {
     Options options = new Options();
 
     if (optionsData != null &&
-      optionsData.containsKey("integrations") &&
-      (optionsData.get("integrations") instanceof HashMap)) {
+            optionsData.containsKey("integrations") &&
+            (optionsData.get("integrations") instanceof HashMap)) {
       for (Map.Entry<String, Object> integration : ((HashMap<String,Object>)optionsData.get("integrations")).entrySet()) {
         String key = integration.getKey();
 

@@ -3,18 +3,17 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_segment/flutter_segment.dart';
 
-void main() {
+Future<void> main() async{
   /// Wait until the platform channel is properly initialized so we can call
   /// `setContext` during the app initialization.
   WidgetsFlutterBinding.ensureInitialized();
-
-  Segment.config(
+  /*Segment.config(
     options: SegmentConfig(
-      writeKey: 'YOUR_WRITE_KEY_GOES_HERE',
+      writeKey: 'writeKey',
       trackApplicationLifecycleEvents: false,
+      debug: true
     ),
-  );
-
+  );*/
   /// The `context.device.token` is a special property.
   /// When you define it, setting the context again with no token property (ex: `{}`)
   /// has no effect on cleaning up the device token.
