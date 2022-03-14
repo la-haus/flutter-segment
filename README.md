@@ -1,8 +1,3 @@
-# ⚠️ DEPRECATION NOTE ⚠️
-This project is not longer maintained from this repository. We moved it to our friends from [La Haus](https://github.com/la-haus).
-
-You can find the latest version in this [GitHub repository](https://github.com/la-haus/flutter-library-segment).
-
 # Segment plugin
 [![Pub Version](https://img.shields.io/pub/v/flutter_segment)](https://pub.dev/packages/flutter_segment)
 [![style: lint](https://img.shields.io/badge/style-lint-4BC0F5.svg)](https://pub.dev/packages/lint)
