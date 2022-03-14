@@ -1,3 +1,7 @@
+## 3.7.0
+* Android/iOS: add `Segment.flush` for debug environments (https://github.com/la-haus/flutter-segment/pull/9).
+* iOS: improve logging (https://github.com/claimsforce-gmbh/flutter-segment/pull/111)
+
 ## 3.5.0
 * iOS: we are forcing to use `use_frameworks!`
 

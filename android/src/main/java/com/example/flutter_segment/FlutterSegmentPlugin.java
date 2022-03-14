@@ -160,6 +160,8 @@ public class FlutterSegmentPlugin implements MethodCallHandler, FlutterPlugin {
       this.disable(call, result);
     } else if (call.method.equals("enable")) {
       this.enable(call, result);
+    } else if (call.method.equals("flush")) {
+      this.flush(call, result);
     } else {
       result.notImplemented();
     }
@@ -324,6 +326,15 @@ public class FlutterSegmentPlugin implements MethodCallHandler, FlutterPlugin {
   private void enable(MethodCall call, Result result) {
     try {
       Analytics.with(this.applicationContext).optOut(false);
+      result.success(true);
+    } catch (Exception e) {
+      result.error("FlutterSegmentException", e.getLocalizedMessage(), null);
+    }
+  }
+
+  private void flush(MethodCall call, Result result) {
+    try {
+      Analytics.with(this.applicationContext).flush();
       result.success(true);
     } catch (Exception e) {
       result.error("FlutterSegmentException", e.getLocalizedMessage(), null);

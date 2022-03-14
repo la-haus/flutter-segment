@@ -93,6 +93,10 @@ class Segment {
     return _segment.enable();
   }
 
+  static Future<void> flush() {
+    return _segment.flush();
+  }
+
   static Future<void> debug(bool enabled) {
     if (Platform.isAndroid) {
       throw Exception(
