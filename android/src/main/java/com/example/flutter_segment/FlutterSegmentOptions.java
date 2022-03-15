@@ -40,14 +40,6 @@ public class FlutterSegmentOptions {
         return debug;
     }
 
-    // static FlutterSegmentOptions create(Bundle bundle) {
-    //     String writeKey = bundle.getString("com.claimsforce.segment.WRITE_KEY");
-    //     Boolean trackApplicationLifecycleEvents = bundle.getBoolean("com.claimsforce.segment.TRACK_APPLICATION_LIFECYCLE_EVENTS");
-    //     Boolean isAmplitudeIntegrationEnabled = bundle.getBoolean("com.claimsforce.segment.ENABLE_AMPLITUDE_INTEGRATION", false);
-    //     Boolean debug = bundle.getBoolean("com.claimsforce.segment.DEBUG", false);
-    //     return new FlutterSegmentOptions(writeKey, trackApplicationLifecycleEvents, isAmplitudeIntegrationEnabled, debug);
-    // }
-
     static FlutterSegmentOptions create(HashMap<String, Object> options) {
         String writeKey = (String) options.get("writeKey");
         Boolean trackApplicationLifecycleEvents = (Boolean) options.get("trackApplicationLifecycleEvents");

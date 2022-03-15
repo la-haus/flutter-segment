@@ -55,18 +55,6 @@ public class FlutterSegmentPlugin implements MethodCallHandler, FlutterPlugin {
     methodChannel = new MethodChannel(messenger, "flutter_segment");
     // register the channel to receive calls
     methodChannel.setMethodCallHandler(this);
-
-    // try {
-    //   ApplicationInfo ai = applicationContext.getPackageManager()
-    //           .getApplicationInfo(applicationContext.getPackageName(), PackageManager.GET_META_DATA);
-
-    //   Bundle bundle = ai.metaData;
-
-    //   FlutterSegmentOptions options = FlutterSegmentOptions.create(bundle);
-    //   setupChannels(options);
-    // } catch (Exception e) {
-    //   Log.e("FlutterSegment", e.getMessage());
-    // }
   }
 
   private void setupChannels(FlutterSegmentOptions options) {
