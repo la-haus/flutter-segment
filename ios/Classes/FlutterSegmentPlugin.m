@@ -15,12 +15,6 @@ static BOOL wasSetupFromFile = NO;
       binaryMessenger:[registrar messenger]];
     FlutterSegmentPlugin* instance = [[FlutterSegmentPlugin alloc] init];
     
-    SEGAnalyticsConfiguration *configuration = [FlutterSegmentPlugin createConfigFromFile];
-    if(configuration) {
-        [instance setup:configuration];
-        wasSetupFromFile = YES;
-    }
-    
     [registrar addMethodCallDelegate:instance channel:channel];
 }
 
@@ -341,34 +335,22 @@ static BOOL wasSetupFromFile = NO;
   }
 }
 
-+ (SEGAnalyticsConfiguration*)createConfigFromFile {
-    NSString *path = [[NSBundle mainBundle] pathForResource: @"Info" ofType: @"plist"];
-    NSDictionary *dict = [NSDictionary dictionaryWithContentsOfFile: path];
-    NSString *writeKey = [dict objectForKey: @"com.claimsforce.segment.WRITE_KEY"];
-    BOOL trackApplicationLifecycleEvents = [[dict objectForKey: @"com.claimsforce.segment.TRACK_APPLICATION_LIFECYCLE_EVENTS"] boolValue];
-    BOOL isAmplitudeIntegrationEnabled = [[dict objectForKey: @"com.claimsforce.segment.ENABLE_AMPLITUDE_INTEGRATION"] boolValue];
-    if(!writeKey) {
-        return nil;
-    }
-    SEGAnalyticsConfiguration *configuration = [SEGAnalyticsConfiguration configurationWithWriteKey:writeKey];
-    configuration.trackApplicationLifecycleEvents = trackApplicationLifecycleEvents;
-
-    if (isAmplitudeIntegrationEnabled) {
-      [configuration use:[SEGAmplitudeIntegrationFactory instance]];
-    }
-
-    return configuration;
-}
-
 + (SEGAnalyticsConfiguration*)createConfigFromDict:(NSDictionary*) dict {
     NSString *writeKey = [dict objectForKey: @"writeKey"];
     BOOL trackApplicationLifecycleEvents = [[dict objectForKey: @"trackApplicationLifecycleEvents"] boolValue];
-    BOOL isAmplitudeIntegrationEnabled = [[dict objectForKey: @"amplitudeIntegrationEnabled"] boolValue];
+    NSArray *integrationItems = [dict objectForKey: @"integrationItems"];
     SEGAnalyticsConfiguration *configuration = [SEGAnalyticsConfiguration configurationWithWriteKey:writeKey];
     configuration.trackApplicationLifecycleEvents = trackApplicationLifecycleEvents;
 
-    if (isAmplitudeIntegrationEnabled) {
-      [configuration use:[SEGAmplitudeIntegrationFactory instance]];
+    for (NSString* o in integrationItems)
+    {
+      ((void (^)())@{
+          @"amplitude" : ^{
+             [configuration use:[SEGAmplitudeIntegrationFactory instance]];
+          },
+      }[o] ?: ^{
+          //Do Nothing
+      })();
     }
 
     return configuration;
