@@ -20,6 +20,7 @@ import static com.segment.analytics.Analytics.LogLevel;
 import java.util.LinkedHashMap;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.ArrayList;
 
 import io.flutter.plugin.common.BinaryMessenger;
 import io.flutter.plugin.common.MethodCall;
@@ -54,18 +55,6 @@ public class FlutterSegmentPlugin implements MethodCallHandler, FlutterPlugin {
     methodChannel = new MethodChannel(messenger, "flutter_segment");
     // register the channel to receive calls
     methodChannel.setMethodCallHandler(this);
-
-    try {
-      ApplicationInfo ai = applicationContext.getPackageManager()
-              .getApplicationInfo(applicationContext.getPackageName(), PackageManager.GET_META_DATA);
-
-      Bundle bundle = ai.metaData;
-
-      FlutterSegmentOptions options = FlutterSegmentOptions.create(bundle);
-      setupChannels(options);
-    } catch (Exception e) {
-      Log.e("FlutterSegment", e.getMessage());
-    }
   }
 
   private void setupChannels(FlutterSegmentOptions options) {
@@ -83,8 +72,14 @@ public class FlutterSegmentPlugin implements MethodCallHandler, FlutterPlugin {
         analyticsBuilder.logLevel(LogLevel.DEBUG);
       }
 
-      if (options.isAmplitudeIntegrationEnabled()) {
-        analyticsBuilder.use(AmplitudeIntegration.FACTORY);
+      for (String item : options.getIntegrationItems()) {
+        switch(item){
+          case "amplitude":
+            analyticsBuilder.use(AmplitudeIntegration.FACTORY);
+            break;
+          default:
+            // do nothing
+        }
       }
 
       // Here we build a middleware that just appends data to the current context

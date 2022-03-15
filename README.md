@@ -88,6 +88,13 @@ Setup your Android, iOS and/or web sources as described at Segment.com and gener
 Set your Segment write key and change the automatic event tracking (only for Android and iOS) on if you wish the library to take care of it for you.
 Remember that the application lifecycle events won't have any special context set for you by the time it is initialized.
 
+### Integration Item List
+| Item           | Supported | Enum Name |
+|------------------|---|---|
+| `Amplitude`       | YES | `SegmentIntegrationItemType.amplitude` | 
+
+You can tell the plugin tu use any integration item by insert them in `integrationItems` in `SegmentConfig`.
+
 ### Via Dart Code
 ```dart
 void main() {
@@ -106,14 +113,17 @@ void main() {
     options: SegmentConfig(
       writeKey: 'YOUR_WRITE_KEY_GOES_HERE',
       trackApplicationLifecycleEvents: false,
-      amplitudeIntegrationEnabled: false,
+      //Insert any plugins you want to use here,
+      //See `SegmentIntegrationItemType` enumeration
+      integrationItems: const [SegmentIntegrationItemType.amplitude],
       debug: false,
     ),
   );
 }
 ```
 
-### Android _(Deprecated*)_
+
+### Android _(Deprecated* & Removed)_
 ```xml
 <manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.example.flutter_segment_example">
     <application>
@@ -128,7 +138,7 @@ void main() {
 </manifest>
 ```
 
-### iOS _(Deprecated*)_
+### iOS _(Deprecated* & Removed)_
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">

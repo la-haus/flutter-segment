@@ -12,6 +12,7 @@ void main() {
     options: SegmentConfig(
       writeKey: 'YOUR_WRITE_KEY_GOES_HERE',
       trackApplicationLifecycleEvents: false,
+      integrationItems: const [SegmentIntegrationItemType.amplitude],
     ),
   );
 
@@ -60,7 +61,7 @@ class MyApp extends StatelessWidget {
                 child: const Text('TRACK ACTION WITH SEGMENT'),
                 onPressed: () {
                   Segment.track(
-                    eventName: 'ButtonClicked',
+                    eventName: 'DevTest ButtonClicked',
                     properties: {
                       'foo': 'bar',
                       'number': 1337,
