@@ -15,6 +15,7 @@ import com.segment.analytics.Options;
 import com.segment.analytics.Middleware;
 import com.segment.analytics.integrations.BasePayload;
 import com.segment.analytics.android.integrations.amplitude.AmplitudeIntegration;
+import com.segment.analytics.android.integrations.appsflyer.AppsflyerIntegration;
 import static com.segment.analytics.Analytics.LogLevel;
 
 import java.util.LinkedHashMap;
