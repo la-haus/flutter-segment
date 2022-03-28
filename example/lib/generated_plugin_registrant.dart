@@ -6,7 +6,7 @@
 // ignore_for_file: lines_longer_than_80_chars
 
 import 'package:flutter_segment/src/segment_web.dart';
-
+// ignore: implementation_imports
 import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 
 // ignore: public_member_api_docs
