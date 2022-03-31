@@ -32,4 +32,4 @@ flutter:
         pluginClass: FlutterSegmentPlugin
       web:
         pluginClass: SegmentWeb
-        fileName: src/segment_web.dart
+        fileName: segment_web.dart
