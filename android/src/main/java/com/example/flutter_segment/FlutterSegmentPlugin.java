@@ -33,7 +33,7 @@ import io.flutter.plugin.common.PluginRegistry;
 import io.flutter.embedding.engine.plugins.FlutterPlugin;
 
 /** FlutterSegmentPlugin */
-public class FlutterSegmentPlugin implements MethodCallHandler, FlutterPlugin {
+public class FlutterSegmentPlugin extends FlutterApplication implements MethodCallHandler, FlutterPlugin {
   private Context applicationContext;
   private MethodChannel methodChannel;
   private PropertiesMapper propertiesMapper = new PropertiesMapper();
