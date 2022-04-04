@@ -5,6 +5,7 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
+import io.flutter.app.FlutterApplication;
 
 import androidx.annotation.VisibleForTesting;
 
@@ -33,7 +34,7 @@ import io.flutter.plugin.common.PluginRegistry;
 import io.flutter.embedding.engine.plugins.FlutterPlugin;
 
 /** FlutterSegmentPlugin */
-public class FlutterSegmentPlugin implements MethodCallHandler, FlutterPlugin {
+public class FlutterSegmentPlugin extends FlutterApplication implements MethodCallHandler, FlutterPlugin {
   private Context applicationContext;
   private MethodChannel methodChannel;
   private PropertiesMapper propertiesMapper = new PropertiesMapper();
