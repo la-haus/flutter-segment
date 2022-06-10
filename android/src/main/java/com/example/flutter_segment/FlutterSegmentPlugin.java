@@ -32,7 +32,7 @@ import io.flutter.embedding.engine.plugins.FlutterPlugin;
 public class FlutterSegmentPlugin implements MethodCallHandler, FlutterPlugin {
   private Context applicationContext;
   private MethodChannel methodChannel;
-  private PropertiesMapper propertiesMapper = new PropertiesMapper();
+  private final PropertiesMapper propertiesMapper = new PropertiesMapper();
 
   static HashMap<String, Object> appendToContextMiddleware;
 
@@ -128,7 +128,9 @@ public class FlutterSegmentPlugin implements MethodCallHandler, FlutterPlugin {
   }
 
   @Override
-  public void onDetachedFromEngine(@NonNull FlutterPluginBinding binding) { }
+  public void onDetachedFromEngine(@NonNull FlutterPluginBinding binding) {
+    methodChannel.setMethodCallHandler(null);
+  }
 
   @Override
   public void onMethodCall(MethodCall call, @NonNull Result result) {
@@ -322,7 +324,7 @@ public class FlutterSegmentPlugin implements MethodCallHandler, FlutterPlugin {
 
   private void setContext(MethodCall call, Result result) {
     try {
-      this.appendToContextMiddleware = call.argument("context");
+      appendToContextMiddleware = call.argument("context");
       result.success(true);
     } catch (Exception e) {
       result.error("FlutterSegmentException", e.getLocalizedMessage(), null);
