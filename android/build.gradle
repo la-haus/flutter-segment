@@ -4,26 +4,26 @@ version '1.0-SNAPSHOT'
 buildscript {
     repositories {
         google()
-        jcenter()
+        mavenCentral()
 
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.2.1'
+        classpath 'com.android.tools.build:gradle:7.2.0'
     }
 }
 
 rootProject.allprojects {
     repositories {
         google()
-        jcenter()
+        mavenCentral()
     }
 }
 
 apply plugin: 'com.android.library'
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion 31
 
     defaultConfig {
         minSdkVersion 16
@@ -34,8 +34,9 @@ android {
     }
 
     dependencies {
-        implementation 'com.segment.analytics.android:analytics:4.10.0'
-        implementation 'com.segment.analytics.android.integrations:amplitude:3.0.3'
+        implementation 'com.segment.analytics.android:analytics:4.10.4'
+        implementation 'com.segment.analytics.android.integrations:amplitude:3.1.0'
+        implementation 'com.appsflyer:segment-android-integration:6.5.2'
     }
 }
 
