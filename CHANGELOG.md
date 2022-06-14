@@ -1,3 +1,9 @@
+## 3.9.0
+- Android: update segment dependencies and [Google Play policies violation in flutter_segment 3.7.0](https://github.com/la-haus/flutter-segment/issues/30) thanks @vbuberen
+- Android: Upgrade gradle build config for android [PR](https://github.com/la-haus/flutter-segment/pull/29) thanks @vbuberen
+- iOS: Fix userId nil throws "unrecognized selector sent to instance" thanks @zenled
+- Add apps flyer integration [PR](https://github.com/la-haus/flutter-segment/pull/19) thanks @johnsouza-loftbr
+
 ## 3.7.0
 * Android/iOS: add `Segment.flush` for debug environments (https://github.com/la-haus/flutter-segment/pull/9).
 * iOS: improve logging (https://github.com/claimsforce-gmbh/flutter-segment/pull/111)
