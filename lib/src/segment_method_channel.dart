@@ -106,7 +106,7 @@ class SegmentMethodChannel extends SegmentPlatform {
   @override
   Future<String> get getAnonymousId async {
     final value = await _channel.invokeMethod('getAnonymousId');
-    return value || '';
+    return value ?? '';
   }
 
   @override
