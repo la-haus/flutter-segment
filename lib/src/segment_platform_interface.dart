@@ -56,7 +56,7 @@ abstract class SegmentPlatform {
     throw UnimplementedError('alias() has not been implemented.');
   }
 
-  Future<String?> get getAnonymousId {
+  Future<String> get getAnonymousId {
     throw UnimplementedError('getAnonymousId() has not been implemented.');
   }
 
