@@ -95,16 +95,10 @@ void main() {
   /// `setContext` during the app initialization.
   WidgetsFlutterBinding.ensureInitialized();
   
-  String writeKey;
-  if(Platform.isAndroid){
-    writeKey = "ANDROID_WRITE_KEY";
-  } else{ //iOS
-      writeKey = "IOS_WRITE_KEY";
-  }
-
   Segment.config(
     options: SegmentConfig(
-      writeKey: 'YOUR_WRITE_KEY_GOES_HERE',
+      androidWriteKey: 'YOUR_ANDROID_WRITE_KEY_GOES_HERE',
+      iosWriteKey: 'YOUR_IOS_WRITE_KEY_GOES_HERE',
       trackApplicationLifecycleEvents: false,
       amplitudeIntegrationEnabled: false,
       debug: false,
