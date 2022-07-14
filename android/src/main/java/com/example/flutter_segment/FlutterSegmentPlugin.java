@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.segment.analytics.Analytics;
+import com.segment.analytics.Middleware;
 import com.segment.analytics.Properties;
 import com.segment.analytics.Traits;
 import com.segment.analytics.Options;
@@ -87,28 +88,31 @@ public class FlutterSegmentPlugin implements MethodCallHandler, FlutterPlugin {
       // Here we build a middleware that just appends data to the current context
       // using the [deepMerge] strategy.
       analyticsBuilder.useSourceMiddleware(
-              chain -> {
-                try {
-                  if (appendToContextMiddleware == null) {
+              new Middleware() {
+                @Override
+                public void intercept(Chain chain) {
+                  try {
+                    if (appendToContextMiddleware == null) {
+                      chain.proceed(chain.payload());
+                      return;
+                    }
+
+                    BasePayload payload = chain.payload();
+                    Map<String, Object> originalContext = new LinkedHashMap<>(payload.context());
+                    Map<String, Object> mergedContext = FlutterSegmentPlugin.deepMerge(
+                            originalContext,
+                            appendToContextMiddleware
+                    );
+
+                    BasePayload newPayload = payload.toBuilder()
+                            .context(mergedContext)
+                            .build();
+
+                    chain.proceed(newPayload);
+                  } catch (Exception e) {
+                    Log.e("FlutterSegment", e.getMessage());
                     chain.proceed(chain.payload());
-                    return;
                   }
-
-                  BasePayload payload = chain.payload();
-                  Map<String, Object> originalContext = new LinkedHashMap<>(payload.context());
-                  Map<String, Object> mergedContext = FlutterSegmentPlugin.deepMerge(
-                    originalContext,
-                    appendToContextMiddleware
-                  );
-
-                  BasePayload newPayload = payload.toBuilder()
-                    .context(mergedContext)
-                    .build();
-
-                  chain.proceed(newPayload);
-                } catch (Exception e) {
-                  Log.e("FlutterSegment", e.getMessage());
-                  chain.proceed(chain.payload());
                 }
               }
       );
