@@ -6,17 +6,17 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
 
-import androidx.annotation.VisibleForTesting;
-
 import com.segment.analytics.Analytics;
+import com.segment.analytics.Middleware;
 import com.segment.analytics.Properties;
 import com.segment.analytics.Traits;
 import com.segment.analytics.Options;
-import com.segment.analytics.Middleware;
 import com.segment.analytics.integrations.BasePayload;
 import com.segment.analytics.android.integrations.amplitude.AmplitudeIntegration;
 import com.segment.analytics.android.integrations.appsflyer.AppsflyerIntegration;
 import static com.segment.analytics.Analytics.LogLevel;
+
+import androidx.annotation.NonNull;
 
 import java.util.LinkedHashMap;
 import java.util.HashMap;
@@ -27,22 +27,15 @@ import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler;
 import io.flutter.plugin.common.MethodChannel.Result;
-import io.flutter.plugin.common.PluginRegistry;
 import io.flutter.embedding.engine.plugins.FlutterPlugin;
 
 /** FlutterSegmentPlugin */
 public class FlutterSegmentPlugin implements MethodCallHandler, FlutterPlugin {
   private Context applicationContext;
   private MethodChannel methodChannel;
-  private PropertiesMapper propertiesMapper = new PropertiesMapper();
+  private final PropertiesMapper propertiesMapper = new PropertiesMapper();
 
   static HashMap<String, Object> appendToContextMiddleware;
-
-  /** Plugin registration. */
-  public static void registerWith(PluginRegistry.Registrar registrar) {
-    final FlutterSegmentPlugin instance = new FlutterSegmentPlugin();
-    instance.setupChannels(registrar.context(), registrar.messenger());
-  }
 
   @Override
   public void onAttachedToEngine(FlutterPluginBinding binding) {
@@ -94,34 +87,34 @@ public class FlutterSegmentPlugin implements MethodCallHandler, FlutterPlugin {
 
       // Here we build a middleware that just appends data to the current context
       // using the [deepMerge] strategy.
-      analyticsBuilder.middleware(
-        new Middleware() {
-          @Override
-          public void intercept(Chain chain) {
-            try {
-              if (appendToContextMiddleware == null) {
-                chain.proceed(chain.payload());
-                return;
+      analyticsBuilder.useSourceMiddleware(
+              new Middleware() {
+                @Override
+                public void intercept(Chain chain) {
+                  try {
+                    if (appendToContextMiddleware == null) {
+                      chain.proceed(chain.payload());
+                      return;
+                    }
+
+                    BasePayload payload = chain.payload();
+                    Map<String, Object> originalContext = new LinkedHashMap<>(payload.context());
+                    Map<String, Object> mergedContext = FlutterSegmentPlugin.deepMerge(
+                            originalContext,
+                            appendToContextMiddleware
+                    );
+
+                    BasePayload newPayload = payload.toBuilder()
+                            .context(mergedContext)
+                            .build();
+
+                    chain.proceed(newPayload);
+                  } catch (Exception e) {
+                    Log.e("FlutterSegment", e.getMessage());
+                    chain.proceed(chain.payload());
+                  }
+                }
               }
-
-              BasePayload payload = chain.payload();
-              Map<String, Object> originalContext = new LinkedHashMap<>(payload.context());
-              Map<String, Object> mergedContext = FlutterSegmentPlugin.deepMerge(
-                originalContext,
-                appendToContextMiddleware
-              );
-
-              BasePayload newPayload = payload.toBuilder()
-                .context(mergedContext)
-                .build();
-
-              chain.proceed(newPayload);
-            } catch (Exception e) {
-              Log.e("FlutterSegment", e.getMessage());
-              chain.proceed(chain.payload());
-            }
-          }
-        }
       );
 
       // Set the initialized instance as globally accessible.
@@ -139,36 +132,52 @@ public class FlutterSegmentPlugin implements MethodCallHandler, FlutterPlugin {
   }
 
   @Override
-  public void onDetachedFromEngine(FlutterPluginBinding binding) { }
+  public void onDetachedFromEngine(@NonNull FlutterPluginBinding binding) {
+    methodChannel.setMethodCallHandler(null);
+  }
 
   @Override
-  public void onMethodCall(MethodCall call, Result result) {
-    if(call.method.equals("config")) {
-      this.config(call, result);
-    } else if(call.method.equals("identify")) {
-      this.identify(call, result);
-    } else if (call.method.equals("track")) {
-      this.track(call, result);
-    } else if (call.method.equals("screen")) {
-      this.screen(call, result);
-    } else if (call.method.equals("group")) {
-      this.group(call, result);
-    } else if (call.method.equals("alias")) {
-      this.alias(call, result);
-    } else if (call.method.equals("getAnonymousId")) {
-      this.anonymousId(result);
-    } else if (call.method.equals("reset")) {
-      this.reset(result);
-    } else if (call.method.equals("setContext")) {
-      this.setContext(call, result);
-    } else if (call.method.equals("disable")) {
-      this.disable(call, result);
-    } else if (call.method.equals("enable")) {
-      this.enable(call, result);
-    } else if (call.method.equals("flush")) {
-      this.flush(call, result);
-    } else {
-      result.notImplemented();
+  public void onMethodCall(MethodCall call, @NonNull Result result) {
+    switch (call.method) {
+      case "config":
+        this.config(call, result);
+        break;
+      case "identify":
+        this.identify(call, result);
+        break;
+      case "track":
+        this.track(call, result);
+        break;
+      case "screen":
+        this.screen(call, result);
+        break;
+      case "group":
+        this.group(call, result);
+        break;
+      case "alias":
+        this.alias(call, result);
+        break;
+      case "getAnonymousId":
+        this.anonymousId(result);
+        break;
+      case "reset":
+        this.reset(result);
+        break;
+      case "setContext":
+        this.setContext(call, result);
+        break;
+      case "disable":
+        this.disable(call, result);
+        break;
+      case "enable":
+        this.enable(call, result);
+        break;
+      case "flush":
+        this.flush(call, result);
+        break;
+      default:
+        result.notImplemented();
+        break;
     }
   }
 
@@ -319,7 +328,7 @@ public class FlutterSegmentPlugin implements MethodCallHandler, FlutterPlugin {
 
   private void setContext(MethodCall call, Result result) {
     try {
-      this.appendToContextMiddleware = call.argument("context");
+      appendToContextMiddleware = call.argument("context");
       result.success(true);
     } catch (Exception e) {
       result.error("FlutterSegmentException", e.getLocalizedMessage(), null);
