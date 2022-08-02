@@ -14,7 +14,7 @@ jobs:
           flutter-version: '3.0.0'
           channel: 'stable'
           cache: true
-          cache-key: flutter # optional, change this to force refresh cache
+          cache-key: flutter-3 # optional, change this to force refresh cache
           cache-path: ${{ runner.tool_cache }}/flutter # optional, change this to specify the cache path
       - name: Install dependencies
         run: pub get
