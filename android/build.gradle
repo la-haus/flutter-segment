@@ -38,10 +38,12 @@ android {
         implementation 'com.segment.analytics.android:analytics:4.10.4'
         implementation 'com.segment.analytics.android.integrations:amplitude:3.1.0'
         implementation 'com.appsflyer:segment-android-integration:6.5.2'
-        implementation 'com.segment.analytics.android.integrations:firebase:+@aar'
+        implementation 'com.segment.analytics.android.integrations:firebase:2.3.3'
     }
 }
 
 dependencies {
     testImplementation 'junit:junit:4.13.2'
 }
+
+apply plugin: 'com.google.gms.google-services'
