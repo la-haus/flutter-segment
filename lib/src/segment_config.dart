@@ -4,6 +4,7 @@ class SegmentConfig {
     this.trackApplicationLifecycleEvents = false,
     this.amplitudeIntegrationEnabled = false,
     this.appsflyerIntegrationEnabled = false,
+    this.facebookAppEventsIntegrationEnabled = false,
     this.debug = false,
   });
 
@@ -11,6 +12,7 @@ class SegmentConfig {
   final bool trackApplicationLifecycleEvents;
   final bool amplitudeIntegrationEnabled;
   final bool appsflyerIntegrationEnabled;
+  final bool facebookAppEventsIntegrationEnabled;
   final bool debug;
 
   Map<String, dynamic> toMap() {
@@ -19,6 +21,8 @@ class SegmentConfig {
       'trackApplicationLifecycleEvents': trackApplicationLifecycleEvents,
       'amplitudeIntegrationEnabled': amplitudeIntegrationEnabled,
       'appsflyerIntegrationEnabled': appsflyerIntegrationEnabled,
+      'facebookAppEventsIntegrationEnabled':
+          facebookAppEventsIntegrationEnabled,
       'debug': debug,
     };
   }

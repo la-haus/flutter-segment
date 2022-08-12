@@ -1,13 +1,13 @@
 name: flutter_segment
 description: Flutter implementation of Segment Analytics for iOS, Android and Web
-version: 3.11.0
+version: 3.11.1
 homepage: https://lahaus.com
 repository: https://github.com/la-haus/flutter-library-segment
 issue_tracker: https://github.com/la-haus/flutter-library-segment/issues
 documentation: https://github.com/la-haus/flutter-library-segment#readme
 
 environment:
-  sdk: '>=2.12.0 <3.0.0'
+  sdk: ">=2.12.0 <3.0.0"
   flutter: ">=1.12.13+hotfix.4"
 
 dependencies:
