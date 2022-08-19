@@ -437,12 +437,12 @@ NSString *const SEGBuildKeyV2 = @"SEGBuildKeyV2";
         }];
     }
 
-    [self track:@"Application Opened" properties:@{
+    [[SEGAnalytics sharedAnalytics] track:@"Application Opened" properties:@{
         @"from_background" : @NO,
         @"version" : currentVersion ?: @"",
         @"build" : currentBuild ?: @"",
-        @"referring_application" : launchOptions[UIApplicationLaunchOptionsSourceApplicationKey] ?: @"",
-        @"url" : launchOptions[UIApplicationLaunchOptionsURLKey] ?: @"",
+        @"referring_application" : @"",
+        @"url" : @"",
     }];
 
     [[NSUserDefaults standardUserDefaults] setObject:currentVersion forKey:SEGVersionKey];
