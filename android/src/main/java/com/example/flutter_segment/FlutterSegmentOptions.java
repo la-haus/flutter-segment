@@ -9,6 +9,7 @@ public class FlutterSegmentOptions {
     private final Boolean trackApplicationLifecycleEvents;
     private final Boolean amplitudeIntegrationEnabled;
     private final Boolean appsflyerIntegrationEnabled;
+    private final Boolean firebaseIntegrationEnabled;
     private final Boolean debug;
 
     public  FlutterSegmentOptions(
@@ -16,12 +17,14 @@ public class FlutterSegmentOptions {
             Boolean trackApplicationLifecycleEvents,
             Boolean amplitudeIntegrationEnabled,
             Boolean appsflyerIntegrationEnabled,
+            Boolean firebaseIntegrationEnabled,
             Boolean debug
     ) {
         this.writeKey = writeKey;
         this.trackApplicationLifecycleEvents = trackApplicationLifecycleEvents;
         this.amplitudeIntegrationEnabled = amplitudeIntegrationEnabled;
         this.appsflyerIntegrationEnabled = appsflyerIntegrationEnabled;
+        this.firebaseIntegrationEnabled = firebaseIntegrationEnabled;
         this.debug = debug;
     }
 
@@ -41,6 +44,10 @@ public class FlutterSegmentOptions {
         return appsflyerIntegrationEnabled;
     }
 
+    public Boolean isFirebaseIntegrationEnabled() {
+        return firebaseIntegrationEnabled;
+    }
+
     public Boolean getDebug() {
         return debug;
     }
@@ -50,8 +57,9 @@ public class FlutterSegmentOptions {
         Boolean trackApplicationLifecycleEvents = bundle.getBoolean("com.claimsforce.segment.TRACK_APPLICATION_LIFECYCLE_EVENTS");
         Boolean isAmplitudeIntegrationEnabled = bundle.getBoolean("com.claimsforce.segment.ENABLE_AMPLITUDE_INTEGRATION", false);
         Boolean isAppsflyerIntegrationEnabled = bundle.getBoolean("com.claimsforce.segment.ENABLE_APPSFLYER_INTEGRATION", false);
+        Boolean isFirebaseIntegrationEnabled = bundle.getBoolean("com.claimsforce.segment.ENABLE_FIREBASE_INTEGRATION", false);
         Boolean debug = bundle.getBoolean("com.claimsforce.segment.DEBUG", false);
-        return new FlutterSegmentOptions(writeKey, trackApplicationLifecycleEvents, isAmplitudeIntegrationEnabled, isAppsflyerIntegrationEnabled, debug);
+        return new FlutterSegmentOptions(writeKey, trackApplicationLifecycleEvents, isAmplitudeIntegrationEnabled, isAppsflyerIntegrationEnabled, isFirebaseIntegrationEnabled, debug);
     }
 
     static FlutterSegmentOptions create(HashMap<String, Object> options) {
@@ -59,8 +67,9 @@ public class FlutterSegmentOptions {
         Boolean trackApplicationLifecycleEvents = (Boolean) options.get("trackApplicationLifecycleEvents");
         Boolean isAmplitudeIntegrationEnabled = orFalse((Boolean) options.get("amplitudeIntegrationEnabled"));
         Boolean isAppsflyerIntegrationEnabled = orFalse((Boolean) options.get("appsflyerIntegrationEnabled"));
+        Boolean isFirebaseIntegrationEnabled = orFalse((Boolean) options.get("firebaseIntegrationEnabled"));
         Boolean debug = orFalse((Boolean) options.get("debug"));
-        return new FlutterSegmentOptions(writeKey, trackApplicationLifecycleEvents, isAmplitudeIntegrationEnabled, isAppsflyerIntegrationEnabled, debug);
+        return new FlutterSegmentOptions(writeKey, trackApplicationLifecycleEvents, isAmplitudeIntegrationEnabled, isAppsflyerIntegrationEnabled, isFirebaseIntegrationEnabled, debug);
     }
 
     private static Boolean orFalse(Boolean value) {
