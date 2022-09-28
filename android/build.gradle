@@ -17,6 +17,8 @@ rootProject.allprojects {
     repositories {
         google()
         mavenCentral()
+        maven { url "https://appboy.github.io/appboy-android-sdk/sdk" }
+        maven { url "https://appboy.github.io/appboy-segment-android/sdk" }
     }
 }
 
@@ -34,6 +36,7 @@ android {
     }
 
     dependencies {
+        implementation 'com.appboy:appboy-segment-integration:14.0.0'
         implementation 'com.segment.analytics.android:analytics:4.10.4'
         implementation 'com.segment.analytics.android.integrations:amplitude:3.1.0'
         implementation 'com.appsflyer:segment-android-integration:6.5.2'

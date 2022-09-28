@@ -1,4 +1,5 @@
 #import "SEGAppsFlyerIntegrationFactory.h"
+#import "SEGAppboyIntegrationFactory.h"
 #import "FlutterSegmentPlugin.h"
 #import <Segment/SEGAnalytics.h>
 #import <Segment/SEGContext.h>
@@ -371,6 +372,7 @@ static BOOL wasSetupFromFile = NO;
     BOOL trackApplicationLifecycleEvents = [[dict objectForKey: @"trackApplicationLifecycleEvents"] boolValue];
     BOOL isAmplitudeIntegrationEnabled = [[dict objectForKey: @"amplitudeIntegrationEnabled"] boolValue];
     BOOL isAppsflyerIntegrationEnabled = [[dict objectForKey: @"appsflyerIntegrationEnabled"] boolValue];
+    BOOL isAppboyIntegrationEnabled = [[dict objectForKey: @"appboyIntegrationEnabled"] boolValue];
     SEGAnalyticsConfiguration *configuration = [SEGAnalyticsConfiguration configurationWithWriteKey:writeKey];
     configuration.trackApplicationLifecycleEvents = trackApplicationLifecycleEvents;
 
@@ -380,6 +382,10 @@ static BOOL wasSetupFromFile = NO;
 
     if (isAppsflyerIntegrationEnabled) {
       [configuration use:[SEGAppsFlyerIntegrationFactory instance]];
+    }
+
+    if (isAppboyIntegrationEnabled) {
+      [configuration use:[SEGAppboyIntegrationFactory instance]];
     }
 
     return configuration;

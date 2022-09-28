@@ -14,6 +14,7 @@ import com.segment.analytics.Options;
 import com.segment.analytics.integrations.BasePayload;
 import com.segment.analytics.android.integrations.amplitude.AmplitudeIntegration;
 import com.segment.analytics.android.integrations.appsflyer.AppsflyerIntegration;
+import com.segment.analytics.android.integrations.appboy.AppboyIntegration;
 import static com.segment.analytics.Analytics.LogLevel;
 
 import androidx.annotation.NonNull;
@@ -83,6 +84,10 @@ public class FlutterSegmentPlugin implements MethodCallHandler, FlutterPlugin {
 
       if (options.isAppsflyerIntegrationEnabled()) {
         analyticsBuilder.use(AppsflyerIntegration.FACTORY);
+      }
+
+      if (options.isAppboyIntegrationEnabled()) {
+        analyticsBuilder.use(AppboyIntegration.FACTORY);
       }
 
       // Here we build a middleware that just appends data to the current context
