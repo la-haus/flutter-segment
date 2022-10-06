@@ -1,5 +1,5 @@
 #import "SEGAppsFlyerIntegrationFactory.h"
-#import "SEGAppboyIntegrationFactory.h"
+// #import "SEGAppboyIntegrationFactory.h"
 #import "FlutterSegmentPlugin.h"
 #import <Segment/SEGAnalytics.h>
 #import <Segment/SEGContext.h>
@@ -386,9 +386,9 @@ static BOOL wasSetupFromFile = NO;
       [configuration use:[SEGAppsFlyerIntegrationFactory instance]];
     }
 
-    if (isAppboyIntegrationEnabled) {
-      [configuration use:[SEGAppboyIntegrationFactory instance]];
-    }
+    // if (isAppboyIntegrationEnabled) {
+    //   [configuration use:[SEGAppboyIntegrationFactory instance]];
+    // }
 
     if (isAdjustIntegrationEnabled) {
       [configuration use:[SEGAdjustIntegrationFactory instance]];
