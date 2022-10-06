@@ -21,7 +21,7 @@ Library to let Flutter apps use Segment.io
   s.dependency 'Segment-Amplitude', '3.3.2'
   s.dependency 'segment-appsflyer-ios', '6.8.0'
   s.dependency 'segment-appsflyer-ios', '6.8.0'
-  # s.dependency 'Segment-Appboy', '4.5.1'
+  s.dependency 'Segment-Appboy', '4.6.0'
   s.dependency 'Segment-Adjust', '3.1.4'
   s.ios.deployment_target = '11.0'
 
