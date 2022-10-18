@@ -10,6 +10,7 @@ public class FlutterSegmentOptions {
     private final Boolean amplitudeIntegrationEnabled;
     private final Boolean appsflyerIntegrationEnabled;
     private final Boolean appboyIntegrationEnabled;
+    private final Boolean adjustIntegrationEnabled;
     private final Boolean debug;
 
     public  FlutterSegmentOptions(
@@ -18,6 +19,7 @@ public class FlutterSegmentOptions {
             Boolean amplitudeIntegrationEnabled,
             Boolean appsflyerIntegrationEnabled,
             Boolean appboyIntegrationEnabled,
+            Boolean adjustIntegrationEnabled,
             Boolean debug
     ) {
         this.writeKey = writeKey;
@@ -25,6 +27,7 @@ public class FlutterSegmentOptions {
         this.amplitudeIntegrationEnabled = amplitudeIntegrationEnabled;
         this.appsflyerIntegrationEnabled = appsflyerIntegrationEnabled;
         this.appboyIntegrationEnabled = appboyIntegrationEnabled;
+        this.adjustIntegrationEnabled = adjustIntegrationEnabled;
         this.debug = debug;
     }
 
@@ -48,6 +51,10 @@ public class FlutterSegmentOptions {
         return appboyIntegrationEnabled;
     }
 
+    public Boolean isAdjustIntegrationEnabled() {
+        return adjustIntegrationEnabled;
+    }
+
     public Boolean getDebug() {
         return debug;
     }
@@ -58,8 +65,9 @@ public class FlutterSegmentOptions {
         Boolean isAmplitudeIntegrationEnabled = bundle.getBoolean("com.claimsforce.segment.ENABLE_AMPLITUDE_INTEGRATION", false);
         Boolean isAppsflyerIntegrationEnabled = bundle.getBoolean("com.claimsforce.segment.ENABLE_APPSFLYER_INTEGRATION", false);
         Boolean isAppboyIntegrationEnabled = bundle.getBoolean("com.claimsforce.segment.ENABLE_APPBOY_INTEGRATION", false);
+        Boolean isAdjustIntegrationEnabled = bundle.getBoolean("com.claimsforce.segment.ENABLE_ADJUST_INTEGRATION", false);
         Boolean debug = bundle.getBoolean("com.claimsforce.segment.DEBUG", false);
-        return new FlutterSegmentOptions(writeKey, trackApplicationLifecycleEvents, isAmplitudeIntegrationEnabled, isAppsflyerIntegrationEnabled, isAppboyIntegrationEnabled, debug);
+        return new FlutterSegmentOptions(writeKey, trackApplicationLifecycleEvents, isAmplitudeIntegrationEnabled, isAppsflyerIntegrationEnabled, isAppboyIntegrationEnabled, isAdjustIntegrationEnabled, debug);
     }
 
     static FlutterSegmentOptions create(HashMap<String, Object> options) {
@@ -68,8 +76,9 @@ public class FlutterSegmentOptions {
         Boolean isAmplitudeIntegrationEnabled = orFalse((Boolean) options.get("amplitudeIntegrationEnabled"));
         Boolean isAppsflyerIntegrationEnabled = orFalse((Boolean) options.get("appsflyerIntegrationEnabled"));
         Boolean isAppboyIntegrationEnabled = orFalse((Boolean) options.get("appboyIntegrationEnabled"));
+        Boolean isAdjustIntegrationEnabled = orFalse((Boolean) options.get("adjustIntegrationEnabled"));
         Boolean debug = orFalse((Boolean) options.get("debug"));
-        return new FlutterSegmentOptions(writeKey, trackApplicationLifecycleEvents, isAmplitudeIntegrationEnabled, isAppsflyerIntegrationEnabled, isAppboyIntegrationEnabled, debug);
+        return new FlutterSegmentOptions(writeKey, trackApplicationLifecycleEvents, isAmplitudeIntegrationEnabled, isAppsflyerIntegrationEnabled, isAppboyIntegrationEnabled, isAdjustIntegrationEnabled, debug);
     }
 
     private static Boolean orFalse(Boolean value) {

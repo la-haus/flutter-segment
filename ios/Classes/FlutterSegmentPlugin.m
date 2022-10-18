@@ -5,6 +5,7 @@
 #import <Segment/SEGContext.h>
 #import <Segment/SEGMiddleware.h>
 #import <Segment_Amplitude/SEGAmplitudeIntegrationFactory.h>
+#import "SEGAdjustIntegrationFactory.h"
 
 @implementation FlutterSegmentPlugin
 // Contents to be appended to the context
@@ -373,6 +374,7 @@ static BOOL wasSetupFromFile = NO;
     BOOL isAmplitudeIntegrationEnabled = [[dict objectForKey: @"amplitudeIntegrationEnabled"] boolValue];
     BOOL isAppsflyerIntegrationEnabled = [[dict objectForKey: @"appsflyerIntegrationEnabled"] boolValue];
     BOOL isAppboyIntegrationEnabled = [[dict objectForKey: @"appboyIntegrationEnabled"] boolValue];
+    BOOL isAdjustIntegrationEnabled = [[dict objectForKey: @"adjustIntegrationEnabled"] boolValue];
     SEGAnalyticsConfiguration *configuration = [SEGAnalyticsConfiguration configurationWithWriteKey:writeKey];
     configuration.trackApplicationLifecycleEvents = trackApplicationLifecycleEvents;
 
@@ -386,6 +388,10 @@ static BOOL wasSetupFromFile = NO;
 
     if (isAppboyIntegrationEnabled) {
       [configuration use:[SEGAppboyIntegrationFactory instance]];
+    }
+
+    if (isAdjustIntegrationEnabled) {
+      [configuration use:[SEGAdjustIntegrationFactory instance]];
     }
 
     return configuration;
