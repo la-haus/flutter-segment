@@ -36,7 +36,7 @@ android {
         implementation 'com.segment.analytics.android:analytics:4.10.4'
         implementation 'com.segment.analytics.android.integrations:amplitude:3.1.0'
         implementation 'com.appsflyer:segment-android-integration:6.5.2'
-        implementation 'com.segment.analytics.android.integrations:firebase:2.3.3'
+        implementation 'com.segment.analytics.android.integrations:firebase:2.3.3@aar'
     }
 }
 
