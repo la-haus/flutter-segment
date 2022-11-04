@@ -3,12 +3,12 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_segment/flutter_segment.dart';
 
-void main() {
+void main() async {
   /// Wait until the platform channel is properly initialized so we can call
   /// `setContext` during the app initialization.
   WidgetsFlutterBinding.ensureInitialized();
 
-  Segment.config(
+  await Segment.config(
     options: SegmentConfig(
       writeKey: 'YOUR_WRITE_KEY_GOES_HERE',
       trackApplicationLifecycleEvents: false,

@@ -9,10 +9,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: subosito/flutter-action@v1
+      - uses: subosito/flutter-action@v2
         with:
           flutter-version: '3.0.0'
-      - run: pub get
+          channel: 'stable'
+          cache: true
+          cache-key: flutter-3 # optional, change this to force refresh cache
+          cache-path: ${{ runner.tool_cache }}/flutter # optional, change this to specify the cache path
 
       - name: Prepare Env
         shell: bash
@@ -24,6 +27,7 @@ jobs:
         run: |
           sh ./prepare_deploy_env.sh
 
+      - run: flutter pub get
       - name: Check Publish Warnings
         run: pub publish --dry-run
       - name: Publish Package

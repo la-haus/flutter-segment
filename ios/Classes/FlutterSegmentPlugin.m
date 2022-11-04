@@ -156,6 +156,9 @@ static BOOL wasSetupFromFile = NO;
     NSDictionary *options = call.arguments[@"options"];
     SEGAnalyticsConfiguration *configuration = [FlutterSegmentPlugin createConfigFromDict:options];
     [self setup:configuration];
+    if(!wasSetupFromFile) {
+        [self trackInstalledEvent];
+    }
     result([NSNumber numberWithBool:YES]);
   }
   @catch (NSException *exception) {
@@ -405,6 +408,57 @@ static BOOL wasSetupFromFile = NO;
     }
   }];
   return result;
+}
+
+
+#pragma mark Work around for Firing Installed / Updated events
+// See https://github.com/segmentio/analytics-ios/blob/fc64997865619f73bbab196c164f7845a13da110/Segment/Classes/SEGAnalytics.m#L163
+
+NSString *const SEGVersionKey = @"SEGVersionKey";
+NSString *const SEGBuildKeyV1 = @"SEGBuildKey";
+NSString *const SEGBuildKeyV2 = @"SEGBuildKeyV2";
+
+- (void)trackInstalledEvent
+{
+    // Previously SEGBuildKey was stored an integer. This was incorrect because the CFBundleVersion
+    // can be a string. This migrates SEGBuildKey to be stored as a string.
+    NSInteger previousBuildV1 = [[NSUserDefaults standardUserDefaults] integerForKey:SEGBuildKeyV1];
+    if (previousBuildV1) {
+        [[NSUserDefaults standardUserDefaults] setObject:[@(previousBuildV1) stringValue] forKey:SEGBuildKeyV2];
+        [[NSUserDefaults standardUserDefaults] removeObjectForKey:SEGBuildKeyV1];
+    }
+
+    NSString *previousVersion = [[NSUserDefaults standardUserDefaults] stringForKey:SEGVersionKey];
+    NSString *previousBuildV2 = [[NSUserDefaults standardUserDefaults] stringForKey:SEGBuildKeyV2];
+
+    NSString *currentVersion = [[NSBundle mainBundle] infoDictionary][@"CFBundleShortVersionString"];
+    NSString *currentBuild = [[NSBundle mainBundle] infoDictionary][@"CFBundleVersion"];
+
+    if (!previousBuildV2) {
+        [[SEGAnalytics sharedAnalytics] track:@"Application Installed" properties:@{
+            @"version" : currentVersion ?: @"",
+            @"build" : currentBuild ?: @"",
+        }];
+    } else if (![currentBuild isEqualToString:previousBuildV2]) {
+        [[SEGAnalytics sharedAnalytics] track:@"Application Updated" properties:@{
+            @"previous_version" : previousVersion ?: @"",
+            @"previous_build" : previousBuildV2 ?: @"",
+            @"version" : currentVersion ?: @"",
+            @"build" : currentBuild ?: @"",
+        }];
+    }
+
+    [[SEGAnalytics sharedAnalytics] track:@"Application Opened" properties:@{
+        @"from_background" : @NO,
+        @"version" : currentVersion ?: @"",
+        @"build" : currentBuild ?: @"",
+        @"referring_application" : @"",
+        @"url" : @"",
+    }];
+
+    [[NSUserDefaults standardUserDefaults] setObject:currentVersion forKey:SEGVersionKey];
+    [[NSUserDefaults standardUserDefaults] setObject:currentBuild forKey:SEGBuildKeyV2];
+    [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
 @end

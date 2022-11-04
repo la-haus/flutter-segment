@@ -1,3 +1,7 @@
+## 3.12.1
+- iOS: Fix for iOS Application Installed event (#56)
+- iOS: Update iOS podspec dependency and metadata (#55)
+
 ## 3.11.0
 - Web: Fix linter warning `implementation_imports` (#20)
 - Android: Remove deprecated APIs and fix for a few found issues (#33)
