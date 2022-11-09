@@ -32,6 +32,8 @@ import io.flutter.plugin.common.MethodChannel.MethodCallHandler;
 import io.flutter.plugin.common.MethodChannel.Result;
 import io.flutter.embedding.engine.plugins.FlutterPlugin;
 
+import com.example.flutter_segment.BrazeDebounceMiddleware;
+
 /** FlutterSegmentPlugin */
 public class FlutterSegmentPlugin implements MethodCallHandler, FlutterPlugin {
   private Context applicationContext;
@@ -89,7 +91,9 @@ public class FlutterSegmentPlugin implements MethodCallHandler, FlutterPlugin {
       }
 
       if (options.isAppboyIntegrationEnabled()) {
-        analyticsBuilder.use(AppboyIntegration.FACTORY);
+        analyticsBuilder
+          .use(AppboyIntegration.FACTORY)
+          .middleware(new BrazeDebounceMiddleware());
       }
 
       if (options.isAdjustIntegrationEnabled()) {

@@ -6,6 +6,7 @@
 #import <Segment/SEGMiddleware.h>
 #import <Segment_Amplitude/SEGAmplitudeIntegrationFactory.h>
 #import "SEGAdjustIntegrationFactory.h"
+#import "BrazeDebounceMiddleware.h"
 
 @implementation FlutterSegmentPlugin
 // Contents to be appended to the context
@@ -388,6 +389,7 @@ static BOOL wasSetupFromFile = NO;
 
     if (isAppboyIntegrationEnabled) {
       [configuration use:[SEGAppboyIntegrationFactory instance]];
+      configuration.middlewares = @[[[BrazeDebounceMiddleware alloc] init]];
     }
 
     if (isAdjustIntegrationEnabled) {
