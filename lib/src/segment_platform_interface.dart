@@ -72,6 +72,10 @@ abstract class SegmentPlatform {
     throw UnimplementedError('enable() has not been implemented.');
   }
 
+  Future<void> flush() {
+    throw UnimplementedError('flush() has not been implemented.');
+  }
+
   Future<void> debug(bool enabled) {
     throw UnimplementedError('debug() has not been implemented.');
   }

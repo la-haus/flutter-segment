@@ -42,6 +42,10 @@ class MyApp extends StatelessWidget {
     Segment.screen(
       screenName: 'Example Screen',
     );
+
+    // If you want to flush the data now
+    Segment.flush();
+
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
