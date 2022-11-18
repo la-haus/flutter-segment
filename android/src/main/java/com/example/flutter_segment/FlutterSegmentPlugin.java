@@ -14,6 +14,7 @@ import com.segment.analytics.Options;
 import com.segment.analytics.integrations.BasePayload;
 import com.segment.analytics.android.integrations.amplitude.AmplitudeIntegration;
 import com.segment.analytics.android.integrations.appsflyer.AppsflyerIntegration;
+import com.segment.analytics.android.integrations.moengage.MoEngageIntegration;
 import static com.segment.analytics.Analytics.LogLevel;
 
 import androidx.annotation.NonNull;
@@ -51,7 +52,7 @@ public class FlutterSegmentPlugin implements MethodCallHandler, FlutterPlugin {
 
     try {
       ApplicationInfo ai = applicationContext.getPackageManager()
-              .getApplicationInfo(applicationContext.getPackageName(), PackageManager.GET_META_DATA);
+          .getApplicationInfo(applicationContext.getPackageName(), PackageManager.GET_META_DATA);
 
       Bundle bundle = ai.metaData;
 
@@ -84,42 +85,45 @@ public class FlutterSegmentPlugin implements MethodCallHandler, FlutterPlugin {
       if (options.isAppsflyerIntegrationEnabled()) {
         analyticsBuilder.use(AppsflyerIntegration.FACTORY);
       }
+      if (options.isMoengageIntegrationEnabled()) {
+        analyticsBuilder.use(MoEngageIntegration.FACTORY);
+      }
 
       // Here we build a middleware that just appends data to the current context
       // using the [deepMerge] strategy.
       analyticsBuilder.useSourceMiddleware(
-              new Middleware() {
-                @Override
-                public void intercept(Chain chain) {
-                  try {
-                    if (appendToContextMiddleware == null) {
-                      chain.proceed(chain.payload());
-                      return;
-                    }
-
-                    BasePayload payload = chain.payload();
-                    Map<String, Object> originalContext = new LinkedHashMap<>(payload.context());
-                    Map<String, Object> mergedContext = FlutterSegmentPlugin.deepMerge(
-                            originalContext,
-                            appendToContextMiddleware
-                    );
-
-                    BasePayload newPayload = payload.toBuilder()
-                            .context(mergedContext)
-                            .build();
-
-                    chain.proceed(newPayload);
-                  } catch (Exception e) {
-                    Log.e("FlutterSegment", e.getMessage());
-                    chain.proceed(chain.payload());
-                  }
+          new Middleware() {
+            @Override
+            public void intercept(Chain chain) {
+              try {
+                if (appendToContextMiddleware == null) {
+                  chain.proceed(chain.payload());
+                  return;
                 }
+
+                BasePayload payload = chain.payload();
+                Map<String, Object> originalContext = new LinkedHashMap<>(payload.context());
+                Map<String, Object> mergedContext = FlutterSegmentPlugin.deepMerge(
+                    originalContext,
+                    appendToContextMiddleware);
+
+                BasePayload newPayload = payload.toBuilder()
+                    .context(mergedContext)
+                    .build();
+
+                chain.proceed(newPayload);
+              } catch (Exception e) {
+                Log.e("FlutterSegment", e.getMessage());
+                chain.proceed(chain.payload());
               }
-      );
+            }
+          });
 
       // Set the initialized instance as globally accessible.
-      // It may throw an exception if we are trying to re-register a singleton Analytics instance.
-      // This state may happen after the app is popped (back button until the app closes)
+      // It may throw an exception if we are trying to re-register a singleton
+      // Analytics instance.
+      // This state may happen after the app is popped (back button until the app
+      // closes)
       // and opened again from the TaskManager.
       try {
         Analytics.setSingletonInstance(analyticsBuilder.build());
@@ -205,14 +209,13 @@ public class FlutterSegmentPlugin implements MethodCallHandler, FlutterPlugin {
   }
 
   private void callIdentify(
-    String userId,
-    HashMap<String, Object> traitsData,
-    HashMap<String, Object> optionsData
-  ) {
+      String userId,
+      HashMap<String, Object> traitsData,
+      HashMap<String, Object> optionsData) {
     Traits traits = new Traits();
     Options options = this.buildOptions(optionsData);
 
-    for(Map.Entry<String, Object> trait : traitsData.entrySet()) {
+    for (Map.Entry<String, Object> trait : traitsData.entrySet()) {
       String key = trait.getKey();
       Object value = trait.getValue();
       traits.putValue(key, value);
@@ -234,10 +237,9 @@ public class FlutterSegmentPlugin implements MethodCallHandler, FlutterPlugin {
   }
 
   private void callTrack(
-    String eventName,
-    HashMap<String, Object> propertiesData,
-    HashMap<String, Object> optionsData
-  ) {
+      String eventName,
+      HashMap<String, Object> propertiesData,
+      HashMap<String, Object> optionsData) {
     Properties properties = propertiesMapper.buildProperties(propertiesData);
     Options options = this.buildOptions(optionsData);
 
@@ -257,10 +259,9 @@ public class FlutterSegmentPlugin implements MethodCallHandler, FlutterPlugin {
   }
 
   private void callScreen(
-    String screenName,
-    HashMap<String, Object> propertiesData,
-    HashMap<String, Object> optionsData
-  ) {
+      String screenName,
+      HashMap<String, Object> propertiesData,
+      HashMap<String, Object> optionsData) {
     Properties properties = propertiesMapper.buildProperties(propertiesData);
     Options options = this.buildOptions(optionsData);
 
@@ -280,14 +281,13 @@ public class FlutterSegmentPlugin implements MethodCallHandler, FlutterPlugin {
   }
 
   private void callGroup(
-    String groupId,
-    HashMap<String, Object> traitsData,
-    HashMap<String, Object> optionsData
-  ) {
+      String groupId,
+      HashMap<String, Object> traitsData,
+      HashMap<String, Object> optionsData) {
     Traits traits = new Traits();
     Options options = this.buildOptions(optionsData);
 
-    for(Map.Entry<String, Object> trait : traitsData.entrySet()) {
+    for (Map.Entry<String, Object> trait : traitsData.entrySet()) {
       String key = trait.getKey();
       Object value = trait.getValue();
       traits.putValue(key, value);
@@ -367,8 +367,10 @@ public class FlutterSegmentPlugin implements MethodCallHandler, FlutterPlugin {
   }
 
   /**
-   * Enables / disables / sets custom integration properties so Segment can properly
-   * interact with 3rd parties, such as Amplitude.
+   * Enables / disables / sets custom integration properties so Segment can
+   * properly
+   * interact with 3rd parties, such as Amplitude, MoEngage.
+   * 
    * @see https://segment.com/docs/connections/sources/catalog/libraries/mobile/android/#selecting-destinations
    * @see https://github.com/segmentio/analytics-android/blob/master/analytics/src/main/java/com/segment/analytics/Options.java
    */
@@ -377,16 +379,17 @@ public class FlutterSegmentPlugin implements MethodCallHandler, FlutterPlugin {
     Options options = new Options();
 
     if (optionsData != null &&
-      optionsData.containsKey("integrations") &&
-      (optionsData.get("integrations") instanceof HashMap)) {
-      for (Map.Entry<String, Object> integration : ((HashMap<String,Object>)optionsData.get("integrations")).entrySet()) {
+        optionsData.containsKey("integrations") &&
+        (optionsData.get("integrations") instanceof HashMap)) {
+      for (Map.Entry<String, Object> integration : ((HashMap<String, Object>) optionsData.get("integrations"))
+          .entrySet()) {
         String key = integration.getKey();
 
         if (integration.getValue() instanceof HashMap) {
-          HashMap<String, Object> values = ((HashMap<String, Object>)integration.getValue());
+          HashMap<String, Object> values = ((HashMap<String, Object>) integration.getValue());
           options.setIntegrationOptions(key, values);
         } else if (integration.getValue() instanceof Boolean) {
-          Boolean value = ((Boolean)integration.getValue());
+          Boolean value = ((Boolean) integration.getValue());
           options.setIntegration(key, value);
         }
       }
