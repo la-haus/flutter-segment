@@ -29,6 +29,8 @@ jobs:
           flutter-version: '2.0.0'
       - run: flutter pub get
       - run: flutter test
+      - name: "Run Android test"
+        run: gradle --project-dir ./example/android --no-daemon test
 
   build_web:
     name: Build Web
