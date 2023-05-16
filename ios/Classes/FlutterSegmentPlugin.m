@@ -1,3 +1,4 @@
+#import "SEGAppsFlyerIntegrationFactory.h"
 #import "FlutterSegmentPlugin.h"
 #import <Segment/SEGAnalytics.h>
 #import <Segment/SEGContext.h>

@@ -17,7 +17,10 @@ import com.segment.analytics.android.integrations.appsflyer.AppsflyerIntegration
 
 import androidx.annotation.NonNull;
 
+import com.segment.analytics.android.integrations.appsflyer.AppsflyerIntegration;
 import static com.segment.analytics.Analytics.LogLevel;
+
+import androidx.annotation.NonNull;
 
 import java.util.LinkedHashMap;
 import java.util.HashMap;
@@ -96,8 +99,12 @@ public class FlutterSegmentPlugin implements MethodCallHandler, FlutterPlugin {
         Log.i("FlutterSegment", "Attribution Information are not been tracked");
             }
 
-            // Here we build a middleware that just appends data to the current context
-            // using the [deepMerge] strategy.
+      if (options.isAppsflyerIntegrationEnabled()) {
+        analyticsBuilder.use(AppsflyerIntegration.FACTORY);
+      }
+
+      // Here we build a middleware that just appends data to the current context
+      // using the [deepMerge] strategy.
       analyticsBuilder.useSourceMiddleware(
               new Middleware() {
                 @Override
