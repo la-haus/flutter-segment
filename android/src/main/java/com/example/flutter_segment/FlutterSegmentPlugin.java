@@ -71,7 +71,7 @@ public class FlutterSegmentPlugin implements MethodCallHandler, FlutterPlugin {
     private void setupChannels(FlutterSegmentOptions options) {
         try {
             Analytics.Builder analyticsBuilder = new Analytics.Builder(applicationContext, options.getWriteKey());
-      if (options.isAppsFlyerIntegrationEnabled()) {
+      if (options.isAppsflyerIntegrationEnabled()) {
         analyticsBuilder.use(AppsflyerIntegration.FACTORY);
       }
 
@@ -92,7 +92,7 @@ public class FlutterSegmentPlugin implements MethodCallHandler, FlutterPlugin {
 //        analyticsBuilder.use(AmplitudeIntegration.FACTORY);
 //      }
 
-      if (options.getTrackAttributionInformation()) {
+      if (options.getTrackApplicationLifecycleEvents()) {
         Log.i("FlutterSegment", "Track Attribution Information is enabled");
         analyticsBuilder.trackAttributionInformation();
       } else {
@@ -396,8 +396,8 @@ public class FlutterSegmentPlugin implements MethodCallHandler, FlutterPlugin {
      * Enables / disables / sets custom integration properties so Segment can properly
      * interact with 3rd parties, such as Amplitude.
      *
-     * @see https://segment.com/docs/connections/sources/catalog/libraries/mobile/android/#selecting-destinations
-     * @see https://github.com/segmentio/analytics-android/blob/master/analytics/src/main/java/com/segment/analytics/Options.java
+     * @see <a href="https://segment.com/docs/connections/sources/catalog/libraries/mobile/android/#selecting-destinations">...</a>
+     * @see <a href="https://github.com/segmentio/analytics-android/blob/master/analytics/src/main/java/com/segment/analytics/Options.java">...</a>
      */
     @SuppressWarnings("unchecked")
     private Options buildOptions(HashMap<String, Object> optionsData) {
