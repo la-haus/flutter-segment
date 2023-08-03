@@ -3,7 +3,7 @@
 #
 Pod::Spec.new do |s|
   s.name             = 'flutter_segment'
-  s.version          = '3.12.1'
+  s.version          = '3.13.1'
   s.summary          = 'Segment.io plugin for Flutter'
   s.description      = <<-DESC
 Library to let Flutter apps use Segment.io

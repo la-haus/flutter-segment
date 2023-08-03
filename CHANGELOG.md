@@ -1,3 +1,6 @@
+## 3.13.1
+- iOS: Update Appsflyer SDK iOS dependency 6.10.1 (#76)
+
 ## 3.13.0
 - iOS: Update AppsFlyer version for iOS (#70)
 
