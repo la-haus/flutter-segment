@@ -1,8 +1,6 @@
 name: Deploy PubSpec
 
-on:
-  release:
-    types: [published]
+on: workflow_dispatch
 
 jobs:
   build:
@@ -28,7 +26,8 @@ jobs:
           sh ./prepare_deploy_env.sh
 
       - run: flutter pub get
+
       - name: Check Publish Warnings
         run: pub publish --dry-run
-      - name: Publish Package
-        run: pub publish -f
+      #- name: Publish Package
+      #  run: pub publish -f
