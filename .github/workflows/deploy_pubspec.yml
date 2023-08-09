@@ -13,7 +13,7 @@ jobs:
           channel: 'stable'
           cache: true
           cache-key: flutter-3 # optional, change this to force refresh cache
-          cache-path: ${{ runner.tool_cache }}/flutter # optional, change this to specify the cache path
+          cache-path: ${{ runner.tool_cache }}/flutter-3 # optional, change this to specify the cache path
 
       - name: Prepare Env
         shell: bash
@@ -28,6 +28,6 @@ jobs:
       - run: flutter pub get
 
       - name: Check Publish Warnings
-        run: pub publish --dry-run
+        run: flutter pub publish --dry-run
       #- name: Publish Package
       #  run: pub publish -f
