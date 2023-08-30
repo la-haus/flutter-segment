@@ -25,10 +25,16 @@ apply plugin: 'com.android.library'
 android {
     compileSdkVersion 31
 
+    // For compatibility with AGP < 4.2
+    if (project.android.hasProperty("namespace")) {
+        namespace 'com.example.flutter_segment'
+    }
+
     defaultConfig {
         minSdkVersion 16
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
+    
     lintOptions {
         disable 'InvalidPackage'
     }
