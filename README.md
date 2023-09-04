@@ -1,7 +1,7 @@
 =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
 ⚠️ ⚠️
-We are no longer supporting this library. Feel free to fork it and work on your own branch.
+We are no longer mantaining this library. Feel free to fork it and work on your own branch.
 ⚠️ ⚠️
 
 =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
