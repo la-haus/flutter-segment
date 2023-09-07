@@ -1,3 +1,6 @@
+## 3.13.2
+- Update README with no longer maintaining message
+
 ## 3.13.1
 - iOS: Update Appsflyer SDK iOS dependency 6.10.1 (#76)
 
