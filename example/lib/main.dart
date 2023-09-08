@@ -10,7 +10,8 @@ void main() async {
 
   await Segment.config(
     options: SegmentConfig(
-      writeKey: 'YOUR_WRITE_KEY_GOES_HERE',
+      androidWriteKey: 'YOUR_ANDROID_WRITE_KEY_GOES_HERE',
+      iosWriteKey: 'YOUR_IOS_WRITE_KEY_GOES_HERE',
       trackApplicationLifecycleEvents: false,
     ),
   );
