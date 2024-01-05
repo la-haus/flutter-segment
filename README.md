@@ -1,7 +1,10 @@
 =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
 ⚠️ ⚠️
-We are no longer mantaining this library. Feel free to fork it and work on your own branch.
+We are no longer maintaining this library.
+There are a couple of options:
+- Segment has created a package [here](https://github.com/segmentio/analytics_flutter)
+- Fork this repo
 ⚠️ ⚠️
 
 =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
